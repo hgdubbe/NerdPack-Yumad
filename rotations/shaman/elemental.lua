@@ -72,11 +72,11 @@ local Survival = {
 
 local Keybinds = {
 	-- Liquid Magma Totem at cursor on Left-Shift if enabled in UI.
-	{'!Liquid Magma Totem', '{!moving||moving}&talent(6,1)&keybind(lshift)&UI(K_LMT)', 'cursor.ground'},
+	{'!Liquid Magma Totem', 'talent(6,1)&keybind(lshift)&UI(K_LMT)', 'cursor.ground'},
 	-- Lightning Surge Totem at cursor on Left-Control if enabled in UI.
-	{'!Lightning Surge Totem', '{!moving||moving}&keybind(lcontrol)&UI(K_LST)', 'cursor.ground'},
+	{'!Lightning Surge Totem', 'keybind(lcontrol)&UI(K_LST)', 'cursor.ground'},
 	-- Earthbind Totem at cursor on Left-Alt if enabled in UI.
-	{'!Earthbind Totem', '{!moving||moving}&keybind(lalt)&UI(K_ET)', 'cursor.ground'},
+	{'!Earthbind Totem', 'keybind(lalt)&UI(K_ET)', 'cursor.ground'},
 }
 
 local Trinkets = {
@@ -92,7 +92,6 @@ local Emergency = {
 
 local Interrupts = {
 	{'&Wind Shear'},
-
 }
 
 local Dispel ={
@@ -105,7 +104,7 @@ local LRCooldowns = {
 	{{{'Totem Mastery', '{!moving||moving}&totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)'},
 	{'Fire Elemental', '!talent(6,2)'},
 	{'&Elemental Mastery', 'talent(6,1)'}, -- Remove when 7.1.5 is LIVE.
-	{'Blood Fury', 'player.buff(Elemental Mastery)'},
+	{'&Blood Fury', 'player.buff(Elemental Mastery)'},
 	}, {'!moving||moving'}},
 }
 
@@ -167,8 +166,8 @@ local ASST = {
 }
 
 local inCombat = {
-	{Keybinds},
-	{Dispel, 'toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
+	{Keybinds, '{!moving||moving}'},
+	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
 	{Survival, 'player.health<100'},
 	{Emergency},
 	{Trinkets},
@@ -181,7 +180,7 @@ local inCombat = {
 }
 
 local outCombat = {
-	{Dispel, 'toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
+	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 	{'Healing Surge', '!moving&lowest.health<=70', 'lowest'},
 	{'Ghost Wolf', 'movingfor>=2&!player.buff(Ghost Wolf)'},

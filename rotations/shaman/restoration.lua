@@ -120,7 +120,7 @@ end
 
 local Survival = {
 	-- Astral Shift
-	{'Astral Shift', 'UI(S_ASE)&player.health<=UI(S_AS)'},
+	{'&Astral Shift', 'UI(S_ASE)&player.health<=UI(S_AS)'},
 	-- Gift of the Naaru usage if enabled in UI.
 	{'Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
@@ -154,14 +154,14 @@ local Totems = {
 
 local Emergency = {
 	-- Riptide
-	{'!Riptide', 'UI(E_EH)&lowest.health<=UI(E_RT)', 'lowest'},
+	{'!Riptide', '{!moving||moving}&UI(E_EH)&lowest.health<=UI(E_RT)', 'lowest'},
 	-- Healing Surge 
 	{'!Healing Surge', 'UI(E_EH)&lowest.health<=UI(E_HS)', 'lowest'},
 }
 
 local Interrupts = {
 	-- Wind Shear selected target.
-	{'!Wind Shear'},
+	{'&Wind Shear'},
 }
 
 local Dispel ={
@@ -171,7 +171,7 @@ local Dispel ={
 
 local DPS = {
 	-- Flame Shock
-	{'Flame Shock', '!target.debuff(Flame Shock)'},
+	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)'},
 	-- Lava Burst 
 	{'Lava Burst', 'target.debuff(Flame Shock).duration>spell(Lava Burst).casttime'},
 	-- Chain Lightning
@@ -182,64 +182,64 @@ local DPS = {
 
 local Tank = {
 	-- Riptide 
-	{'Riptide', 'tank.buff(Riptide).duration<=5||tank.health<=UI(T_FRT)', 'tank'},
+	{'Riptide', '{!moving||moving}&tank.buff(Riptide).duration<=5||tank.health<=UI(T_FRT)', 'tank'},
 	{{ -- Spiritwalker's Grace
 		-- Healing Surge
 		{'Healing Surge', 'tank.health<=UI(T_HS)', 'tank'},
 		-- AoE Healing Rain
 		{'Healing Rain', 'advanced&UI(T_HRE)&toggle(AoE)&tank.area(10,90).heal>=1', 'tank.ground'},
 		-- AoE Chain Heal
-		{'Chain Heal', 'UI(T_CHE)&toggle(AoE)&tank.area(40,80).heal>=1', 'tank'},
-	}, {'!player.moving||player.buff(Spiritwalker\'s Grace)&player.moving'}},
+		{'Chain Heal', 'UI(T_CHE)&toggle(AoE)&tank.area(40,80).heal>=2', 'tank'},
+	}, {'!moving||player.buff(Spiritwalker\'s Grace)&moving'}},
 }
 
 local Player = {
 	--Riptide
-	{'Riptide', 'player.buff(Riptide).duration<=5||player.health<=UI(P_FRT)', 'player'},
+	{'Riptide', '{!moving||moving}&player.buff(Riptide).duration<=5||player.health<=UI(P_FRT)', 'player'},
 	{{ -- Spiritwalker's Grace
 		--Healing Surge
 		{'Healing Surge', 'player.health<=UI(P_HS)', 'player'},
 		-- AoE Healing Rain
 		{'Healing Rain', 'advanced&UI(P_HRE)&toggle(AoE)&player.area(10,90).heal>=2', 'player.ground'},
 		-- AoE Chain Heal
-		{'Chain Heal', 'UI(P_CHE)&toggle(AoE)&player.area(40,80).heal>=1', 'player'},
-	}, {'!player.moving||player.buff(Spiritwalker\'s Grace)&player.moving'}},
+		{'Chain Heal', 'UI(P_CHE)&toggle(AoE)&player.area(40,80).heal>=2', 'player'},
+	}, {'!moving||player.buff(Spiritwalker\'s Grace)&moving'}},
 }
 
 local Lowest = {
 	--Riptide
-	{'Riptide', 'lowest.buff(Riptide).duration<=5||lowest.health<=UI(L_FRT)', 'lowest'},
+	{'Riptide', '{!moving||moving}&lowest.buff(Riptide).duration<=5||lowest.health<=UI(L_FRT)', 'lowest'},
 	{{ -- Spiritwalker's Grace
-		--Healing Surge
-		{'Healing Surge', 'lowest.health<=UI(L_HS)', 'lowest'},
 		--Healing Wave
 		{'Healing Wave', 'lowest.health<=UI(L_HW)', 'lowest'},
 		-- AoE Healing Rain
 		{'Healing Rain', 'advanced&UI(L_HRE)&toggle(AoE)&lowest.area(10,90).heal>=2', 'lowest.ground'},
 		-- AoE Chain Heal
-		{'Chain Heal', 'UI(L_CHE)&toggle(AoE)&lowest.area(40,80).heal>=1', 'lowest'},
-	}, {'!player.moving||player.buff(Spiritwalker\'s Grace)&player.moving'}},
+		{'Chain Heal', 'UI(L_CHE)&toggle(AoE)&lowest.area(40,80).heal>=2', 'lowest'},
+		--Healing Surge
+		{'Healing Surge', 'lowest.health<=UI(L_HS)', 'lowest'},
+	}, {'!moving||player.buff(Spiritwalker\'s Grace)&moving'}},
 }
 
 local inCombat = {
-	{Keybinds},
-	{Dispel, 'toggle(yuPS)&spell(Purify Spirit).cooldown=0'},
+	{Keybinds, '{!moving||moving}'},
+	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Purify Spirit).cooldown=0'},
 	{Survival},
 	{Emergency},
-	{Totems},
+	{Totems, '{!moving||moving}'},
 	{Trinkets},
 	{Tank, 'tank.exists&tank.health<100'},
 	{Lowest, 'lowest.health<100'},
 	{Player, 'player.health<100'},
-	{Interrupts, 'toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
+	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 	{DPS, 'toggle(yuDPS)&target.range<40&target.infront'},
 }
 
 local outCombat = {
-	{Dispel, 'toggle(yuPS)&spell(Purify Spirit).cooldown=0'},
-	{'Riptide', 'lowest.health<100', 'lowest'},
+	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Purify Spirit).cooldown=0'},
+	{'Riptide', '{!moving||moving}&lowest.health<100', 'lowest'},
 	{Lowest, 'lowest.health<100'},
-	{Interrupts, 'toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
+	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 }
 
 NeP.CR:Add(264, {
@@ -249,13 +249,3 @@ NeP.CR:Add(264, {
 	gui = GUI,
 	load = exeOnLoad
 })
-
-	-- Archived local nested toggle.
-	--[[
-	{{ -- AoE
-		-- Healing Rain
-		{'Healing Rain', {'UI(G_HR)', 'player.advanced'}, 'player.ground'},
-		--Chain Heal used to heal moderate to high damage. Provides Tidal Waves.
-		{'Chain Heal','UI(G_CH)', 'player'}
-	}, {'toggle(AoE)', 'player.area(40).friendly >= 3', 'AoEHeal(80, 3)'} }
-	]]
