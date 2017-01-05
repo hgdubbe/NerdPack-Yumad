@@ -119,10 +119,10 @@ local exeOnLoad = function()
 end
 
 local Survival = {
-	-- Astral Shift
+	-- Astral Shift usage if enabled in UI.
 	{'&Astral Shift', 'UI(S_ASE)&player.health<=UI(S_AS)'},
 	-- Gift of the Naaru usage if enabled in UI.
-	{'Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
+	{'&Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
 	{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
@@ -146,77 +146,58 @@ local Trinkets = {
 }
 
 local Totems = {
-	-- Healing Stream Totem
+	-- Healing Stream Totem usage if enabled in UI.
 	{'Healing Stream Totem', 'UI(To_HSTE)'},
-	-- Earthen Shield Totem
+	-- Earthen Shield Totem usage if enabled in UI.
 	{'Earthen Shield Totem', 'advanced&UI(To_ESTE)', 'tank.ground'},
 }
 
 local Emergency = {
-	-- Riptide
+	-- Riptide usage if enabled in UI.
 	{'!Riptide', '{!moving||moving}&UI(E_EH)&lowest.health<=UI(E_RT)', 'lowest'},
-	-- Healing Surge 
+	-- Healing Surge usage if enabled in UI.
 	{'!Healing Surge', 'UI(E_EH)&lowest.health<=UI(E_HS)', 'lowest'},
 }
 
 local Interrupts = {
-	-- Wind Shear selected target.
 	{'&Wind Shear'},
 }
 
 local Dispel ={
-	-- Purify Spirit
 	{'%dispelall'},
 }
 
 local DPS = {
-	-- Flame Shock
 	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)'},
-	-- Lava Burst 
 	{'Lava Burst', 'target.debuff(Flame Shock).duration>spell(Lava Burst).casttime'},
-	-- Chain Lightning
 	{'Chain Lightning', 'player.area(40).enemies>=2', 'target'},
-	-- Lightning Bolt
 	{'Lightning Bolt', nil, 'target'},
 }
 
 local Tank = {
-	-- Riptide 
 	{'Riptide', '{!moving||moving}&tank.buff(Riptide).duration<=5||tank.health<=UI(T_FRT)', 'tank'},
 	{{ -- Spiritwalker's Grace
-		-- Healing Surge
 		{'Healing Surge', 'tank.health<=UI(T_HS)', 'tank'},
-		-- AoE Healing Rain
 		{'Healing Rain', 'advanced&UI(T_HRE)&toggle(AoE)&tank.area(10,90).heal>=1', 'tank.ground'},
-		-- AoE Chain Heal
 		{'Chain Heal', 'UI(T_CHE)&toggle(AoE)&tank.area(40,80).heal>=2', 'tank'},
 	}, {'!moving||player.buff(Spiritwalker\'s Grace)&moving'}},
 }
 
 local Player = {
-	--Riptide
 	{'Riptide', '{!moving||moving}&player.buff(Riptide).duration<=5||player.health<=UI(P_FRT)', 'player'},
 	{{ -- Spiritwalker's Grace
-		--Healing Surge
 		{'Healing Surge', 'player.health<=UI(P_HS)', 'player'},
-		-- AoE Healing Rain
 		{'Healing Rain', 'advanced&UI(P_HRE)&toggle(AoE)&player.area(10,90).heal>=2', 'player.ground'},
-		-- AoE Chain Heal
 		{'Chain Heal', 'UI(P_CHE)&toggle(AoE)&player.area(40,80).heal>=2', 'player'},
 	}, {'!moving||player.buff(Spiritwalker\'s Grace)&moving'}},
 }
 
 local Lowest = {
-	--Riptide
 	{'Riptide', '{!moving||moving}&lowest.buff(Riptide).duration<=5||lowest.health<=UI(L_FRT)', 'lowest'},
 	{{ -- Spiritwalker's Grace
-		--Healing Wave
 		{'Healing Wave', 'lowest.health<=UI(L_HW)', 'lowest'},
-		-- AoE Healing Rain
 		{'Healing Rain', 'advanced&UI(L_HRE)&toggle(AoE)&lowest.area(10,90).heal>=2', 'lowest.ground'},
-		-- AoE Chain Heal
 		{'Chain Heal', 'UI(L_CHE)&toggle(AoE)&lowest.area(40,80).heal>=2', 'lowest'},
-		--Healing Surge
 		{'Healing Surge', 'lowest.health<=UI(L_HS)', 'lowest'},
 	}, {'!moving||player.buff(Spiritwalker\'s Grace)&moving'}},
 }
@@ -224,10 +205,10 @@ local Lowest = {
 local inCombat = {
 	{Keybinds, '{!moving||moving}'},
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Purify Spirit).cooldown=0'},
-	{Survival},
+	{Survival, '{!moving||moving}'},
 	{Emergency},
 	{Totems, '{!moving||moving}'},
-	{Trinkets},
+	{Trinkets, '{!moving||moving}'},
 	{Tank, 'tank.exists&tank.health<100'},
 	{Lowest, 'lowest.health<100'},
 	{Player, 'player.health<100'},

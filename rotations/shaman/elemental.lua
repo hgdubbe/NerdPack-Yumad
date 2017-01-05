@@ -14,7 +14,14 @@ local GUI = {
 	{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
 	{type = 'spinner', text = 'Ancient Healing Potion (Health %)', key = 'S_AHP', default = 20},
 	{type = 'ruler'},{type = 'spacer'},
-	
+
+	-- GUI Emergency Healing
+	{type = 'header', text = 'Emergency Healing', align = 'center'},
+	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_EH', default = true},
+	{type = 'text', text = 'Thresholds set to ensure party member survival.'},
+	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HS', default = 35},
+	{type = 'ruler'},{type = 'spacer'},
+
 	-- GUI Keybinds
 	{type = 'header', text = 'Keybinds', align = 'center'},
 	{type = 'checkbox', text = 'L-Shift: Liquid Magma Totem @ Cursor', key = 'K_LMT', default = true},
@@ -27,13 +34,6 @@ local GUI = {
 	{type = 'text', text = 'Activate on-use trinkets on cooldown.'},
 	{type = 'checkbox', text = 'Enable Top Trinket', key = 'trinket_1', default = false},
 	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'Trinket_2', default = false},
-	{type = 'ruler'},{type = 'spacer'},
-
-	-- GUI Emergency Healing
-	{type = 'header', text = 'Emergency Healing', align = 'center'},
-	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_EH', default = true},
-	{type = 'text', text = 'Thresholds set to ensure party member survival.'},
-	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HS', default = 35},
 	{type = 'ruler'},{type = 'spacer'},
 }
 
@@ -58,16 +58,24 @@ end
 local Survival = {
 	-- Astral Shift usage if enabled in UI.
 	{'&Astral Shift', 'UI(S_ASE)&player.health<=UI(S_AS)'},
-	--Healing Surge usage if enabled in UI.
-	{'Healing Surge', 'UI(S_HSGE)&!moving&player.health<=UI(S_HSG)', 'player'},
 	-- Earth Elemental usage if enabled in UI.
 	{'Earth Elemental', 'UI(S_EEE)&player.health<=UI(S_EE)'},
 	-- Gift of the Naaru usage if enabled in UI.
-	{'Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
+	{'&Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
 	{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
 	{'#Ancient Healing Potion', 'UI(S_AHPE)&player.health<=UI(S_AHP)'},
+}
+
+local Player = {
+	-- Healing Surge usage if enabled in UI.
+	{'!Healing Surge', '!moving&UI(S_HSGE)&player.health<=UI(S_HSG)', 'player'},
+}
+
+local Emergency = {
+	-- Healing Surge usage if enabled in UI.
+	{'!Healing Surge', '!moving&UI(E_EH)&lowest.health<=UI(E_HS)', 'lowest'},
 }
 
 local Keybinds = {
@@ -86,10 +94,6 @@ local Trinkets = {
 	{'#trinket2', 'UI(trinket_2)'},
 }
 
-local Emergency = {
-	{'!Healing Surge', 'UI(E_EH)&lowest.health<=UI(E_HS)', 'lowest'},
-}
-
 local Interrupts = {
 	{'&Wind Shear'},
 }
@@ -104,7 +108,7 @@ local LRCooldowns = {
 	{{{'Totem Mastery', '{!moving||moving}&totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)'},
 	{'Fire Elemental', '!talent(6,2)'},
 	{'&Elemental Mastery', 'talent(6,1)'}, -- Remove when 7.1.5 is LIVE.
-	{'&Blood Fury', 'player.buff(Elemental Mastery)'},
+	{'&Blood Fury', 'player.buff(Elemental Mastery)'}, -- lastcast(Fire Elemental)
 	}, {'!moving||moving'}},
 }
 
@@ -168,9 +172,10 @@ local ASST = {
 local inCombat = {
 	{Keybinds, '{!moving||moving}'},
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
-	{Survival, 'player.health<100'},
+	{Survival, '{!moving||moving}'},
+	{Player, 'player.health<100'},
 	{Emergency},
-	{Trinkets},
+	{Trinkets, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 	{LRCooldowns, 'talent(7,2)&toggle(cooldowns)'},
 	{IFCooldowns, 'talent(7,3)&toggle(cooldowns)'},
