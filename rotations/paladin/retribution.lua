@@ -125,16 +125,12 @@ local Cooldowns = {
 	{'#trinket1', 'equipped(Faulty Countermeasure)&{player.buff(Avenging Wrath)||player.buff(Crusade)}'},
 	--actions+=/arcane_torrent,if=holy_power<5&(buff.crusade.up|buff.avenging_wrath.up|time<2)
 	{'Arcane Torrent', 'holypower<5&{player.buff(Crusade)||player.buff(Avenging Wrath)||combat.time<2}'},
-	--actions+=/wake_of_ashes,if=holy_power<=1&time<2
-	{'Wake of Ashes', 'holypower<=1&combat.time<2'},
 	--actions+=/holy_wrath
 	{'Holy Wrath'},
 	--actions+=/avenging_wrath
 	{'Avenging Wrath', '!talent(7,2)'},
 	--actions+=/crusade,if=holy_power>=5&!equipped.137048|((equipped.137048|race.blood_elf)&time<2|time>2&holy_power>=4)
 	{'&Crusade', 'talent(7,2)&{holypower>=5&!equipped(Liadrin\'s Fury Unleashed)||{{equipped(Liadrin\'s Fury Unleashed)}&combat.time<2||combat.time>2&holypower>=4}}'},
-	--actions+=/execution_sentence,if=spell_targets.divine_storm<=3&(cooldown.judgment.remains<gcd*4.5|debuff.judgment.remains>gcd*4.67)&(!talent.crusade.enabled|cooldown.crusade.remains>gcd*2)
-	{'Execution Sentence','talent(1,2)&{player.area(6).enemies<=3&{spell(Judgment).cooldown<gcd*4.5||target.debuff(judgment).duration>gcd*4.67}&{!talent(7,2)||spell(Crusade).cooldown>gcd*2}}'},
 }
 
 local Combat = {
@@ -144,6 +140,10 @@ local Combat = {
 	{'Blade of Justice', 'combat.time<2&{equipped(Liadrin\'s Fury Unleashed)}'},
 	--actions+=/divine_hammer,if=time<2&(equipped.137048|race.blood_elf)
 	{'Divine Hammer', 'combat.time<2&{equipped(Liadrin\'s Fury Unleashed)}'},
+	--actions+=/wake_of_ashes,if=holy_power<=1&time<2
+	{'Wake of Ashes', 'holypower<=1&combat.time<2'},
+	--actions+=/execution_sentence,if=spell_targets.divine_storm<=3&(cooldown.judgment.remains<gcd*4.5|debuff.judgment.remains>gcd*4.67)&(!talent.crusade.enabled|cooldown.crusade.remains>gcd*2)
+	{'Execution Sentence','talent(1,2)&{player.area(6).enemies<=3&{spell(Judgment).cooldown<gcd*4.5||target.debuff(judgment).duration>gcd*4.67}&{!talent(7,2)||spell(Crusade).cooldown>gcd*2}}'},
 	--actions+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&buff.divine_purpose.up&buff.divine_purpose.remains<gcd*2
 	{'Divine Storm', 'target.debuff(Judgment)&player.area(6).enemies>=2&player.buff(Divine Purpose)&player.buff(Divine Purpose).duration<gcd*2'},
 	--actions+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&holy_power>=5&buff.divine_purpose.react
