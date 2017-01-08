@@ -102,10 +102,22 @@ local Dispel = {
 	{'%dispelall'},
 }
 
+-- ####################################################################################
+-- Primairly sourced from legion-dev SimC with additions from Storm, Earth and Lava.
+-- Updates to rotations from both sources are considered for implementation.
+-- ####################################################################################
+
 -- SimC APL 1/7/2017
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Shaman_Elemental_T19M.simc
+-- Lightning Rod Rotation 12/18/2016
+-- http://www.stormearthandlava.com/elemental-shaman-hub/lightning-rod-build-guide/
+-- Icefury Rotaion 1/8/2017
+-- http://www.stormearthandlava.com/elemental-shaman-hub/icefury-build-guide/
+-- Ascendance Rotaion 1/8/2017
+-- http://www.stormearthandlava.com/elemental-shaman-hub/ascendance-build-guide/
+
 local AoE = {
-	--actions+=/totem_mastery
+	--actions.aoe+=/totem_mastery
 	{'Totem Mastery', '{!moving||moving}&talent(1,3)&{totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)}'},
 	--actions.aoe=stormkeeper
 	{'Stormkeeper'},
@@ -123,7 +135,6 @@ local AoE = {
 	{'Lava Burst', '{!moving||moving}&player.buff(Lava Surge)||!moving&!talent(7,2)&target.debuff(Flame Shock).duration>spell(Lava Burst).casttime'},
 	--actions.aoe+=/elemental_blast,if=!talent.lightning_rod.enabled&spell_targets.chain_lightning<5
 	--***Elemental Blast according to Fortified affix Lightning Rod Rotaion from Storm, Earth and Lava***
-	--!!!This condition meets expectations for both SimC and Storm, Earth and Lava!!!
 	{'Elemental Blast', 'talent(5,3)'},
 	--actions.aoe+=/lava_beam
 	{'Lava Beam', 'talent(7,1)&player.buff(Ascendance)'},
@@ -133,57 +144,122 @@ local AoE = {
 	{'Chain Lightning', nil, 'target'},
 }
 
--- Lighting Rod Rotation ##############################################################
--- http://www.stormearthandlava.com/elemental-shaman-hub/lightning-rod-build-guide/
+-- Lightning Rod Rotation ##############################################################
 local LRCooldowns = {
-	{{{'Totem Mastery', '{!moving||moving}&totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)'},
+	{'Totem Mastery', '{!moving||moving}&talent(1,3)&{totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)}'},
 	{'Fire Elemental', '!talent(6,2)'},
 	{'&Elemental Mastery', 'talent(6,1)'}, -- Remove when 7.1.5 is LIVE.
-	{'&Blood Fury', 'player.buff(Elemental Mastery)'}, -- lastcast(Fire Elemental)
-	}, {'!moving||moving'}},
+	{'&Blood Fury', 'lastcast(Fire Elemental)'},
+	{'&Berserking', 'lastcast(Fire Elemental)'},
 }
 
-local LRST = {
-	{'Totem Mastery', '{!moving||moving}&totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)'},
-	{'Flame Shock', '{!moving||moving}&{!target.debuff(Flame Shock)||player.maelstrom>=20&player.buff(Elemental Focus)&target.debuff(Flame Shock).duration<9}'},
-	{'Elemental Blast', 'talent(5,3)'},
-	{'Lava Burst', 'target.debuff(Flame Shock).duration>spell(Lava Burst).casttime'},
-	{'Stormkeeper'},
-	{'Liquid Magma Totem', '{!moving||moving}&talent(6,1)', 'cursor.ground'},
+local LRSingle = {
+	--actions.single_lr+=/totem_mastery
+	{'Totem Mastery', '{!moving||moving}&talent(1,3)&{totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)}'},
+	--actions.single_lr=flame_shock,if=!ticking
+	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)'},
+	--actions.single_lr+=/earthquake,if=buff.echoes_of_the_great_sundering.up&maelstrom>=86
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86', 'cursor.ground'},
+	--actions.single_lr+=/earth_shock,if=maelstrom>=92
 	{'Earth Shock', '{!moving||moving}&player.maelstrom>=92'},
-	{'Lava Burst', '{!moving||moving}&player.buff(Lava Surge)'},
+	--actions.single_lr+=/stormkeeper,if=raid_event.adds.count<3|raid_event.adds.in>50
+	{'Stormkeeper'},
+	--actions.single_lr+=/elemental_blast
+	{'Elemental Blast', 'talent(5,3)'},
+	--actions.single_lr+=/liquid_magma_totem,if=raid_event.adds.count<3|raid_event.adds.in>50
+	{'Liquid Magma Totem', '{!moving||moving}&talent(6,1)', 'cursor.ground'},
+	--actions.single_lr+=/lava_burst,if=dot.flame_shock.remains>cast_time&cooldown_react
+	--***Lava Burst according to Lightning Rod Rotaion from Storm, Earth and Lava***
+	{'Lava Burst', '{!moving||moving}&player.buff(Lava Surge)||target.debuff(Flame Shock).duration>spell(Lava Burst).casttime&spell(Lava Burst).cooldown=0'},
+	{'Lava Burst', 'player.buff(Stormkeeper)&target.debuff(Flame Shock).duration>spell(Lava Burst).casttime&spell(Lava Burst).cooldown=0&player.buff(Stormkeeper).duration>spell(Lava Burst).casttime+{1.5*{spell_haste}*player.buff(Stormkeeper).count+1}'},
+	--actions.single_lr+=/flame_shock,if=maelstrom>=20&buff.elemental_focus.up,target_if=refreshable
+	{'Flame Shock', '{!moving||moving}&player.maelstrom>=20&player.buff(Elemental Focus)&target.debuff(Flame Shock).duration<9'},
+	--actions.single_lr+=/earth_shock,if=maelstrom>=86
+	--***Earth Shock according to AoE Lightning Rod Rotaion from Storm, Earth and Lava***
 	{'Earth Shock', '{!moving||moving}&player.maelstrom>=86&!player.buff(Lava Surge)'},
-	{'Lava Burst', 'player.buff(Stormkeeper).count<=3&player.buff(Stormkeeper).duration>spell(Lava Burst).casttime+gcd'},
+	--actions.single_lr+=/earthquake,if=buff.echoes_of_the_great_sundering.up
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)', 'cursor.ground'},
+	--actions.single_lr+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&spell_targets.chain_lightning<3,target_if=debuff.lightning_rod.down
+	{'Lightning Bolt', 'player.buff(Power of the Maelstrom)&!target.debuff(Lightning Rod)'},
+	--actions.single_lr+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&spell_targets.chain_lightning<3
+	{'Lightning Bolt', 'player.buff(Power of the Maelstrom)'},
+	--actions.single_lr+=/lightning_bolt,target_if=debuff.lightning_rod.down
+	{'Lightning Bolt', '!target.debuff(Lightning Rod)'},
+	--actions.single_lr+=/lightning_bolt
 	{'Lightning Bolt', nil, 'target'},
 }
 
 -- Icefury Rotation ###################################################################
--- http://www.stormearthandlava.com/elemental-shaman-hub/icefury-build-guide/
 local IFCooldowns = {
 	{'Stormkeeper'},
 	{'Fire Elemental', '!talent(6,2)'},
-	{'Blood Fury', 'lastcast(Fire Elemental)'},
+	{'&Blood Fury', 'lastcast(Fire Elemental)'},
+	{'&Berserking', 'lastcast(Fire Elemental)'},
 }
 
-local IFST = {
-	{{{'Flame Shock', '!target.debuff(Flame Shock)||player.maelstrom>=20&player.buff(Elemental Focus)&target.debuff(Flame Shock).duration<9'},
-	{'Elemental Blast', 'talent(5,3)'},
-	{'Earth Shock', 'player.maelstrom>=92'},
-	{'Icefury', 'player.maelstrom<=76'},
-	{'Frost Shock', 'lastcast(Icefury)&spell(Frost Shock).charges=4||player.maelstrom>20'},
-	{'!Frost Shock', 'player.maelstrom<20&player.buff(Icefury).count<=2&player.buff(Icefury).duration<=2+gcd'},
-	{'Lava Burst', 'target.debuff(Flame Shock).duration>spell(Lava Burst).casttime||player.buff(Lava Surge)||player.maelstrom<=88&spell(Lava Burst).charges<=2'},
-	}, {'!moving||moving'}},
+local IFSingle = {
+	--actions.single_if=flame_shock,if=!ticking
+	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)'},
+	--actions.single_if+=/earthquake,if=buff.echoes_of_the_great_sundering.up&maelstrom>=86
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86', 'cursor.ground'},
+	--actions.single_if+=/earth_shock,if=maelstrom>=92
+	{'Earth Shock', '{!moving||moving}&player.maelstrom>=92'},
+	--actions.single_if+=/stormkeeper,if=raid_event.adds.count<3|raid_event.adds.in>50
 	{'Stormkeeper'},
+	--actions.single_if+=/elemental_blast
+	{'Elemental Blast', 'talent(5,3)'},
+	--actions.single_if+=/icefury,if=raid_event.movement.in<5|maelstrom<=76
+	{'Icefury', 'player.maelstrom<=76'},
+	--actions.single_if+=/liquid_magma_totem,if=raid_event.adds.count<3|raid_event.adds.in>50
+	{'Liquid Magma Totem', '{!moving||moving}&talent(6,1)', 'cursor.ground'},
+	--actions.single_if+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&buff.stormkeeper.up&spell_targets.chain_lightning<3
+	{'Lightning Bolt', 'player.buff(Power of the Maelstrom)&player.buff(Stormkeeper)'},
+	--actions.single_if+=/lava_burst,if=dot.flame_shock.remains>cast_time&cooldown_react
+	--***Lava Burst according to Icefury Rotaion from Storm, Earth and Lava***
+	{'Lava Burst', '{!moving||moving}&player.buff(Lava Surge)||target.debuff(Flame Shock).duration>spell(Lava Burst).casttime&{spell(Lava Burst).cooldown=0||player.maelstrom<=88&spell(Lava Burst).charges<=2}'},
+	--actions.single_if+=/frost_shock,if=buff.icefury.up&((maelstrom>=20&raid_event.movement.in>buff.icefury.remains)|buff.icefury.remains<(1.5*spell_haste*buff.icefury.stack+1))
+	--***Frost Shock according to Icefury Rotaion from Storm, Earth and Lava***
+	{'Frost Shock', '{!moving||moving}&player.buff(Icefury)&{lastcast(Icefury)||player.maelstrom>=20||player.buff(Icefury).duration<{1.5*{spell_haste}*player.buff(Icefury).count+1}}'},
+	--actions.single_if+=/flame_shock,if=maelstrom>=20&buff.elemental_focus.up,target_if=refreshable
+	{'Flame Shock', '{!moving||moving}&player.maelstrom>=20&player.buff(Elemental Focus)&target.debuff(Flame Shock).duration<9'},
+	--actions.single_if+=/frost_shock,moving=1,if=buff.icefury.up
+	{'Frost Shock', '{!moving||moving}&player.buff(Icefury)'},
+	--actions.single_if+=/earth_shock,if=maelstrom>=86
+	{'Earth Shock', '{!moving||moving}&player.maelstrom>=86'},
+	--actions.single_if+=/earthquake,if=buff.echoes_of_the_great_sundering.up
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)', 'cursor.ground'},
+	--actions.single_if+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&spell_targets.chain_lightning<3
+	{'Lightning Bolt', 'player.buff(Power of the Maelstrom)'},
+	--actions.single_if+=/lightning_bolt
 	{'Lightning Bolt', nil, 'target'},
 }
 
 -- Ascendance Rotation ################################################################
--- http://www.stormearthandlava.com/elemental-shaman-hub/ascendance-build-guide/
 local ASCooldowns = {
 }
 
-local ASST = {
+local ASSingle = {
+	--actions.single_asc=ascendance,if=dot.flame_shock.remains>buff.ascendance.duration&(time>=60|buff.bloodlust.up)&cooldown.lava_burst.remains>0&!buff.stormkeeper.up
+	--actions.single_asc+=/flame_shock,if=!ticking
+	--actions.single_asc+=/flame_shock,if=maelstrom>=20&remains<=buff.ascendance.duration&cooldown.ascendance.remains+buff.ascendance.duration<=duration
+	--actions.single_asc+=/earthquake,if=buff.echoes_of_the_great_sundering.up&!buff.ascendance.up&maelstrom>=86
+	--actions.single_asc+=/earth_shock,if=maelstrom>=92&!buff.ascendance.up
+	--actions.single_asc+=/stormkeeper,if=raid_event.adds.count<3|raid_event.adds.in>50
+	--actions.single_asc+=/elemental_blast
+	--actions.single_asc+=/liquid_magma_totem,if=raid_event.adds.count<3|raid_event.adds.in>50
+	--actions.single_asc+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&buff.stormkeeper.up&spell_targets.chain_lightning<3
+	--actions.single_asc+=/lava_burst,if=dot.flame_shock.remains>cast_time&(cooldown_react|buff.ascendance.up)
+	--actions.single_asc+=/flame_shock,if=maelstrom>=20&buff.elemental_focus.up,target_if=refreshable
+	--actions.single_asc+=/earth_shock,if=maelstrom>=86
+	--actions.single_asc+=/totem_mastery,if=buff.resonance_totem.remains<10|(buff.resonance_totem.remains<(buff.ascendance.duration+cooldown.ascendance.remains)&cooldown.ascendance.remains<15)
+	--actions.single_asc+=/earthquake,if=buff.echoes_of_the_great_sundering.up
+	--actions.single_asc+=/lava_beam,if=active_enemies>1&spell_targets.lava_beam>1
+	--actions.single_asc+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&spell_targets.chain_lightning<3
+	--actions.single_asc+=/chain_lightning,if=active_enemies>1&spell_targets.chain_lightning>1
+	--actions.single_asc+=/lightning_bolt
+	--actions.single_asc+=/flame_shock,moving=1,target_if=refreshable
+	--actions.single_asc+=/earth_shock,moving=1
+	--actions.single_asc+=/flame_shock,moving=1,if=movement.distance>6
 }
 
 local inCombat = {
@@ -194,11 +270,11 @@ local inCombat = {
 	{Emergency},
 	{Trinkets, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
-	{LRCooldowns, 'talent(7,2)&toggle(cooldowns)'},
-	{IFCooldowns, 'talent(7,3)&toggle(cooldowns)'},
+	{LRCooldowns, '!moving||moving&talent(7,2)&toggle(cooldowns)'},
+	{IFCooldowns, '!moving||moving&talent(7,3)&toggle(cooldowns)'},
 	{AoE, 'toggle(aoe)&player.area(40).enemies>2'},
-	{LRST, 'talent(7,2)&target.infront&target.range<=40'},
-	{IFST, 'talent(7,3)&target.infront&target.range<=40'},
+	{LRSingle, 'talent(7,2)&target.infront&target.range<=40'},
+	{IFSingle, 'talent(7,3)&target.infront&target.range<=40'},
 }
 
 local outCombat = {
