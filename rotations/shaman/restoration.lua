@@ -43,7 +43,7 @@ local GUI = {
 	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_EH', default = true},
 	{type = 'text', text = 'Thresholds set to ensure party member survival.'},
 	{type = 'spinner', text = 'Riptide (Health %)', key = 'E_RT', default = 25},
-	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HS', default = 35},
+	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HSG', default = 35},
 	{type = 'ruler'},{type = 'spacer'},
 
 	-- GUI Tank Healing
@@ -95,10 +95,10 @@ local GUI = {
 
 local exeOnLoad = function()
 	-- Rotation loaded message.
-	print('|cff0068ff ----------------------------------------------------------------------|r')
-	print('|cff0068ff --- |rShaman: |cff0068ffRESTORATION|r')
-	print('|cff0068ff --- |rRecommended Talents: 1/3 - 2/2 - 3/1 - 4/2 - 5/3 - 6/2 - 7/?')
-	print('|cff0068ff ----------------------------------------------------------------------|r')
+	print('|cff0070de ----------------------------------------------------------------------|r')
+	print('|cff0070de --- |rShaman: |cff0070deRESTORATION|r')
+	print('|cff0070de --- |rRecommended Talents: 1/3 - 2/2 - 3/1 - 4/2 - 5/3 - 6/2 - 7/?')
+	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 
 	NeP.Interface:AddToggle({
@@ -156,7 +156,7 @@ local Emergency = {
 	-- Riptide usage if enabled in UI.
 	{'!Riptide', '{!moving||moving}&UI(E_EH)&lowest.health<=UI(E_RT)', 'lowest'},
 	-- Healing Surge usage if enabled in UI.
-	{'!Healing Surge', 'UI(E_EH)&lowest.health<=UI(E_HS)', 'lowest'},
+	{'!Healing Surge', 'UI(E_EH)&lowest.health<=UI(E_HSG)', 'lowest'},
 }
 
 local Interrupts = {

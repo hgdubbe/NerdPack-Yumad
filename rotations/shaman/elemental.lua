@@ -17,9 +17,9 @@ local GUI = {
 
 	-- GUI Emergency Healing
 	{type = 'header', text = 'Emergency Healing', align = 'center'},
-	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_EH', default = true},
+	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_HSGE', default = true},
 	{type = 'text', text = 'Thresholds set to ensure party member survival.'},
-	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HS', default = 35},
+	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HSG', default = 35},
 	{type = 'ruler'},{type = 'spacer'},
 
 	-- GUI Keybinds
@@ -39,11 +39,11 @@ local GUI = {
 
 local exeOnLoad = function()
 	-- Rotation loaded message.
-	print('|cff0068ff ----------------------------------------------------------------------|r')
-	print('|cff0068ff --- |rShaman: |cff0068ffELEMENTAL|r')
-	print('|cff0068ff --- |rLightning Rod (Mythic+) Talents: 1/3 - 2/1 - 3/1 - 4/2 - 5/2 or 5/3 (Fortified) - 6/1 - 7/2')
-	print('|cff0068ff --- |rIcefury Talents: 1/2 - 2/1 - 3/1 - 4/2 - 5/3 - 6/3 - 7/3')
-	print('|cff0068ff ----------------------------------------------------------------------|r')
+	print('|cff0070de ----------------------------------------------------------------------|r')
+	print('|cff0070de --- |rShaman: |cff0070deELEMENTAL|r')
+	print('|cff0070de --- |rLightning Rod (Mythic+) Talents: 1/3 - 2/1 - 3/1 - 4/2 - 5/2 or 5/3 (Fortified) - 6/1 - 7/2')
+	print('|cff0070de --- |rIcefury Talents: 1/2 - 2/1 - 3/1 - 4/2 - 5/3 - 6/3 - 7/3')
+	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 
 	NeP.Interface:AddToggle({
@@ -75,7 +75,7 @@ local Player = {
 
 local Emergency = {
 	-- Healing Surge usage if enabled in UI.
-	{'!Healing Surge', '!moving&UI(E_EH)&lowest.health<=UI(E_HS)', 'lowest'},
+	{'!Healing Surge', '!moving&UI(E_HSGE)&lowest.health<=UI(E_HSG)', 'lowest'},
 }
 
 local Keybinds = {
@@ -98,8 +98,39 @@ local Interrupts = {
 	{'&Wind Shear'},
 }
 
-local Dispel ={
+local Dispel = {
 	{'%dispelall'},
+}
+
+-- SimC APL 1/7/2017
+-- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Shaman_Elemental_T19M.simc
+local AoE = {
+	--actions+=/totem_mastery
+	{'Totem Mastery', '{!moving||moving}&talent(1,3)&{totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)}'},
+	--actions.aoe=stormkeeper
+	{'Stormkeeper'},
+	--actions.aoe+=/ascendance
+	{'Ascendance', '{!moving||moving}&talent(7,1)'},
+	--actions.aoe+=/liquid_magma_totem
+	{'Liquid Magma Totem', '{!moving||moving}&talent(6,1)', 'cursor.ground'},
+	--actions.aoe+=/flame_shock,if=spell_targets.chain_lightning<4&maelstrom>=20&!talent.lightning_rod.enabled,target_if=refreshable
+	--***Flame Shock according to AoE Lightning Rod Rotaion from Storm, Earth and Lava***
+	{'Flame Shock', '{!moving||moving}&!talent(7,2)&player.maelstrom>=20&target.debuff(Flame Shock).duration<gcd'},
+	{'Flame Shock', '{!moving||moving}&talent(7,2)&{player.area(40).enemies<4&!target.debuff(Flame Shock)||player.maelstrom>=20&player.buff(Elemental Focus)&target.debuff(Flame Shock).duration<9}'},
+	--actions.aoe+=/earthquake
+	{'Earthquake', '{!moving||moving}&player.maelstrom>=50', 'cursor.ground'},
+	--actions.aoe+=/lava_burst,if=dot.flame_shock.remains>cast_time&buff.lava_surge.up&!talent.lightning_rod.enabled&spell_targets.chain_lightning<4
+	{'Lava Burst', '{!moving||moving}&player.buff(Lava Surge)||!moving&!talent(7,2)&target.debuff(Flame Shock).duration>spell(Lava Burst).casttime'},
+	--actions.aoe+=/elemental_blast,if=!talent.lightning_rod.enabled&spell_targets.chain_lightning<5
+	--***Elemental Blast according to Fortified affix Lightning Rod Rotaion from Storm, Earth and Lava***
+	--!!!This condition meets expectations for both SimC and Storm, Earth and Lava!!!
+	{'Elemental Blast', 'talent(5,3)'},
+	--actions.aoe+=/lava_beam
+	{'Lava Beam', 'talent(7,1)&player.buff(Ascendance)'},
+	--actions.aoe+=/chain_lightning,target_if=debuff.lightning_rod.down
+	{'Chain Lightning', 'talent(7,2)&!target.debuff(Lightning Rod)'},
+	--actions.aoe+=/chain_lightning
+	{'Chain Lightning', nil, 'target'},
 }
 
 -- Lighting Rod Rotation ##############################################################
@@ -110,17 +141,6 @@ local LRCooldowns = {
 	{'&Elemental Mastery', 'talent(6,1)'}, -- Remove when 7.1.5 is LIVE.
 	{'&Blood Fury', 'player.buff(Elemental Mastery)'}, -- lastcast(Fire Elemental)
 	}, {'!moving||moving'}},
-}
-
-local LRAoE = {
-	{'Totem Mastery', '{!moving||moving}&totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)'},
-	{'Liquid Magma Totem', '{!moving||moving}&talent(6,1)', 'cursor.ground'},
-	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)'},
-	{'Elemental Blast', 'talent(5,3)'},
-	{'Lava Burst', '{!moving||moving}&player.buff(Lava Surge)'},
-	{'Stormkeeper'},
-	{'Earthquake', '{!moving||moving}&player.maelstrom>=50', 'cursor.ground'},
-	{'Chain Lightning', nil, 'target'},
 }
 
 local LRST = {
@@ -163,9 +183,6 @@ local IFST = {
 local ASCooldowns = {
 }
 
-local ASAoE = {
-}
-
 local ASST = {
 }
 
@@ -179,7 +196,7 @@ local inCombat = {
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 	{LRCooldowns, 'talent(7,2)&toggle(cooldowns)'},
 	{IFCooldowns, 'talent(7,3)&toggle(cooldowns)'},
-	{LRAoE, 'talent(7,2)&toggle(aoe)&player.area(40).enemies>2'},
+	{AoE, 'toggle(aoe)&player.area(40).enemies>2'},
 	{LRST, 'talent(7,2)&target.infront&target.range<=40'},
 	{IFST, 'talent(7,3)&target.infront&target.range<=40'},
 }
