@@ -1,7 +1,5 @@
 local _ = ...
 
-local LAD = LibStub('LibArtifactData-1.0')
-
 local setsTable = {
 	["DEATH KNIGHT"] = {
 		["T19"] = {
@@ -139,6 +137,8 @@ for _, itemID in ipairs(pieces) do
 end
 return counter
 end)
+
+local LAD = LibStub('LibArtifactData-1.0')
 
 --/dump NeP.DSL:Get('artifact.activeid')()
 NeP.DSL:Register('artifact.active_id', function ()
