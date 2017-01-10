@@ -195,8 +195,8 @@ local outCombat = {
 	{'Ghost Wolf', 'movingfor>=2&!player.buff(Ghost Wolf)'},
 }
 
-NeP.CR:Add(262, {
-	name = '|r[|cff00fff0Yumad|r] Shaman - |cff0068ffElemental|r',
+NeP.CR:Add(263, {
+	name = '|r[|cff00fff0Yumad|r] Shaman - |cff0068ffEnhancement|r',
 	ic = inCombat,
 	ooc = outCombat,
 	gui = GUI,
