@@ -5,6 +5,7 @@
 
 <Script file="rotations\shaman\restoration.lua"/>
 <Script file="rotations\shaman\elemental.lua"/>
+<Script file="rotations\shaman\enhancement.lua"/>
 
 <Script file="rotations\paladin\retribution.lua"/>
 
