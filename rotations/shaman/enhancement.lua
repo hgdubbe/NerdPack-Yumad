@@ -101,7 +101,7 @@ local Dispel = {
 -- Updates to rotations from sources are considered for implementation.
 -- ####################################################################################
 
--- SimC APL 1/8/2017
+-- SimC APL 1/10/2017
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Shaman_Enhancement_T19M.simc
 
 local Cooldowns = {

@@ -27,14 +27,6 @@ local GUI = {
 	{type = 'spinner', text = 'Flash of Light (Health %)', key = 'E_FOL', default = 35},
 	{type = 'ruler'},{type = 'spacer'},
 
-	--[[ GUI Keybinds
-	{type = 'header', text = 'Keybinds', align = 'center'},
-	{type = 'checkbox', text = 'L-Shift: Liquid Magma Totem @ Cursor', key = 'K_LMT', default = true},
-	{type = 'checkbox', text = 'L-Control: Lightning Surge Totem @ Cursor', key = 'K_LST', default = true},
-	{type = 'checkbox', text = 'L-Alt: Earthbind Totem @ Cursor', key = 'K_ET', default = true},
-	{type = 'ruler'},{type = 'spacer'},
-	]]
-
 	-- GUI Trinkets
 	{type = 'header', text = 'Trinkets', align = 'center'},
 	{type = 'text', text = 'Activate on-use trinkets on cooldown.'},
@@ -92,9 +84,6 @@ local Emergency = {
 	{'!Flash of Light', '!moving&UI(E_FOLE)&lowest.health<=UI(E_FOL)', 'lowest'},
 }
 
-local Keybinds = {
-}
-
 local Trinkets = {
 	-- Top Trinket usage if enabled in UI.
 	{'#trinket1', 'UI(trinket_1)&!equipped(Faulty Countermeasure)'},
@@ -118,8 +107,14 @@ local Blessings = {
 	{'Greater Blessing of Kings', '!player.buff(Greater Blessing of Kings)', 'player'},
 }
 
--- SimC APL 1/7/2017
+-- ####################################################################################
+-- Primairly sourced from legion-dev SimC.
+-- Updates to rotations from sources are considered for implementation.
+-- ####################################################################################
+
+-- SimC APL 1/10/2017
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Paladin_Retribution_T19M.simc
+
 local Cooldowns = {
 	--actions+=/use_item,name=faulty_countermeasure,if=(buff.avenging_wrath.up|buff.crusade.up)
 	{'#trinket1', 'equipped(Faulty Countermeasure)&{player.buff(Avenging Wrath)||player.buff(Crusade)}'},
@@ -207,7 +202,6 @@ local Combat = {
 }
 
 local inCombat = {
-	--{Keybinds, '{!moving||moving}'},
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Toxins).cooldown=0'},
 	{Survival, '{!moving||moving}'},
 	{Blessings, '{!moving||moving}'},
