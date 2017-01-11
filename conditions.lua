@@ -123,7 +123,7 @@ local setsTable = {
 	},
 }
 
---{set_bonus(T19)=2||set_bonus(T19)>=4}
+--{'set_bonus(T19)=2||set_bonus(T19)>=4'}
 --/dump NeP.DSL:Get('set_bonus')('player', 'T19')
 NeP.DSL:Register("set_bonus", function(_, set)
 local class = select(2,UnitClass('player'))
@@ -136,6 +136,11 @@ for _, itemID in ipairs(pieces) do
   end
 end
 return counter
+end)
+
+--{'/startattack', '!isattacking'},
+NeP.DSL:Register("isattacking", function()
+    return IsCurrentSpell(6603)
 end)
 
 local LAD = LibStub('LibArtifactData-1.0')

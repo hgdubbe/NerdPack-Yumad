@@ -199,6 +199,8 @@ local Combat = {
 	{'Divine Storm', 'target.debuff(Judgment)&holypower>=3&player.area(6).enemies>=2&{{talent(7,2)&!toggle(cooldowns)}||!talent(7,2)||spell(Crusade).cooldown>gcd*5}'},
 	--actions+=/templars_verdict,if=debuff.judgment.up&holy_power>=3&(!talent.crusade.enabled|cooldown.crusade.remains>gcd*5)
 	{'Templar\'s Verdict', 'target.debuff(Judgment)&holypower>=3&{{talent(7,2)&!toggle(cooldowns)}||!talent(7,2)||spell(Crusade).cooldown>gcd*5}'},
+	--Force attack if waiting for queued spell
+	{'/startattack', '!isattacking'},
 }
 
 local inCombat = {
