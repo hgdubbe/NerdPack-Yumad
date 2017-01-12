@@ -14,10 +14,10 @@ local GUI = {
 	{type = 'checkbox', text = 'Enable Blessing of Freedom (Snare)', key = 'S_BOFSE', default = true},
 	{type = 'checkbox', text = 'Enable Gift of the Naaru', key = 'S_GOTNE', default = true},
 	{type = 'spinner', text = 'Gift of the Naaru (Health %)', key = 'S_GOTN', default = 40},
-	{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
-	{type = 'spinner', text = 'Healthstone (Health %)', key = 'S_HS', default = 20},
-	{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
-	{type = 'spinner', text = 'Ancient Healing Potion (Health %)', key = 'S_AHP', default = 20},
+	--{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
+	--{type = 'spinner', text = 'Healthstone (Health %)', key = 'S_HS', default = 20},
+	--{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
+	--{type = 'spinner', text = 'Ancient Healing Potion (Health %)', key = 'S_AHP', default = 20},
 	{type = 'ruler'},{type = 'spacer'},
 
 	-- GUI Emergency Healing
@@ -69,9 +69,9 @@ local Survival = {
 	-- Gift of the Naaru usage if enabled in UI.
 	{'&Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
-	{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
+	--{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
-	{'#Ancient Healing Potion', 'UI(S_AHPE)&player.health<=UI(S_AHP)'},
+	--{'#Ancient Healing Potion', 'UI(S_AHPE)&player.health<=UI(S_AHP)'},
 }
 
 local Player = {

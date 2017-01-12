@@ -138,11 +138,6 @@ end
 return counter
 end)
 
---{'/startattack', '!isattacking'},
-NeP.DSL:Register("isattacking", function()
-    return IsCurrentSpell(6603)
-end)
-
 local LAD = LibStub('LibArtifactData-1.0')
 
 --/dump NeP.DSL:Get('artifact.activeid')()

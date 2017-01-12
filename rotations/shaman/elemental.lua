@@ -9,10 +9,10 @@ local GUI = {
 	{type = 'spinner', text = 'Earth Elemental (Health %)', key = 'S_EE', default = 50},
 	{type = 'checkbox', text = 'Enable Gift of the Naaru', key = 'S_GOTNE', default = true},
 	{type = 'spinner', text = 'Gift of the Naaru (Health %)', key = 'S_GOTN', default = 40},
-	{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
-	{type = 'spinner', text = 'Healthstone (Health %)', key = 'S_HS', default = 20},
-	{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
-	{type = 'spinner', text = 'Ancient Healing Potion (Health %)', key = 'S_AHP', default = 20},
+	--{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
+	--{type = 'spinner', text = 'Healthstone (Health %)', key = 'S_HS', default = 20},
+	--{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
+	--{type = 'spinner', text = 'Ancient Healing Potion (Health %)', key = 'S_AHP', default = 20},
 	{type = 'ruler'},{type = 'spacer'},
 
 	-- GUI Emergency Healing
@@ -64,9 +64,9 @@ local Survival = {
 	-- Gift of the Naaru usage if enabled in UI.
 	{'&Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
-	{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
+	--{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
-	{'#Ancient Healing Potion', 'UI(S_AHPE)&player.health<=UI(S_AHP)'},
+	--{'#Ancient Healing Potion', 'UI(S_AHPE)&player.health<=UI(S_AHP)'},
 }
 
 local Player = {
@@ -108,7 +108,7 @@ local Dispel = {
 -- Updates to rotations from sources are considered for implementation.
 -- ####################################################################################
 
--- SimC APL 1/10/2017
+-- SimC APL 1/11/2017
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Shaman_Elemental_T19M.simc
 -- Lightning Rod Rotation 1/10/2017
 -- http://www.stormearthandlava.com/elemental-shaman-hub/lightning-rod-build-guide/
@@ -125,13 +125,15 @@ local AoE = {
 	--actions.aoe+=/ascendance
 	{'Ascendance', '{!moving||moving}&talent(7,1)'},
 	--actions.aoe+=/liquid_magma_totem
-	{'Liquid Magma Totem', '{!moving||moving}&talent(6,1)', 'cursor.ground'},
+	{'Liquid Magma Totem', '{!moving||moving}&talent(6,1)&!advanced', 'cursor.ground'},
+	{'Liquid Magma Totem', '{!moving||moving}&talent(6,1)&advanced', 'target.ground'},
 	--actions.aoe+=/flame_shock,if=spell_targets.chain_lightning<4&maelstrom>=20&!talent.lightning_rod.enabled,target_if=refreshable
 	--***Flame Shock according to AoE Lightning Rod Rotaion from Storm, Earth and Lava***
 	{'Flame Shock', '{!moving||moving}&!talent(7,2)&player.maelstrom>=20&target.debuff(Flame Shock).duration<gcd'},
 	{'Flame Shock', '{!moving||moving}&talent(7,2)&{player.area(40).enemies<4&!target.debuff(Flame Shock)||player.maelstrom>=20&player.buff(Elemental Focus)&target.debuff(Flame Shock).duration<9}'},
 	--actions.aoe+=/earthquake
-	{'Earthquake', '{!moving||moving}&player.maelstrom>=50', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.maelstrom>=50&!advanced', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.maelstrom>=50&advanced', 'target.ground'},
 	--actions.aoe+=/lava_burst,if=dot.flame_shock.remains>cast_time&buff.lava_surge.up&!talent.lightning_rod.enabled&spell_targets.chain_lightning<4
 	{'Lava Burst', '{!moving||moving}&player.buff(Lava Surge)||!moving&!talent(7,2)&target.debuff(Flame Shock).duration>spell(Lava Burst).casttime'},
 	--actions.aoe+=/elemental_blast,if=!talent.lightning_rod.enabled&spell_targets.chain_lightning<5
@@ -161,7 +163,8 @@ local LRSingle = {
 	--actions.single_lr=flame_shock,if=!ticking
 	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)'},
 	--actions.single_lr+=/earthquake,if=buff.echoes_of_the_great_sundering.up&maelstrom>=86
-	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86&!advanced', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86&advanced', 'target.ground'},
 	--actions.single_lr+=/earth_shock,if=maelstrom>=92
 	{'Earth Shock', '{!moving||moving}&player.maelstrom>=92'},
 	--actions.single_lr+=/stormkeeper,if=raid_event.adds.count<3|raid_event.adds.in>50
@@ -177,7 +180,8 @@ local LRSingle = {
 	--***Earth Shock according to Lightning Rod Rotaion from Storm, Earth and Lava***
 	{'Earth Shock', '{!moving||moving}&player.maelstrom>=86&!player.buff(Lava Surge)'},
 	--actions.single_lr+=/earthquake,if=buff.echoes_of_the_great_sundering.up
-	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&!advanced', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&advanced', 'target.ground'},
 	--actions.single_lr+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&spell_targets.chain_lightning<3,target_if=debuff.lightning_rod.down
 	--***Lightning Bolt according to Lightning Rod Rotaion from Storm, Earth and Lava***
 	{'Lightning Bolt', 'player.buff(Power of the Maelstrom)&{!target.debuff(Lightning Rod)||player.buff(Stormkeeper)&!toggle(aoe)}'},
@@ -204,7 +208,10 @@ local IFSingle = {
 	--actions.single_if=flame_shock,if=!ticking
 	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)'},
 	--actions.single_if+=/earthquake,if=buff.echoes_of_the_great_sundering.up&maelstrom>=86
-	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86&!advanced', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86&advanced', 'target.ground'},
+	--actions.single_if+=/frost_shock,if=buff.icefury.up&maelstrom>=86
+	{'Frost Shock', 'player.buff(Icefury)&player.maelstrom>=86'},
 	--actions.single_if+=/earth_shock,if=maelstrom>=92
 	{'Earth Shock', '{!moving||moving}&player.maelstrom>=92'},
 	--actions.single_if+=/stormkeeper,if=raid_event.adds.count<3|raid_event.adds.in>50
@@ -228,7 +235,8 @@ local IFSingle = {
 	--actions.single_if+=/earth_shock,if=maelstrom>=86
 	{'Earth Shock', '{!moving||moving}&player.maelstrom>=86'},
 	--actions.single_if+=/earthquake,if=buff.echoes_of_the_great_sundering.up
-	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&!advanced', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&advanced', 'target.ground'},
 	--actions.single_if+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&spell_targets.chain_lightning<3
 	{'Lightning Bolt', 'player.buff(Power of the Maelstrom)'},
 	--actions.single_if+=/lightning_bolt
@@ -252,7 +260,8 @@ local ASSingle = {
 	--actions.single_asc+=/flame_shock,if=maelstrom>=20&remains<=buff.ascendance.duration&cooldown.ascendance.remains+buff.ascendance.duration<=duration
 	{'Flame Shock', 'player.maelstrom>=20&target.debuff(Flame Shock).duration<=player.buff(Ascendance).duration&spell(Ascendance).cooldown+player.buff(Ascendance).duration<=target.debuff(Flame Shock).duration'},
 	--actions.single_asc+=/earthquake,if=buff.echoes_of_the_great_sundering.up&!buff.ascendance.up&maelstrom>=86
-	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&!player.buff(Ascendance)&player.maelstrom>=86', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&!player.buff(Ascendance)&player.maelstrom>=86&!advanced', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&!player.buff(Ascendance)&player.maelstrom>=86&advanced', 'target.ground'},
 	--actions.single_asc+=/earth_shock,if=maelstrom>=92&!buff.ascendance.up
 	{'Earth Shock', '{!moving||moving}&player.maelstrom>=92&!player.buff(Ascendance)'},
 	--actions.single_asc+=/stormkeeper,if=raid_event.adds.count<3|raid_event.adds.in>50
@@ -271,7 +280,8 @@ local ASSingle = {
 	--***Earth Shock according to Ascendance Rotaion from Storm, Earth and Lava***
 	{'Earth Shock', '{!moving||moving}&player.maelstrom>=86&!player.buff(Lava Surge)&!player.buff(Ascendance)'},
 	--actions.single_asc+=/earthquake,if=buff.echoes_of_the_great_sundering.up
-	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&!player.buff(Ascendance)', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&!player.buff(Ascendance)&!advanced', 'cursor.ground'},
+	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&!player.buff(Ascendance)&advanced', 'target.ground'},
 	--actions.single_asc+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&spell_targets.chain_lightning<3
 	{'Lightning Bolt', 'player.buff(Power of the Maelstrom)'},
 	--actions.single_asc+=/lightning_bolt
