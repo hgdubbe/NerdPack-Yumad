@@ -22,7 +22,7 @@ local GUI = {
 
 	-- GUI Emergency Healing
 	{type = 'header', text = 'Emergency Healing', align = 'center'},
-	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_FOLE', default = true},
+	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_FOLE', default = false},
 	{type = 'text', text = 'Thresholds set to ensure party member survival.'},
 	{type = 'spinner', text = 'Flash of Light (Health %)', key = 'E_FOL', default = 35},
 	{type = 'ruler'},{type = 'spacer'},

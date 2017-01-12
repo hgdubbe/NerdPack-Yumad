@@ -15,7 +15,7 @@ local GUI = {
 
 	-- GUI Emergency Healing
 	{type = 'header', text = 'Emergency Healing', align = 'center'},
-	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_HSGE', default = true},
+	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_HSGE', default = false},
 	{type = 'text', text = 'Thresholds set to ensure party member survival.'},
 	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HSG', default = 35},
 	{type = 'ruler'},{type = 'spacer'},
