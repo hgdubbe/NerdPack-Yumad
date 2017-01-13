@@ -15,9 +15,9 @@ local GUI = {
 	--{type = 'spinner', text = 'Ancient Healing Potion (Health %)', key = 'S_AHP', default = 20},
 	{type = 'ruler'},{type = 'spacer'},
 
-	-- GUI Emergency Healing
-	{type = 'header', text = 'Emergency Healing', align = 'center'},
-	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_HSGE', default = false},
+	-- GUI Emergency Group Healing
+	{type = 'header', text = 'Emergency Group Healing', align = 'center'},
+	{type = 'checkbox', text = 'Enable Emergency Group Healing', key = 'E_HSGE', default = false},
 	{type = 'text', text = 'Thresholds set to ensure party member survival.'},
 	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HSG', default = 35},
 	{type = 'ruler'},{type = 'spacer'},
@@ -196,7 +196,6 @@ local LRSingle = {
 -- Icefury Rotation ###################################################################
 local IFCooldowns = {
 	{'Totem Mastery', '{!moving||moving}&talent(1,3)&{totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)}'},
-	{'Stormkeeper'},
 	{'Fire Elemental', '!talent(6,2)'},
 	{'&Blood Fury', 'lastcast(Fire Elemental)'},
 	{'&Berserking', 'lastcast(Fire Elemental)'},
@@ -215,11 +214,11 @@ local IFSingle = {
 	--actions.single_if+=/earth_shock,if=maelstrom>=92
 	{'Earth Shock', '{!moving||moving}&player.maelstrom>=92'},
 	--actions.single_if+=/stormkeeper,if=raid_event.adds.count<3|raid_event.adds.in>50
-	{'Stormkeeper'},
+	{'Stormkeeper', '!player.buff(Icefury)'},
 	--actions.single_if+=/elemental_blast
 	{'Elemental Blast', 'talent(5,3)'},
 	--actions.single_if+=/icefury,if=raid_event.movement.in<5|maelstrom<=76
-	{'Icefury', 'player.maelstrom<=76'},
+	{'Icefury', 'player.maelstrom<=76&!player.buff(Stormkeeper)'},
 	--actions.single_if+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&buff.stormkeeper.up&spell_targets.chain_lightning<3
 	{'Lightning Bolt', 'player.buff(Power of the Maelstrom)&player.buff(Stormkeeper)'},
 	--actions.single_if+=/lava_burst,if=dot.flame_shock.remains>cast_time&cooldown_react
@@ -245,13 +244,13 @@ local IFSingle = {
 
 -- Ascendance Rotation ################################################################
 local ASCooldowns = {
-	{'Stormkeeper'},
-	{'Fire Elemental', '!talent(6,2)'},
-	{'&Blood Fury', 'lastcast(Fire Elemental)'},
-	{'&Berserking', 'lastcast(Fire Elemental)'},
 	--actions.single_asc=ascendance,if=dot.flame_shock.remains>buff.ascendance.duration&(time>=60|buff.bloodlust.up)&cooldown.lava_burst.remains>0&!buff.stormkeeper.up
 	--{'Ascendance', 'target.debuff(Flame Shock).duration>player.buff(Ascendance).duration&{combat(player).time>=60||hashero}&spell(Lava Burst).cooldown>0&!player.buff(Stormkeeper)'},
 	{'Ascendance', 'spell(Lava Burst).cooldown>0&!player.buff(Stormkeeper)'},
+	{'Stormkeeper', '!player.buff(Ascendance)'},
+	{'Fire Elemental', '!talent(6,2)'},
+	{'&Blood Fury', 'lastcast(Fire Elemental)'},
+	{'&Berserking', 'lastcast(Fire Elemental)'},
 }
 
 local ASSingle = {
@@ -265,7 +264,7 @@ local ASSingle = {
 	--actions.single_asc+=/earth_shock,if=maelstrom>=92&!buff.ascendance.up
 	{'Earth Shock', '{!moving||moving}&player.maelstrom>=92&!player.buff(Ascendance)'},
 	--actions.single_asc+=/stormkeeper,if=raid_event.adds.count<3|raid_event.adds.in>50
-	{'Stormkeeper'},
+	{'Stormkeeper', '!player.buff(Ascendance)'},
 	--actions.single_asc+=/elemental_blast
 	{'Elemental Blast', 'talent(5,3)'},
 	--actions.single_asc+=/lightning_bolt,if=buff.power_of_the_maelstrom.up&buff.stormkeeper.up&spell_targets.chain_lightning<3
@@ -293,7 +292,7 @@ local inCombat = {
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
 	{Survival, '{!moving||moving}'},
 	{Player, 'player.health<100'},
-	{Emergency},
+	{Emergency, 'ingroup'},
 	{Trinkets, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 	{LRCooldowns, '{!moving||moving}&talent(7,2)&toggle(cooldowns)'},

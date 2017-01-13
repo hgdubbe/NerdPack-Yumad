@@ -13,9 +13,9 @@ local GUI = {
 	--{type = 'spinner', text = 'Ancient Healing Potion (Health %)', key = 'S_AHP', default = 20},
 	{type = 'ruler'},{type = 'spacer'},
 
-	-- GUI Emergency Healing
-	{type = 'header', text = 'Emergency Healing', align = 'center'},
-	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_HSGE', default = false},
+	-- GUI Emergency Group Healing
+	{type = 'header', text = 'Emergency Group Healing', align = 'center'},
+	{type = 'checkbox', text = 'Enable Emergency Group Healing', key = 'E_HSGE', default = false},
 	{type = 'text', text = 'Thresholds set to ensure party member survival.'},
 	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HSG', default = 35},
 	{type = 'ruler'},{type = 'spacer'},
@@ -183,7 +183,7 @@ local inCombat = {
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
 	{Survival, '{!moving||moving}'},
 	{Player, 'player.health<100'},
-	{Emergency},
+	{Emergency, 'ingroup'},
 	{Trinkets, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 	{Cooldowns, '{!moving||moving}&toggle(cooldowns)'},
