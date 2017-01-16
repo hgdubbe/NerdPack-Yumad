@@ -57,7 +57,7 @@ local Survival = {
 	-- Astral Shift usage if enabled in UI.
 	{'&Astral Shift', 'UI(S_ASE)&player.health<=UI(S_AS)'},
 	-- Gift of the Naaru usage if enabled in UI.
-	{'&Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
+	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
 	--{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
@@ -66,12 +66,12 @@ local Survival = {
 
 local Player = {
 	-- Healing Surge usage if enabled in UI.
-	{'!Healing Surge', '!moving&UI(S_HSGE)&player.health<=UI(S_HSG)', 'player'},
+	{'!Healing Surge', '!moving&{!player.debuff(Ignite Soul)}&UI(S_HSGE)&player.health<=UI(S_HSG)', 'player'},
 }
 
 local Emergency = {
 	-- Healing Surge usage if enabled in UI.
-	{'!Healing Surge', '!moving&UI(E_HSGE)&lowest.health<=UI(E_HSG)', 'lowest'},
+	{'!Healing Surge', '!moving&{!lowest.debuff(Ignite Soul)}&UI(E_HSGE)&lowest.health<=UI(E_HSG)', 'lowest'},
 }
 
 local Keybinds = {
@@ -182,18 +182,19 @@ local inCombat = {
 	{Keybinds, '{!moving||moving}'},
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
 	{Survival, '{!moving||moving}'},
-	{Player, 'player.health<100'},
+	{Player, '{!ingroup||ingroup}&player.health<100'},
 	{Emergency, 'ingroup'},
 	{Trinkets, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 	{Cooldowns, '{!moving||moving}&toggle(cooldowns)'},
-	{Combat, 'target.infront&target.range<=40'},
+	{Combat, 'target.infront&target.range<=8'},
 }
 
 local outCombat = {
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
-	{'Healing Surge', '!moving&lowest.health<=70', 'lowest'},
+	{Emergency, 'ingroup'},
+	{'Healing Surge', '!moving&player.health<=70', 'player'},
 	{'Ghost Wolf', 'movingfor>=2&!player.buff(Ghost Wolf)'},
 }
 

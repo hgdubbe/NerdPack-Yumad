@@ -55,7 +55,7 @@ end
 
 local Survival = {
 	-- Lay on Hands usage if enabled in UI.
-	{'&Lay on Hands', 'UI(S_LOHE)&player.health<=UI(S_LOH)'},
+	{'&Lay on Hands', '{!player.debuff(Ignite Soul)}&UI(S_LOHE)&player.health<=UI(S_LOH)'},
 	-- Shield of Vengeance usage if enabled in UI.
 	{'&Shield of Vengeance', 'UI(S_SOVE)&player.health<=UI(S_SOV)'},
 	-- Eye for an Eye usage if enabled in UI.
@@ -67,7 +67,7 @@ local Survival = {
 	-- Blessing of Freedom usage if enabled in UI.
 	{'!Blessing of Freedom', 'UI(S_BOFSE)&player.state.snare'},
 	-- Gift of the Naaru usage if enabled in UI.
-	{'&Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
+	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
 	--{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
@@ -76,12 +76,12 @@ local Survival = {
 
 local Player = {
 	-- Flash of Light usage if enabled in UI.
-	{'!Flash of Light', '!moving&UI(S_FOLE)&player.health<=UI(S_FOL)', 'player'},
+	{'!Flash of Light', '!moving&{!player.debuff(Ignite Soul)}&UI(S_FOLE)&player.health<=UI(S_FOL)', 'player'},
 }
 
 local Emergency = {
 	-- Flash of Light usage if enabled in UI.
-	{'!Flash of Light', '!moving&UI(E_FOLE)&lowest.health<=UI(E_FOL)', 'lowest'},
+	{'!Flash of Light', '!moving&{!lowest.debuff(Ignite Soul)}&UI(E_FOLE)&lowest.health<=UI(E_FOL)', 'lowest'},
 }
 
 local Trinkets = {
@@ -207,7 +207,7 @@ local inCombat = {
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Toxins).cooldown=0'},
 	{Survival, '{!moving||moving}'},
 	{Blessings, '{!moving||moving}'},
-	{Player, 'player.health<100'},
+	{Player, '{!ingroup||ingroup}&player.health<100'},
 	{Emergency, 'ingroup'},
 	{Trinkets, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront'},
@@ -219,6 +219,8 @@ local outCombat = {
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Toxins).cooldown=0'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront'},
 	{Blessings, '{!moving||moving}'},
+	{Emergency, 'ingroup'},
+	{'Flash of Light', '!moving&player.health<=70', 'player'},
 }
 
 NeP.CR:Add(70, {

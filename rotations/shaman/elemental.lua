@@ -41,9 +41,9 @@ local exeOnLoad = function()
 	-- Rotation loaded message.
 	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cff0070de --- |rShaman: |cff0070deELEMENTAL|r')
-	print('|cff0070de --- |rLightning Rod (Mythic+) Talents: 1/3 - 2/1 - 3/1 - 4/2 - 5/3 or 5/2 (Tyrannical) - 6/1 - 7/2')
-	print('|cff0070de --- |rIcefury Talents: 1/3 or 1/2 (Pure Single) - 2/1 - 3/1 - 4/2 - 5/3 - 6/3 or 6/1 (Mythic+) - 7/3')
-	print('|cff0070de --- |rAscendance Talents: 1/1 - 2/1 - 3/1 - 4/2 - 5/3 or 5/1 (Flame Shock multi-targets) - 6/3 - 7/1')
+	print('|cff0070de --- |rLightning Rod: 1/3 - 2/1 - 3/1 - 4/2 - 5/3||5/2 (Tyrannical) - 6/1 - 7/2')
+	print('|cff0070de --- |rIcefury: 1/3 - 2/1 - 3/1 - 4/2 - 5/3 - 6/3||6/1 (Mythic+ AoE) - 7/3')
+	print('|cff0070de --- |rAscendance: 1/1 - 2/1 - 3/1 - 4/2 - 5/3 - 6/3||6/1 (Mythic+ AoE)- 7/1')
 	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 
@@ -62,7 +62,7 @@ local Survival = {
 	-- Earth Elemental usage if enabled in UI.
 	{'Earth Elemental', 'UI(S_EEE)&player.health<=UI(S_EE)'},
 	-- Gift of the Naaru usage if enabled in UI.
-	{'&Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
+	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
 	--{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
@@ -71,12 +71,12 @@ local Survival = {
 
 local Player = {
 	-- Healing Surge usage if enabled in UI.
-	{'!Healing Surge', '!moving&UI(S_HSGE)&player.health<=UI(S_HSG)', 'player'},
+	{'!Healing Surge', '!moving&{!player.debuff(Ignite Soul)}&UI(S_HSGE)&player.health<=UI(S_HSG)', 'player'},
 }
 
 local Emergency = {
 	-- Healing Surge usage if enabled in UI.
-	{'!Healing Surge', '!moving&UI(E_HSGE)&lowest.health<=UI(E_HSG)', 'lowest'},
+	{'!Healing Surge', '!moving&{!lowest.debuff(Ignite Soul)}&UI(E_HSGE)&lowest.health<=UI(E_HSG)', 'lowest'},
 }
 
 local Keybinds = {
@@ -108,13 +108,13 @@ local Dispel = {
 -- Updates to rotations from sources are considered for implementation.
 -- ####################################################################################
 
--- SimC APL 1/11/2017
+-- SimC APL 1/16/2017
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Shaman_Elemental_T19M.simc
 -- Lightning Rod Rotation 1/10/2017
 -- http://www.stormearthandlava.com/elemental-shaman-hub/lightning-rod-build-guide/
--- Icefury Rotaion 1/10/2017
+-- Icefury Rotaion 1/16/2017
 -- http://www.stormearthandlava.com/elemental-shaman-hub/icefury-build-guide/
--- Ascendance Rotaion 1/10/2017
+-- Ascendance Rotaion 1/14/2017
 -- http://www.stormearthandlava.com/elemental-shaman-hub/ascendance-build-guide/
 
 local AoE = {
@@ -160,8 +160,8 @@ local LRCooldowns = {
 local LRSingle = {
 	--actions.single_lr+=/totem_mastery
 	{'Totem Mastery', '{!moving||moving}&talent(1,3)&{totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)}'},
-	--actions.single_lr=flame_shock,if=!ticking
-	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)'},
+	--actions.single_lr=flame_shock,if=!ticking|dot.flame_shock.remains<=gcd
+	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)||target.debuff(Flame Shock).duration<=gcd'},
 	--actions.single_lr+=/earthquake,if=buff.echoes_of_the_great_sundering.up&maelstrom>=86
 	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86&!advanced', 'cursor.ground'},
 	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86&advanced', 'target.ground'},
@@ -204,8 +204,8 @@ local IFCooldowns = {
 local IFSingle = {
 	--actions.single_if+=/totem_mastery
 	{'Totem Mastery', '{!moving||moving}&talent(1,3)&{totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)}'},
-	--actions.single_if=flame_shock,if=!ticking
-	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)'},
+	--actions.single_if=flame_shock,if=!ticking|dot.flame_shock.remains<=gcd
+	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)||target.debuff(Flame Shock).duration<=gcd'},
 	--actions.single_if+=/earthquake,if=buff.echoes_of_the_great_sundering.up&maelstrom>=86
 	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86&!advanced', 'cursor.ground'},
 	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&player.maelstrom>=86&advanced', 'target.ground'},
@@ -254,8 +254,8 @@ local ASCooldowns = {
 }
 
 local ASSingle = {
-	--actions.single_asc+=/flame_shock,if=!ticking
-	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)'},
+	--actions.single_asc+=/flame_shock,if=!ticking|dot.flame_shock.remains<=gcd
+	{'Flame Shock', '{!moving||moving}&!target.debuff(Flame Shock)||target.debuff(Flame Shock).duration<=gcd'},
 	--actions.single_asc+=/flame_shock,if=maelstrom>=20&remains<=buff.ascendance.duration&cooldown.ascendance.remains+buff.ascendance.duration<=duration
 	{'Flame Shock', 'player.maelstrom>=20&target.debuff(Flame Shock).duration<=player.buff(Ascendance).duration&spell(Ascendance).cooldown+player.buff(Ascendance).duration<=target.debuff(Flame Shock).duration'},
 	--actions.single_asc+=/earthquake,if=buff.echoes_of_the_great_sundering.up&!buff.ascendance.up&maelstrom>=86
@@ -277,7 +277,7 @@ local ASSingle = {
 	{'Flame Shock', '{!moving||moving}&player.maelstrom>=20&player.buff(Elemental Focus)&target.debuff(Flame Shock).duration<9'},
 	--actions.single_asc+=/earth_shock,if=maelstrom>=86
 	--***Earth Shock according to Ascendance Rotaion from Storm, Earth and Lava***
-	{'Earth Shock', '{!moving||moving}&player.maelstrom>=86&!player.buff(Lava Surge)&!player.buff(Ascendance)'},
+	{'Earth Shock', '{!moving||moving}&player.maelstrom>=86&{!player.buff(Lava Surge)||!player.buff(Ascendance)}'},
 	--actions.single_asc+=/earthquake,if=buff.echoes_of_the_great_sundering.up
 	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&!player.buff(Ascendance)&!advanced', 'cursor.ground'},
 	{'Earthquake', '{!moving||moving}&player.buff(Echoes of the Great Sundering)&!player.buff(Ascendance)&advanced', 'target.ground'},
@@ -291,7 +291,7 @@ local inCombat = {
 	{Keybinds, '{!moving||moving}'},
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
 	{Survival, '{!moving||moving}'},
-	{Player, 'player.health<100'},
+	{Player, '{!ingroup||ingroup}&player.health<100'},
 	{Emergency, 'ingroup'},
 	{Trinkets, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
@@ -307,7 +307,8 @@ local inCombat = {
 local outCombat = {
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
-	{'Healing Surge', '!moving&lowest.health<=70', 'lowest'},
+	{Emergency, 'ingroup'},
+	{'Healing Surge', '!moving&player.health<=70', 'player'},
 	{'Ghost Wolf', 'movingfor>=2&!player.buff(Ghost Wolf)'},
 }
 
