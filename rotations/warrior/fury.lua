@@ -66,10 +66,10 @@ local BattleCry = {
 	{'Execute'},
 	--actions.cooldowns+=/raging_blow,if=buff.enrage.up
 	{'Raging Blow', 'player.buff(Enrage)'},
-	--actions.cooldowns+=/rampage,if=talent.reckless_abandon.enabled
-	{'Rampage', 'talent(7,2)'},
 	--actions.cooldowns+=/odyns_fury
 	{'Odyn\'s Fury', 'player.buff(Enrage)'},
+	--actions.cooldowns+=/rampage,if=talent.reckless_abandon.enabled
+	{'Rampage', 'talent(7,2)'},
 	--actions.cooldowns+=/berserker_rage,if=talent.outburst.enabled&buff.enrage.down&buff.battle_cry.up
 	{'&Berserker Rage', 'talent(3,2)&!player.buff(Enrage)&player.buff(Battle Cry)'},
 	--actions.cooldowns+=/bloodthirst,if=buff.enrage.remains<1&!talent.outburst.enabled
@@ -78,8 +78,6 @@ local BattleCry = {
 	{'#trinket1', 'equipped(Draught of Souls)&player.buff(Battle Cry).duration>3&{{talent(7,3)&player.buff(Dragon Roar).duration>=3}||!talent(7,3)}'},
 	--actions.cooldowns+=/raging_blow
 	{'Raging Blow'},
-	--actions.cooldowns+=/odyns_fury
-	{'Odyn\'s Fury', 'player.buff(Enrage)'},
 	--actions.cooldowns+=/bloodthirst
 	{'Bloodthirst'},
 	--actions.cooldowns+=/whirlwind,if=buff.wrecking_ball.react&buff.enrage.up
