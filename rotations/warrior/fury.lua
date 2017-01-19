@@ -77,7 +77,7 @@ local BattleCry = {
 	--actions.cooldowns+=/raging_blow
 	{'Raging Blow'},
 	--actions.cooldowns+=/odyns_fury
-	{'Odyn\'s Fury'},
+	{'Odyn\'s Fury', 'player.buff(Enrage)'},
 	--actions.cooldowns+=/bloodthirst
 	{'Bloodthirst'},
 	--actions.cooldowns+=/whirlwind,if=buff.wrecking_ball.react&buff.enrage.up
@@ -181,8 +181,8 @@ local inCombat = {
 	{BattleCry, '{!moving||moving}&target.range<=8&target.infront&player.buff(Battle Cry)'},
 	{TwoTargets, '{!moving||moving}&toggle(aoe)&{player.area(8).enemies=2||player.area(8).enemies=3}'},
 	{AoE, '{!moving||moving}&toggle(aoe)&{player.area(8).enemies>3'},
-	{Execute, '{!moving||moving}&target.range<=8&target.infront&target.health<=20'},
-	{ST, '{!moving||moving}&target.range<=8&target.infront&target.health>20'},
+	{Execute, '{!moving||moving}&target.range<=8&target.infront&target.health<=20&!player.buff(Battle Cry)'},
+	{ST, '{!moving||moving}&target.range<=8&target.infront&target.health>20&!player.buff(Battle Cry)'},
 }
 
 local outCombat = {
