@@ -58,8 +58,6 @@ local Cooldowns = {
 }
 
 local BattleCry = {
-	--actions.cooldowns+=/odyns_fury
-	{'Odyn\'s Fury'},
 	--actions.cooldowns=rampage,if=talent.massacre.enabled&buff.massacre.react&buff.enrage.remains<1
 	{'Rampage', 'talent(5,1)&player.buff(Massacre)&player.buff(Enrage).duration<1'},
 	--actions.cooldowns+=/bloodthirst,if=target.health.pct<20&buff.enrage.remains<1
@@ -78,6 +76,8 @@ local BattleCry = {
 	{'#trinket1', 'equipped(Draught of Souls)&player.buff(Battle Cry).duration>3&{{talent(7,3)&player.buff(Dragon Roar).duration>=3}||!talent(7,3)}'},
 	--actions.cooldowns+=/raging_blow
 	{'Raging Blow'},
+	--actions.cooldowns+=/odyns_fury
+	{'Odyn\'s Fury'},
 	--actions.cooldowns+=/bloodthirst
 	{'Bloodthirst'},
 	--actions.cooldowns+=/whirlwind,if=buff.wrecking_ball.react&buff.enrage.up
@@ -131,12 +131,12 @@ local ST ={
 }
 
 local AoE = {
-	--actions.aoe+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
-	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
 	--actions.aoe=bloodthirst,if=buff.enrage.down|rage<50
 	{'Bloodthirst', '!player.buff(Enrage)||player.rage<=50'},
 	--actions.aoe+=/call_action_list,name=bladestorm
 	{'Bladestorm', 'talent(7,1)&player.buff(Enrage).duration>2'},
+	--actions.aoe+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
+	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
 	--actions.aoe+=/whirlwind,if=buff.meat_cleaver.down
 	{'Whirlwind', '!player.buff(Meat Cleaver)'},
 	--actions.aoe+=/dragon_roar
@@ -150,8 +150,6 @@ local AoE = {
 }
 
 local TwoTargets = {
-	--actions.two_targets+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
-	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
 	--actions.two_targets=whirlwind,if=buff.meat_cleaver.down
 	{'Whirlwind', '!player.buff(Meat Cleaver)'},
 	--actions.two_targets+=/call_action_list,name=bladestorm
@@ -160,6 +158,8 @@ local TwoTargets = {
 	{'Rampage', '!player.buff(Enrage)||{player.rage=100&!player.buff(Juggernaut)}||talent(5,1)&player.buff(Massacre)'},
 	--actions.two_targets+=/bloodthirst,if=buff.enrage.down
 	{'Bloodthirst', '!player.buff(Enrage)'},
+	--actions.two_targets+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
+	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
 	--actions.two_targets+=/raging_blow,if=talent.inner_rage.enabled&spell_targets.whirlwind=2
 	{'Raging Blow', 'talent(6,3)&player.area(8).enemies=2'},
 	--actions.two_targets+=/whirlwind,if=spell_targets.whirlwind>2
