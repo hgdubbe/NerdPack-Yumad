@@ -68,6 +68,8 @@ local BattleCry = {
 	{'Raging Blow', 'player.buff(Enrage)'},
 	--actions.cooldowns+=/rampage,if=talent.reckless_abandon.enabled
 	{'Rampage', 'talent(7,2)'},
+	--actions.cooldowns+=/odyns_fury
+	{'Odyn\'s Fury', 'player.buff(Enrage)'},
 	--actions.cooldowns+=/berserker_rage,if=talent.outburst.enabled&buff.enrage.down&buff.battle_cry.up
 	{'&Berserker Rage', 'talent(3,2)&!player.buff(Enrage)&player.buff(Battle Cry)'},
 	--actions.cooldowns+=/bloodthirst,if=buff.enrage.remains<1&!talent.outburst.enabled
@@ -84,6 +86,48 @@ local BattleCry = {
 	{'Whirlwind', 'talent(3,1)&player.buff(Wrecking Ball)&player.buff(Enrage)'},
 	--actions.cooldowns+=/furious_slash
 	{'Furious Slash'},
+}
+
+local TwoTargets = {
+	--actions.two_targets=whirlwind,if=buff.meat_cleaver.down
+	{'Whirlwind', '!player.buff(Meat Cleaver)'},
+	--actions.two_targets+=/call_action_list,name=bladestorm
+	{'Bladestorm', 'talent(7,1)&player.buff(Enrage).duration>2'},
+	--actions.two_targets+=/rampage,if=buff.enrage.down|(rage=100&buff.juggernaut.down)|buff.massacre.up
+	{'Rampage', '!player.buff(Enrage)||{player.rage=100&!player.buff(Juggernaut)}||talent(5,1)&player.buff(Massacre)'},
+	--actions.two_targets+=/bloodthirst,if=buff.enrage.down
+	{'Bloodthirst', '!player.buff(Enrage)'},
+	--actions.two_targets+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
+	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
+	--actions.two_targets+=/raging_blow,if=talent.inner_rage.enabled&spell_targets.whirlwind=2
+	{'Raging Blow', 'talent(6,3)&player.area(8).enemies=2'},
+	--actions.two_targets+=/whirlwind,if=spell_targets.whirlwind>2
+	{'Whirlwind', 'player.area(8).enemies>2'},
+	--actions.two_targets+=/dragon_roar
+	{'Dragon Roar', 'talent(7,3)'},
+	--actions.two_targets+=/bloodthirst
+	{'Bloodthirst'},
+	--actions.two_targets+=/whirlwind
+	{'Whirlwind'},
+}
+
+local AoE = {
+	--actions.aoe=bloodthirst,if=buff.enrage.down|rage<50
+	{'Bloodthirst', '!player.buff(Enrage)||player.rage<=50'},
+	--actions.aoe+=/call_action_list,name=bladestorm
+	{'Bladestorm', 'talent(7,1)&player.buff(Enrage).duration>2'},
+	--actions.aoe+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
+	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
+	--actions.aoe+=/whirlwind,if=buff.meat_cleaver.down
+	{'Whirlwind', '!player.buff(Meat Cleaver)'},
+	--actions.aoe+=/dragon_roar
+	{'Dragon Roar', 'talent(7,3)'},
+	--actions.aoe+=/rampage,if=buff.meat_cleaver.up
+	{'Rampage', 'player.buff(Meat Cleaver)'},
+	--actions.aoe+=/bloodthirst
+	{'Bloodthirst'},
+	--actions.aoe+=/whirlwind
+	{'Whirlwind'},
 }
 
 local Execute = {
@@ -128,48 +172,6 @@ local ST ={
 	{'Bladestorm', 'talent(7,1)&player.buff(Enrage).duration>2'},
 	--actions.single_target+=/bloodbath,if=buff.frothing_berserker.up|(rage>80&!talent.frothing_berserker.enabled)
 	{'&Bloodbath', 'talent(6,1)&{player.buff(Frothing Berserker)||{player.rage>=80&!talent(5,2)}}'},
-}
-
-local AoE = {
-	--actions.aoe=bloodthirst,if=buff.enrage.down|rage<50
-	{'Bloodthirst', '!player.buff(Enrage)||player.rage<=50'},
-	--actions.aoe+=/call_action_list,name=bladestorm
-	{'Bladestorm', 'talent(7,1)&player.buff(Enrage).duration>2'},
-	--actions.aoe+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
-	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
-	--actions.aoe+=/whirlwind,if=buff.meat_cleaver.down
-	{'Whirlwind', '!player.buff(Meat Cleaver)'},
-	--actions.aoe+=/dragon_roar
-	{'Dragon Roar', 'talent(7,3)'},
-	--actions.aoe+=/rampage,if=buff.meat_cleaver.up
-	{'Rampage', 'player.buff(Meat Cleaver)'},
-	--actions.aoe+=/bloodthirst
-	{'Bloodthirst'},
-	--actions.aoe+=/whirlwind
-	{'Whirlwind'},
-}
-
-local TwoTargets = {
-	--actions.two_targets=whirlwind,if=buff.meat_cleaver.down
-	{'Whirlwind', '!player.buff(Meat Cleaver)'},
-	--actions.two_targets+=/call_action_list,name=bladestorm
-	{'Bladestorm', 'talent(7,1)&player.buff(Enrage).duration>2'},
-	--actions.two_targets+=/rampage,if=buff.enrage.down|(rage=100&buff.juggernaut.down)|buff.massacre.up
-	{'Rampage', '!player.buff(Enrage)||{player.rage=100&!player.buff(Juggernaut)}||talent(5,1)&player.buff(Massacre)'},
-	--actions.two_targets+=/bloodthirst,if=buff.enrage.down
-	{'Bloodthirst', '!player.buff(Enrage)'},
-	--actions.two_targets+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
-	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
-	--actions.two_targets+=/raging_blow,if=talent.inner_rage.enabled&spell_targets.whirlwind=2
-	{'Raging Blow', 'talent(6,3)&player.area(8).enemies=2'},
-	--actions.two_targets+=/whirlwind,if=spell_targets.whirlwind>2
-	{'Whirlwind', 'player.area(8).enemies>2'},
-	--actions.two_targets+=/dragon_roar
-	{'Dragon Roar', 'talent(7,3)'},
-	--actions.two_targets+=/bloodthirst
-	{'Bloodthirst'},
-	--actions.two_targets+=/whirlwind
-	{'Whirlwind'},
 }
 
 local inCombat = {
