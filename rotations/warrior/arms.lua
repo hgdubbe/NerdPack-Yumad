@@ -24,6 +24,10 @@ local Interrupts = {
 	{'&Arcane Torrent', 'target.range<=8&spell(Pummel).cooldown>gcd&!lastgcd(Pummel)'},
 }
 
+local Attack = {
+	{'/startattack', '!isattacking'},
+}
+
 -- ####################################################################################
 -- Primairly sourced from legion-dev SimC.
 -- Updates to rotations from sources are considered for implementation.
@@ -63,8 +67,6 @@ local Available = {
 	{'Ravager', 'talent(7,3)'},
 	--actions+=/overpower,if=buff.overpower.react
 	{'Overpower', 'talent(1,2)&player.buff(Overpower!)'},
-	--actions+=/auto_attack
-	{'/startattack', '!isattacking'},
 }
 
 local AoE = {
@@ -159,6 +161,7 @@ local inCombat = {
 	{Keybinds, '{!moving||moving}'},
 	{Survival, '{!moving||moving}&player.health<100'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront'},
+	{Attack, '{!moving||moving}'},
 	{Available, '{!moving||moving}&target.range<=8'},
 	{Cleave, '{!moving||moving}&toggle(aoe)&player.area(8).enemies>=2&talent(1,3)'},
 	{AoE, '{!moving||moving}&toggle(aoe)&player.area(8).enemies>=5&!talent(1,3)'},

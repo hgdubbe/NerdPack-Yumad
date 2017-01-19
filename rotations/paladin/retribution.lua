@@ -98,6 +98,10 @@ local Interrupts = {
 	{'&Arcane Torrent', 'target.range<=8&spell(Rebuke).cooldown>gcd&!lastgcd(Rebuke)'},
 }
 
+local Attack = {
+	{'/startattack', '!isattacking'},
+}
+
 local Dispel = {
 	{'%dispelself'},
 }
@@ -199,8 +203,6 @@ local Combat = {
 	{'Divine Storm', 'target.debuff(Judgment)&holypower>=3&player.area(6).enemies>=2&{{talent(7,2)&!toggle(cooldowns)}||!talent(7,2)||spell(Crusade).cooldown>gcd*5}'},
 	--actions+=/templars_verdict,if=debuff.judgment.up&holy_power>=3&(!talent.crusade.enabled|cooldown.crusade.remains>gcd*5)
 	{'Templar\'s Verdict', 'target.debuff(Judgment)&holypower>=3&{{talent(7,2)&!toggle(cooldowns)}||!talent(7,2)||spell(Crusade).cooldown>gcd*5}'},
-	--actions+=/auto_attack
-	{'/startattack', '!isattacking'},
 }
 
 local inCombat = {
@@ -211,6 +213,7 @@ local inCombat = {
 	{Emergency, 'ingroup'},
 	{Trinkets, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront'},
+	{Attack, '{!moving||moving}'},
 	{Cooldowns, '{!moving||moving}&toggle(cooldowns)'},
 	{Combat, '{!moving||moving}&target.infront&target.range<=8'},
 }

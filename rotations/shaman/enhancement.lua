@@ -92,6 +92,10 @@ local Interrupts = {
 	{'&Wind Shear'},
 }
 
+local Attack = {
+	{'/startattack', '!isattacking'},
+}
+
 local Dispel = {
 	{'%dispelself'},
 }
@@ -174,8 +178,6 @@ local Combat = {
 	{'Flametongue'},
 	--actions+=/boulderfist
 	{'Boulderfist', 'talent(1,3)'},
-	--actions+=/auto_attack
-	{'/startattack', '!isattacking'},
 }
 
 local inCombat = {
@@ -186,6 +188,7 @@ local inCombat = {
 	{Emergency, 'ingroup'},
 	{Trinkets, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
+	{Attack, '{!moving||moving}'},
 	{Cooldowns, '{!moving||moving}&toggle(cooldowns)'},
 	{Combat, 'target.infront&target.range<=8'},
 }

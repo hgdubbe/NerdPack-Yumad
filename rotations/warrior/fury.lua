@@ -24,6 +24,10 @@ local Interrupts = {
 	{'&Arcane Torrent', 'target.range<=8&spell(Pummel).cooldown>gcd&!lastgcd(Pummel)'},
 }
 
+local Attack = {
+	{'/startattack', '!isattacking'},
+}
+
 -- ####################################################################################
 -- Primairly sourced from legion-dev SimC.
 -- Updates to rotations from sources are considered for implementation.
@@ -144,8 +148,6 @@ local ST ={
 	{'Bladestorm', 'talent(7,1)&player.buff(Enrage).duration>2'},
 	--actions.single_target+=/bloodbath,if=buff.frothing_berserker.up|(rage>80&!talent.frothing_berserker.enabled)
 	{'&Bloodbath', 'talent(6,1)&{player.buff(Frothing Berserker)||{player.rage>=80&!talent(5,2)}}'},
-	--actions+=/auto_attack
-	{'/startattack', '!isattacking'},
 }
 
 local TwoTargets = {
@@ -175,6 +177,7 @@ local inCombat = {
 	{Keybinds, '{!moving||moving}'},
 	{Survival, '{!moving||moving}&player.health<100'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront'},
+	{Attack, '{!moving||moving}'},
 	{Cooldowns, '{!moving||moving}&toggle(cooldowns)&target.range<=8'},
 	{TwoTargets, '{!moving||moving}&toggle(aoe)&player.area(8).enemies<=3'},
 	{AoE, '{!moving||moving}&toggle(aoe)&player.area(8).enemies>3'},
