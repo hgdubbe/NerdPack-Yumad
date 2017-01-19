@@ -189,4 +189,9 @@ NeP.DSL:Register('spell_haste', function()
     return math.floor((100 / ( 100 + shaste )) * 10^3 ) / 10^3
 end)
 
+--/dump NeP.DSL:Get('gcd.remains')()
+NeP.DSL:Register('gcd.remains', function()
+    return NeP.DSL:Get('spell.cooldown')('player', '61304')
+end)
+
 --/dump NeP.DSL:Get('haste')('player')

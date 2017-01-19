@@ -9,4 +9,6 @@
 
 <Script file="rotations\paladin\retribution.lua"/>
 
+<Script file="rotations\warrior\arms.lua"/>
+
 </Ui>
