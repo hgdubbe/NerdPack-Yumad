@@ -37,7 +37,6 @@ local Attack = {
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Warrior_Fury_T19M.simc
 
 local Cooldowns = {
-	{BattleCry, 'player.buff(Battle Cry)'},
 	--actions+=/use_item,name=faulty_countermeasure,if=buff.battle_cry.up&buff.enrage.up
 	{'#trinket2', 'equipped(Faulty Countermeasure)&player.buff(Battle Cry)&player.buff(Enrage)'},
 	--actions+=/battle_cry,if=gcd.remains=0&(!talent.reckless_abandon.enabled&(cooldown.bloodthirst.remains=0|buff.enrage.remains>cooldown.bloodthirst.remains))|(talent.reckless_abandon.enabled&(talent.dragon_roar.enabled&buff.dragon_roar.up|!talent.dragon_roar.enabled))
@@ -58,26 +57,9 @@ local Cooldowns = {
 	{'&Arcane Torrent', 'player.rage<=60'},
 }
 
-local AoE = {
-	--actions.aoe=bloodthirst,if=buff.enrage.down|rage<50
-	{'Bloodthirst', '!player.buff(Enrage)||player.rage<=50'},
-	--actions.aoe+=/call_action_list,name=bladestorm
-	{'Bladestorm', 'talent(7,1)&player.buff(Enrage).duration>2'},
-	--actions.aoe+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
-	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
-	--actions.aoe+=/whirlwind,if=buff.meat_cleaver.down
-	{'Whirlwind', '!player.buff(Meat Cleaver)'},
-	--actions.aoe+=/dragon_roar
-	{'Dragon Roar', 'talent(7,3)'},
-	--actions.aoe+=/rampage,if=buff.meat_cleaver.up
-	{'Rampage', 'player.buff(Meat Cleaver)'},
-	--actions.aoe+=/bloodthirst
-	{'Bloodthirst'},
-	--actions.aoe+=/whirlwind
-	{'Whirlwind'},
-}
-
 local BattleCry = {
+	--actions.cooldowns+=/odyns_fury
+	{'Odyn\'s Fury'},
 	--actions.cooldowns=rampage,if=talent.massacre.enabled&buff.massacre.react&buff.enrage.remains<1
 	{'Rampage', 'talent(5,1)&player.buff(Massacre)&player.buff(Enrage).duration<1'},
 	--actions.cooldowns+=/bloodthirst,if=target.health.pct<20&buff.enrage.remains<1
@@ -96,8 +78,6 @@ local BattleCry = {
 	{'#trinket1', 'equipped(Draught of Souls)&player.buff(Battle Cry).duration>3&{{talent(7,3)&player.buff(Dragon Roar).duration>=3}||!talent(7,3)}'},
 	--actions.cooldowns+=/raging_blow
 	{'Raging Blow'},
-	--actions.cooldowns+=/odyns_fury
-	{'Odyn\'s Fury'},
 	--actions.cooldowns+=/bloodthirst
 	{'Bloodthirst'},
 	--actions.cooldowns+=/whirlwind,if=buff.wrecking_ball.react&buff.enrage.up
@@ -150,7 +130,28 @@ local ST ={
 	{'&Bloodbath', 'talent(6,1)&{player.buff(Frothing Berserker)||{player.rage>=80&!talent(5,2)}}'},
 }
 
+local AoE = {
+	--actions.aoe+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
+	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
+	--actions.aoe=bloodthirst,if=buff.enrage.down|rage<50
+	{'Bloodthirst', '!player.buff(Enrage)||player.rage<=50'},
+	--actions.aoe+=/call_action_list,name=bladestorm
+	{'Bladestorm', 'talent(7,1)&player.buff(Enrage).duration>2'},
+	--actions.aoe+=/whirlwind,if=buff.meat_cleaver.down
+	{'Whirlwind', '!player.buff(Meat Cleaver)'},
+	--actions.aoe+=/dragon_roar
+	{'Dragon Roar', 'talent(7,3)'},
+	--actions.aoe+=/rampage,if=buff.meat_cleaver.up
+	{'Rampage', 'player.buff(Meat Cleaver)'},
+	--actions.aoe+=/bloodthirst
+	{'Bloodthirst'},
+	--actions.aoe+=/whirlwind
+	{'Whirlwind'},
+}
+
 local TwoTargets = {
+	--actions.two_targets+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
+	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
 	--actions.two_targets=whirlwind,if=buff.meat_cleaver.down
 	{'Whirlwind', '!player.buff(Meat Cleaver)'},
 	--actions.two_targets+=/call_action_list,name=bladestorm
@@ -159,8 +160,6 @@ local TwoTargets = {
 	{'Rampage', '!player.buff(Enrage)||{player.rage=100&!player.buff(Juggernaut)}||talent(5,1)&player.buff(Massacre)'},
 	--actions.two_targets+=/bloodthirst,if=buff.enrage.down
 	{'Bloodthirst', '!player.buff(Enrage)'},
-	--actions.two_targets+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
-	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
 	--actions.two_targets+=/raging_blow,if=talent.inner_rage.enabled&spell_targets.whirlwind=2
 	{'Raging Blow', 'talent(6,3)&player.area(8).enemies=2'},
 	--actions.two_targets+=/whirlwind,if=spell_targets.whirlwind>2
@@ -179,8 +178,9 @@ local inCombat = {
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront'},
 	{Attack, '{!moving||moving}'},
 	{Cooldowns, '{!moving||moving}&toggle(cooldowns)&target.range<=8'},
-	{TwoTargets, '{!moving||moving}&toggle(aoe)&player.area(8).enemies<=3'},
-	{AoE, '{!moving||moving}&toggle(aoe)&player.area(8).enemies>3'},
+	{BattleCry, '{!moving||moving}&target.range<=8&target.infront&player.buff(Battle Cry)'},
+	{TwoTargets, '{!moving||moving}&toggle(aoe)&{player.area(8).enemies=2||player.area(8).enemies=3}'},
+	{AoE, '{!moving||moving}&toggle(aoe)&{player.area(8).enemies>3'},
 	{Execute, '{!moving||moving}&target.range<=8&target.infront&target.health<=20'},
 	{ST, '{!moving||moving}&target.range<=8&target.infront&target.health>20'},
 }
