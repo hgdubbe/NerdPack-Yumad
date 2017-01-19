@@ -61,11 +61,11 @@ local Survival = {
 	-- Eye for an Eye usage if enabled in UI.
 	{'Eye for an Eye', 'talent(5,2)&UI(S_EFAEE)&player.health<=UI(S_EFAE)'},
 	-- Every Man for Himself usage if enabled in UI.
-	{'&Every Man for Himself', 'UI(S_EMFHSE)&player.state.stun'},
+	{'&Every Man for Himself', 'UI(S_EMFHSE)&player.state(stun)'},
 	-- Blessing of Freedom usage if enabled in UI.
-	{'!Blessing of Freedom', 'UI(S_BOFRE)&player.state.root'},
+	{'!Blessing of Freedom', 'UI(S_BOFRE)&player.state(root)'},
 	-- Blessing of Freedom usage if enabled in UI.
-	{'!Blessing of Freedom', 'UI(S_BOFSE)&player.state.snare'},
+	{'!Blessing of Freedom', 'UI(S_BOFSE)&player.state(snare)'},
 	-- Gift of the Naaru usage if enabled in UI.
 	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
@@ -95,11 +95,11 @@ local Interrupts = {
 	{'&Rebuke', 'target.range<=5'},
 	{'Hammer of Justice', 'target.range<=10&spell(Rebuke).cooldown>gcd&!lastgcd(Rebuke)'},
 	{'Blinding Light', 'talent(3,3)&target.range<=10&spell(Rebuke).cooldown>gcd&!lastgcd(Rebuke)'},
-	{'Arcane Torrent', 'target.range<=8&spell(Rebuke).cooldown>gcd&!lastgcd(Rebuke)'},
+	{'&Arcane Torrent', 'target.range<=8&spell(Rebuke).cooldown>gcd&!lastgcd(Rebuke)'},
 }
 
 local Dispel = {
-	{'%dispelall'},
+	{'%dispelself'},
 }
 
 local Blessings = {
@@ -119,7 +119,7 @@ local Cooldowns = {
 	--actions+=/use_item,name=faulty_countermeasure,if=(buff.avenging_wrath.up|buff.crusade.up)
 	{'#trinket1', 'equipped(Faulty Countermeasure)&{player.buff(Avenging Wrath)||player.buff(Crusade)}'},
 	--actions+=/arcane_torrent,if=holy_power<5&(buff.crusade.up|buff.avenging_wrath.up|time<2)
-	{'Arcane Torrent', 'holypower<5&{player.buff(Crusade)||player.buff(Avenging Wrath)||combat(player).time<2}'},
+	{'&Arcane Torrent', 'holypower<5&{player.buff(Crusade)||player.buff(Avenging Wrath)||combat(player).time<2}'},
 	--actions+=/holy_wrath
 	{'Holy Wrath'},
 	--actions+=/avenging_wrath
@@ -199,7 +199,7 @@ local Combat = {
 	{'Divine Storm', 'target.debuff(Judgment)&holypower>=3&player.area(6).enemies>=2&{{talent(7,2)&!toggle(cooldowns)}||!talent(7,2)||spell(Crusade).cooldown>gcd*5}'},
 	--actions+=/templars_verdict,if=debuff.judgment.up&holy_power>=3&(!talent.crusade.enabled|cooldown.crusade.remains>gcd*5)
 	{'Templar\'s Verdict', 'target.debuff(Judgment)&holypower>=3&{{talent(7,2)&!toggle(cooldowns)}||!talent(7,2)||spell(Crusade).cooldown>gcd*5}'},
-	--Force attack if waiting for queued spell
+	--actions+=/auto_attack
 	{'/startattack', '!isattacking'},
 }
 

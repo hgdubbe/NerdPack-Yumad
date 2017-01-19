@@ -93,7 +93,7 @@ local Interrupts = {
 }
 
 local Dispel = {
-	{'%dispelall'},
+	{'%dispelself'},
 }
 
 -- ####################################################################################
@@ -174,7 +174,7 @@ local Combat = {
 	{'Flametongue'},
 	--actions+=/boulderfist
 	{'Boulderfist', 'talent(1,3)'},
-	--Force attack if waiting for queued spell
+	--actions+=/auto_attack
 	{'/startattack', '!isattacking'},
 }
 
