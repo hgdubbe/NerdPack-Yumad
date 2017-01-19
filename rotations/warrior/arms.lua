@@ -11,6 +11,14 @@ local exeOnLoad = function()
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 end
 
+local Survival = {
+	{'Victory Rush', 'player.health<=70'},
+}
+
+local Keybinds = {
+	{'!Heroic Leap', 'keybind(lcontrol)', 'cursor.ground'}
+}
+
 local Interrupts = {
 	{'&Pummel', 'target.range<=5'},
 	{'&Arcane Torrent', 'target.range<=8&spell(Pummel).cooldown>gcd&!lastgcd(Pummel)'},
@@ -148,6 +156,8 @@ local ST = {
 }
 
 local inCombat = {
+	{Keybinds},
+	{Survival, 'player.health<100'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront'},
 	{Available, '{!moving||moving}&target.range<=8'},
 	{Cleave, '{!moving||moving}&toggle(aoe)&player.area(8).enemies>=2&talent(1,3)'},
