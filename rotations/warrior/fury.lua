@@ -95,10 +95,10 @@ local TwoTargets = {
 	{'Rampage', '!player.buff(Enrage)||{player.rage=100&!player.buff(Juggernaut)}||talent(5,1)&player.buff(Massacre)'},
 	--actions.two_targets+=/bloodthirst,if=buff.enrage.down
 	{'Bloodthirst', '!player.buff(Enrage)'},
-	--actions.two_targets+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
-	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
 	--actions.two_targets+=/raging_blow,if=talent.inner_rage.enabled&spell_targets.whirlwind=2
 	{'Raging Blow', 'talent(6,3)&player.area(8).enemies=2'},
+	--actions.two_targets+=/odyns_fury,if=buff.battle_cry.up&buff.enrage.up
+	{'Odyn\'s Fury', 'player.buff(Battle Cry)&player.buff(Enrage)'},
 	--actions.two_targets+=/whirlwind,if=spell_targets.whirlwind>2
 	{'Whirlwind', 'player.area(8).enemies>2'},
 	--actions.two_targets+=/dragon_roar

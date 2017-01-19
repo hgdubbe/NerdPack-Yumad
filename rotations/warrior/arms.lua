@@ -69,33 +69,6 @@ local Available = {
 	{'Overpower', 'talent(1,2)&player.buff(Overpower!)'},
 }
 
-local AoE = {
-	--actions.aoe=mortal_strike,if=cooldown_react
-	{'Mortal Strike'},
-	--actions.aoe+=/execute,if=buff.stone_heart.react
-	{'Execute', 'player.buff(Ayala\'s Stone Heart)'},
-	--actions.aoe+=/colossus_smash,if=cooldown_react&buff.shattered_defenses.down&buff.precise_strikes.down
-	{'Colossus Smash', '!player.buff(Shattered Defenses)&!player.buff(Precise Strikes)'},
-	--actions.aoe+=/warbreaker,if=buff.shattered_defenses.down
-	{'Warbreaker', '!player.buff(Shattered Defenses)'},
-	--actions.aoe+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up|rage.deficit<50)&(!talent.focused_rage.enabled|buff.battle_cry_deadly_calm.up|buff.cleave.up)
-	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.rage<=50}&{!talent(5,3)||player.buff(Battle Cry)&talent(6,1)||player.buff(Cleave)}'},
-	--actions.aoe+=/rend,if=remains<=duration*0.3
-	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<=4.5'},
-	--actions.aoe+=/bladestorm
-	{'Bladestorm'},
-	--actions.aoe+=/cleave
-	{'Cleave'},
-	--actions.aoe+=/execute,if=rage>90
-	{'Execute', 'player.rage>=90'},
-	--actions.aoe+=/whirlwind,if=rage>=40
-	{'Whirlwind', 'player.rage>=40'},
-	--actions.aoe+=/shockwave
-	{'Shockwave', 'talent(2,1)'},
-	--actions.aoe+=/storm_bolt
-	{'Storm Bolt', 'talent(2,2)'},
-}
-
 local Cleave = {
 	--actions.cleave=mortal_strike
 	{'Mortal Strike'},
@@ -120,6 +93,33 @@ local Cleave = {
 	--actions.cleave+=/shockwave
 	{'Shockwave', 'talent(2,1)'},
 	--actions.cleave+=/storm_bolt
+	{'Storm Bolt', 'talent(2,2)'},
+}
+
+local AoE = {
+	--actions.aoe=mortal_strike,if=cooldown_react
+	{'Mortal Strike'},
+	--actions.aoe+=/execute,if=buff.stone_heart.react
+	{'Execute', 'player.buff(Ayala\'s Stone Heart)'},
+	--actions.aoe+=/colossus_smash,if=cooldown_react&buff.shattered_defenses.down&buff.precise_strikes.down
+	{'Colossus Smash', '!player.buff(Shattered Defenses)&!player.buff(Precise Strikes)'},
+	--actions.aoe+=/warbreaker,if=buff.shattered_defenses.down
+	{'Warbreaker', '!player.buff(Shattered Defenses)'},
+	--actions.aoe+=/whirlwind,if=talent.fervor_of_battle.enabled&(debuff.colossus_smash.up|rage.deficit<50)&(!talent.focused_rage.enabled|buff.battle_cry_deadly_calm.up|buff.cleave.up)
+	{'Whirlwind', 'talent(3,1)&{target.debuff(Colossus Smash)||player.rage<=50}&{!talent(5,3)||player.buff(Battle Cry)&talent(6,1)||player.buff(Cleave)}'},
+	--actions.aoe+=/rend,if=remains<=duration*0.3
+	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<=4.5'},
+	--actions.aoe+=/bladestorm
+	{'Bladestorm'},
+	--actions.aoe+=/cleave
+	{'Cleave'},
+	--actions.aoe+=/execute,if=rage>90
+	{'Execute', 'player.rage>=90'},
+	--actions.aoe+=/whirlwind,if=rage>=40
+	{'Whirlwind', 'player.rage>=40'},
+	--actions.aoe+=/shockwave
+	{'Shockwave', 'talent(2,1)'},
+	--actions.aoe+=/storm_bolt
 	{'Storm Bolt', 'talent(2,2)'},
 }
 
