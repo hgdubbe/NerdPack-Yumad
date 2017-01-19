@@ -16,7 +16,7 @@ local Survival = {
 }
 
 local Keybinds = {
-	{'!Heroic Leap', 'keybind(lcontrol)', 'cursor.ground'}
+	{'!Heroic Leap', 'keybind(lshift)', 'cursor.ground'}
 }
 
 local Interrupts = {
@@ -172,8 +172,8 @@ local TwoTargets = {
 }
 
 local inCombat = {
-	{Keybinds},
-	{Survival, 'player.health<100'},
+	{Keybinds, '{!moving||moving}'},
+	{Survival, '{!moving||moving}&player.health<100'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront'},
 	{Cooldowns, '{!moving||moving}&toggle(cooldowns)&target.range<=8'},
 	{TwoTargets, '{!moving||moving}&toggle(aoe)&player.area(8).enemies<=3'},
