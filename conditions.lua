@@ -1,4 +1,11 @@
-local _ = ...
+local _, Yumad = ...
+local LAD = LibStub('LibArtifactData-1.0')
+
+-- ####################################################################################
+-- Credit to Xeer for all of his amazing work.
+-- I'm using a modified condition.lua of selected bits and pieces with additions.
+-- https://github.com/X-Xeer-X/NerdPack-Xeer
+-- ####################################################################################
 
 local setsTable = {
 	["DEATH KNIGHT"] = {
@@ -138,8 +145,6 @@ end
 return counter
 end)
 
-local LAD = LibStub('LibArtifactData-1.0')
-
 --/dump NeP.DSL:Get('artifact.activeid')()
 NeP.DSL:Register('artifact.active_id', function ()
     local artifactID = LAD.GetActiveArtifactID(artifactID)
@@ -184,6 +189,7 @@ NeP.DSL:Register('artifact.enabled', function(_, spell)
 end)
 
 --/dump NeP.DSL:Get('spell_haste')()
+--/dump NeP.DSL:Get('haste')('player') -- NeP condition
 NeP.DSL:Register('spell_haste', function()
     local shaste = NeP.DSL:Get('haste')('player')
     return math.floor((100 / ( 100 + shaste )) * 10^3 ) / 10^3
@@ -194,4 +200,37 @@ NeP.DSL:Register('gcd.remains', function()
     return NeP.DSL:Get('spell.cooldown')('player', '61304')
 end)
 
---/dump NeP.DSL:Get('haste')('player')
+--/dump NeP.DSL:Get('action.execute_time')('player','Aimed Shot')
+--/dump NeP.DSL:Get('action.execute_time')('player','Shadow Bolt')
+NeP.DSL:Register('action.execute_time', function(_, spell)
+    return NeP.DSL:Get('execute_time')(_, spell)
+end)
+
+NeP.DSL:Register('execute_time', function(_, spell)
+    if NeP.DSL:Get('spell.exists')(_, spell) then
+        local GCD = NeP.DSL:Get('gcd')()
+        local CTT = NeP.DSL:Get('spell.casttime')(_, spell)
+        if CTT > GCD then
+            return CTT
+        else
+            return GCD
+        end
+    end
+    return false
+end)
+
+--/dump NeP.DSL:Get('warlock.remaining_duration')('Dreadstalker')
+--/dump NeP.DSL:Get('warlock.remaining_duration')('Wild Imp')
+NeP.DSL:Register('warlock.remaining_duration', function(demon)
+    return Yumad.remaining_duration(demon)
+end)
+
+--/dump NeP.DSL:Get('warlock.empower')()
+NeP.DSL:Register('warlock.empower', function()
+    return Yumad.Empower()
+end)
+
+--/dump NeP.DSL:Get('warlock.count')('Wild Imp')
+NeP.DSL:Register('warlock.count', function(demon)
+    return Yumad.count_active_demon_type(demon)
+end)
