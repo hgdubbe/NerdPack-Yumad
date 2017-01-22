@@ -2,7 +2,7 @@ local GUI = {
 	-- GUI Survival
 	{type = 'header', text = 'Survival', align = 'center'},
 	{type = 'checkbox', text = 'Enable Astral Shift', key = 'S_ASE', default = true},
-	{type = 'spinner', text = 'Astral Shift (Health %)', key = 'S_AS', default = 45},
+	{type = 'spinner', text = 'Astral Shift (Health %)', key = 'S_AS', default = 40},
 	{type = 'checkbox', text = 'Enable Gift of the Naaru', key = 'S_GOTNE', default = true},
 	{type = 'spinner', text = 'Gift of the Naaru (Health %)', key = 'S_GOTN', default = 40},
 	--{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
@@ -22,7 +22,7 @@ local GUI = {
 	{type = 'header', text = 'Trinkets', align = 'center'},
 	{type = 'text', text = 'Activate on-use trinkets on cooldown.'},
 	{type = 'checkbox', text = 'Enable Top Trinket', key = 'trinket_1', default = false},
-	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'Trinket_2', default = false},
+	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'trinket_2', default = false},
 	{type = 'ruler'},{type = 'spacer'},
 
 	-- GUI Healing Stream Totem
@@ -122,7 +122,7 @@ local Survival = {
 	-- Astral Shift usage if enabled in UI.
 	{'&Astral Shift', 'UI(S_ASE)&player.health<=UI(S_AS)'},
 	-- Gift of the Naaru usage if enabled in UI.
-	{'&Gift of the Naaru', 'UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
+	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
 	--{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
@@ -131,11 +131,11 @@ local Survival = {
 
 local Keybinds = {
 	-- Healing Rain at cursor on Left-Shift if enabled in UI.
-	{'!Healing Rain', 'keybind(lshift)&UI(K_HR)', 'cursor.ground'},
+	{'!Healing Rain', 'UI(K_HR)&keybind(lshift)', 'cursor.ground'},
 	-- Lightning Surge Totem at cursor on Left-Control if enabled in UI.
-	{'!Lightning Surge Totem', 'keybind(lcontrol)&UI(K_LST)', 'cursor.ground'},
+	{'!Lightning Surge Totem', 'UI(K_LST)&keybind(lcontrol)', 'cursor.ground'},
 	-- Cloudburst Totem at cursor on Left-Alt if enabled in UI.
-	{'!Cloudburst Totem', 'keybind(lalt)&UI(K_CT)', 'cursor.ground'},
+	{'!Cloudburst Totem', 'UI(K_CT)&keybind(lalt)', 'cursor.ground'},
 }
 
 local Trinkets = {
@@ -224,7 +224,7 @@ local outCombat = {
 }
 
 NeP.CR:Add(264, {
-	name = '|r[|cff00fff0Yumad|r] Shaman - |cff0068ffRestoration|r',
+	name = '|r[|cff00fff0Yumad|r] |cff0070deShaman|r - |cff0070deRESTORATION|r',
 	ic = inCombat,
 	ooc = outCombat,
 	gui = GUI,

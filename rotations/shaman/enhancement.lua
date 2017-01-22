@@ -31,7 +31,7 @@ local GUI = {
 	{type = 'header', text = 'Trinkets', align = 'center'},
 	{type = 'text', text = 'Activate on-use trinkets on cooldown.'},
 	{type = 'checkbox', text = 'Enable Top Trinket', key = 'trinket_1', default = false},
-	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'Trinket_2', default = false},
+	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'trinket_2', default = false},
 	{type = 'ruler'},{type = 'spacer'},
 }
 
@@ -76,9 +76,9 @@ local Emergency = {
 
 local Keybinds = {
 	-- Lightning Surge Totem at cursor on Left-Control if enabled in UI.
-	{'!Lightning Surge Totem', 'keybind(lcontrol)&UI(K_LST)', 'cursor.ground'},
+	{'!Lightning Surge Totem', 'UI(K_LST)&keybind(lcontrol)', 'cursor.ground'},
 	-- Earthbind Totem at cursor on Left-Alt if enabled in UI.
-	{'!Earthbind Totem', 'keybind(lalt)&UI(K_ET)', 'cursor.ground'},
+	{'!Earthbind Totem', 'UI(K_ET)&keybind(lalt)', 'cursor.ground'},
 }
 
 local Trinkets = {
@@ -202,7 +202,7 @@ local outCombat = {
 }
 
 NeP.CR:Add(263, {
-	name = '|r[|cff00fff0Yumad|r] Shaman - |cff0068ffEnhancement|r',
+	name = '|r[|cff00fff0Yumad|r] |cff0070deShaman|r - |cff0070deENHANCEMENT|r',
 	ic = inCombat,
 	ooc = outCombat,
 	gui = GUI,

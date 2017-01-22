@@ -33,7 +33,7 @@ local GUI = {
 	{type = 'header', text = 'Trinkets', align = 'center'},
 	{type = 'text', text = 'Activate on-use trinkets on cooldown.'},
 	{type = 'checkbox', text = 'Enable Top Trinket', key = 'trinket_1', default = false},
-	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'Trinket_2', default = false},
+	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'trinket_2', default = false},
 	{type = 'ruler'},{type = 'spacer'},
 }
 
@@ -60,7 +60,7 @@ local Survival = {
 	-- Astral Shift usage if enabled in UI.
 	{'&Astral Shift', 'UI(S_ASE)&player.health<=UI(S_AS)'},
 	-- Earth Elemental usage if enabled in UI.
-	{'Earth Elemental', 'UI(S_EEE)&player.health<=UI(S_EE)'},
+	{'Earth Elemental', '!ingroup&UI(S_EEE)&player.health<=UI(S_EE)'},
 	-- Gift of the Naaru usage if enabled in UI.
 	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
@@ -81,11 +81,11 @@ local Emergency = {
 
 local Keybinds = {
 	-- Liquid Magma Totem at cursor on Left-Shift if enabled in UI.
-	{'!Liquid Magma Totem', 'talent(6,1)&keybind(lshift)&UI(K_LMT)', 'cursor.ground'},
+	{'!Liquid Magma Totem', 'UI(K_LMT)&talent(6,1)&keybind(lshift)', 'cursor.ground'},
 	-- Lightning Surge Totem at cursor on Left-Control if enabled in UI.
-	{'!Lightning Surge Totem', 'keybind(lcontrol)&UI(K_LST)', 'cursor.ground'},
+	{'!Lightning Surge Totem', 'UI(K_LST)&keybind(lcontrol)', 'cursor.ground'},
 	-- Earthbind Totem at cursor on Left-Alt if enabled in UI.
-	{'!Earthbind Totem', 'keybind(lalt)&UI(K_ET)', 'cursor.ground'},
+	{'!Earthbind Totem', 'UI(K_ET)&keybind(lalt)', 'cursor.ground'},
 }
 
 local Trinkets = {
@@ -313,7 +313,7 @@ local outCombat = {
 }
 
 NeP.CR:Add(262, {
-	name = '|r[|cff00fff0Yumad|r] Shaman - |cff0068ffElemental|r',
+	name = '|r[|cff00fff0Yumad|r] |cff0070deShaman|r - |cff0070deELEMENTAL|r',
 	ic = inCombat,
 	ooc = outCombat,
 	gui = GUI,

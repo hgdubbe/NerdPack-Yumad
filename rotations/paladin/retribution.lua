@@ -9,9 +9,9 @@ local GUI = {
 	{type = 'spinner', text = 'Shield of Vengeance (Health %)', key = 'S_SOV', default = 75},
 	{type = 'checkbox', text = 'Enable Eye for an Eye', key = 'S_EFAEE', default = true},
 	{type = 'spinner', text = 'Eye for an Eye (Health %)', key = 'S_EFAE', default = 90},
-	{type = 'checkbox', text = 'Enable Every Man for Himself (Stun)', key = 'S_EMFHSE', default = true},
-	{type = 'checkbox', text = 'Enable Blessing of Freedom (Root)', key = 'S_BOFRE', default = true},
-	{type = 'checkbox', text = 'Enable Blessing of Freedom (Snare)', key = 'S_BOFSE', default = true},
+	--{type = 'checkbox', text = 'Enable Every Man for Himself (Stun)', key = 'S_EMFHSE', default = true},
+	--{type = 'checkbox', text = 'Enable Blessing of Freedom (Root)', key = 'S_BOFRE', default = true},
+	--{type = 'checkbox', text = 'Enable Blessing of Freedom (Snare)', key = 'S_BOFSE', default = true},
 	{type = 'checkbox', text = 'Enable Gift of the Naaru', key = 'S_GOTNE', default = true},
 	{type = 'spinner', text = 'Gift of the Naaru (Health %)', key = 'S_GOTN', default = 40},
 	--{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
@@ -31,7 +31,7 @@ local GUI = {
 	{type = 'header', text = 'Trinkets', align = 'center'},
 	{type = 'text', text = 'Activate on-use trinkets on cooldown.'},
 	{type = 'checkbox', text = 'Enable Top Trinket', key = 'trinket_1', default = false},
-	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'Trinket_2', default = false},
+	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'trinket_2', default = false},
 	{type = 'ruler'},{type = 'spacer'},
 }
 
@@ -61,11 +61,11 @@ local Survival = {
 	-- Eye for an Eye usage if enabled in UI.
 	{'Eye for an Eye', 'talent(5,2)&UI(S_EFAEE)&player.health<=UI(S_EFAE)'},
 	-- Every Man for Himself usage if enabled in UI.
-	{'&Every Man for Himself', 'UI(S_EMFHSE)&player.state(stun)'},
+	--{'&Every Man for Himself', 'UI(S_EMFHSE)&player.state(stun)'},
 	-- Blessing of Freedom usage if enabled in UI.
-	{'!Blessing of Freedom', 'UI(S_BOFRE)&player.state(root)'},
+	--{'!Blessing of Freedom', 'UI(S_BOFRE)&player.state(root)'},
 	-- Blessing of Freedom usage if enabled in UI.
-	{'!Blessing of Freedom', 'UI(S_BOFSE)&player.state(snare)'},
+	--{'!Blessing of Freedom', 'UI(S_BOFSE)&player.state(snare)'},
 	-- Gift of the Naaru usage if enabled in UI.
 	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
@@ -227,7 +227,7 @@ local outCombat = {
 }
 
 NeP.CR:Add(70, {
-	name = '|r[|cff00fff0Yumad|r] Paladin - |cfff58cbaRetribution|r',
+	name = '|r[|cff00fff0Yumad|r] |cfff58cbaPaladin|r - |cfff58cbaRETRIBUTION|r',
 	ic = inCombat,
 	ooc = outCombat,
 	gui = GUI,

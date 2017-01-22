@@ -1,5 +1,31 @@
 local GUI = {
+	-- GUI Survival
+	{type = 'header', text = 'Survival', align = 'center'},
+	{type = 'checkbox', text = 'Enable Enraged Regeneration', key = 'S_ERE', default = true},
+	{type = 'spinner', text = 'Enraged Regeneration (Health %)', key = 'S_ER', default = 40},
+	{type = 'checkbox', text = 'Enable Commanding Shout', key = 'S_CSE', default = true},
+	{type = 'spinner', text = 'Commanding Shout (Health %)', key = 'S_CS', default = 20},
+	{type = 'checkbox', text = 'Enable Intimidating Shout', key = 'S_ISE', default = true},
+	{type = 'spinner', text = 'Intimidating Shout (Health %)', key = 'S_IS', default = 30},
+	{type = 'checkbox', text = 'Enable Gift of the Naaru', key = 'S_GOTNE', default = true},
+	{type = 'spinner', text = 'Gift of the Naaru (Health %)', key = 'S_GOTN', default = 40},
+	--{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
+	--{type = 'spinner', text = 'Healthstone (Health %)', key = 'S_HS', default = 20},
+	--{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
+	--{type = 'spinner', text = 'Ancient Healing Potion (Health %)', key = 'S_AHP', default = 20},
+	{type = 'ruler'},{type = 'spacer'},
 
+	-- GUI Keybinds
+	{type = 'header', text = 'Keybinds', align = 'center'},
+	{type = 'checkbox', text = 'L-Shift: Heroic Leap @ Cursor', key = 'K_HL', default = true},
+	{type = 'ruler'},{type = 'spacer'},
+
+	-- GUI Trinkets
+	{type = 'header', text = 'Trinkets', align = 'center'},
+	{type = 'text', text = 'Activate on-use trinkets on cooldown.'},
+	{type = 'checkbox', text = 'Enable Top Trinket', key = 'trinket_1', default = false},
+	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'trinket_2', default = false},
+	{type = 'ruler'},{type = 'spacer'},
 }
 
 local exeOnLoad = function()
@@ -12,11 +38,30 @@ local exeOnLoad = function()
 end
 
 local Survival = {
-	{'Victory Rush', 'player.health<=70'},
+	-- Enraged Regeneration usage if enabled in UI.
+	{'&Enraged Regeneration', '{!player.debuff(Ignite Soul)}&UI(S_ERE)&player.health<=UI(S_ER)'},
+	-- Commanding Shout usage if enabled in UI.
+	{'&Commanding Shout', 'UI(S_CSE)&player.health<=UI(S_CS)'},
+	-- Intimidating Shout usage if enabled in UI.
+	{'Intimidating Shout', 'UI(S_ISE)&player.area(8).enemies>2&player.health<=UI(S_IS)'},
+	-- Gift of the Naaru usage if enabled in UI.
+	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
+	-- Healthstone usage if enabled in UI.
+	--{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
+	-- Ancient Healing Potion usage if enabled in UI.
+	--{'#Ancient Healing Potion', 'UI(S_AHPE)&player.health<=UI(S_AHP)'},
 }
 
 local Keybinds = {
-	{'!Heroic Leap', 'keybind(lshift)', 'cursor.ground'}
+	-- Heroic Leap at cursor on Left-Shift if enabled in UI.
+	{'!Heroic Leap', 'UI(K_HL)&keybind(lshift)', 'cursor.ground'}
+}
+
+local Trinkets = {
+	-- Top Trinket usage if enabled in UI.
+	{'#trinket1', 'UI(trinket_1)'},
+	-- Bottom Trinket usage if enabled in UI.
+	{'#trinket2', 'UI(trinket_2)'},
 }
 
 local Interrupts = {
@@ -190,7 +235,7 @@ local outCombat = {
 }
 
 NeP.CR:Add(72, {
-	name = '|r[|cff00fff0Yumad|r] Warrior - |cffc79c6eFury|r',
+	name = '|r[|cff00fff0Yumad|r] |cffc79c6eWarrior|r - |cffc79c6eFURY|r',
 	ic = inCombat,
 	ooc = outCombat,
 	gui = GUI,
