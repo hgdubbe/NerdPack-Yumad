@@ -2,13 +2,13 @@ local GUI = {
 	-- GUI Survival
 	{type = 'header', text = 'Survival', align = 'center'},
 	{type = 'checkbox', text = 'Enable Astral Shift', key = 'S_ASE', default = true},
-	{type = 'spinner', text = 'Astral Shift (Health %)', key = 'S_AS', default = 40},
+	{type = 'spinner', text = '', key = 'S_AS', default = 40},
 	{type = 'checkbox', text = 'Enable Gift of the Naaru', key = 'S_GOTNE', default = true},
-	{type = 'spinner', text = 'Gift of the Naaru (Health %)', key = 'S_GOTN', default = 40},
-	--{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
-	--{type = 'spinner', text = 'Healthstone (Health %)', key = 'S_HS', default = 20},
-	--{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
-	--{type = 'spinner', text = 'Ancient Healing Potion(Health %)', key = 'S_AHP', default = 20},
+	{type = 'spinner', text = '', key = 'S_GOTN', default = 40},
+	{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
+	{type = 'spinner', text = '', key = 'S_HS', default = 20},
+	{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
+	{type = 'spinner', text = '', key = 'S_AHP', default = 20},
 	{type = 'ruler'},{type = 'spacer'},
 	
 	-- GUI Keybinds
@@ -20,7 +20,7 @@ local GUI = {
 
 	-- GUI Trinkets
 	{type = 'header', text = 'Trinkets', align = 'center'},
-	{type = 'text', text = 'Activate on-use trinkets on cooldown.'},
+	{type = 'text', text = 'Activate on-use trinkets on cooldown'},
 	{type = 'checkbox', text = 'Enable Top Trinket', key = 'trinket_1', default = false},
 	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'trinket_2', default = false},
 	{type = 'ruler'},{type = 'spacer'},
@@ -41,15 +41,18 @@ local GUI = {
 	-- GUI Emergency Healing
 	{type = 'header', text = 'Emergency Healing', align = 'center'},
 	{type = 'checkbox', text = 'Enable Emergency Healing', key = 'E_EH', default = true},
-	{type = 'text', text = 'Thresholds set to ensure party member survival.'},
-	{type = 'spinner', text = 'Riptide (Health %)', key = 'E_RT', default = 25},
-	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HSG', default = 35},
+	{type = 'text', text = 'Riptide'},
+	{type = 'spinner', text = 'Riptide', key = 'E_RT', default = 25},
+	{type = 'text', text = 'Healing Surge'},
+	{type = 'spinner', text = '', key = 'E_HSG', default = 35},
 	{type = 'ruler'},{type = 'spacer'},
 
 	-- GUI Tank Healing
 	{type = 'header', text = 'Tank Healing', align = 'center'},
-	{type = 'spinner', text = 'Force Riptide (Health %)', key = 'T_FRT', default = 90},
-	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'T_HS', default = 80},
+	{type = 'text', text = 'Force Riptide'},
+	{type = 'spinner', text = '', key = 'T_FRT', default = 90},
+	{type = 'text', text = 'Healing Surge'},
+	{type = 'spinner', text = '', key = 'T_HS', default = 80},
 	{type = 'spacer'},
 	{type = 'header', text = 'AoE Tank Healing', align = 'center'},
 	{type = 'text', text = 'Toggle Multitarget on NeP Bar.'},
@@ -62,8 +65,10 @@ local GUI = {
 
 	-- GUI Player Healing
 	{type = 'header', text = 'Player Healing', align = 'center'},
-	{type = 'spinner', text = 'Force Riptide (Health %)', key = 'P_FRT', default = 85},
-	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'P_HS', default = 75},
+	{type = 'text', text = 'Force Riptide'},
+	{type = 'spinner', text = '', key = 'P_FRT', default = 85},
+	{type = 'text', text = 'Healing Surge'},
+	{type = 'spinner', text = '', key = 'P_HS', default = 75},
 	{type = 'spacer'},
 	{type = 'header', text = 'AoE Player Healing', align = 'center'},
 	{type = 'text', text = 'Toggle Multitarget on NeP Bar.'},
@@ -76,12 +81,15 @@ local GUI = {
 
 	-- GUI Lowest Healing
 	{type = 'header', text = 'Lowest Healing', align = 'center'},
-	{type = 'spinner', text = 'Force Riptide (Health %)', key = 'L_FRT', default = 80},
-	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'L_HS', default = 70},
+	{type = 'text', text = 'Force Riptide'},
+	{type = 'spinner', text = '', key = 'L_FRT', default = 80},
+	{type = 'text', text = 'Healing Surge'},
+	{type = 'spinner', text = '', key = 'L_HS', default = 70},
 	{type = 'text', text = '|cffff0000Elemental DPS rotation is dependent on the value set for Healing Wave.|r'},
-	{type = 'text', text = '@ 100% = Healing Wave filler spam at all times.'},
-	{type = 'text', text = '@ < 100% = Elemental DPS takes precedence.'},
-	{type = 'spinner', text = 'Healing Wave (Health %)', key = 'L_HW', default = 100},
+	{type = 'text', text = '|cffff0000@ 100% = Healing Wave filler spam at all times.|r'},
+	{type = 'text', text = '|cffff0000@ < 100% = Elemental DPS takes precedence.|r'},
+	{type = 'text', text = 'Healing Wave'},
+	{type = 'spinner', text = '', key = 'L_HW', default = 100},
 	{type = 'spacer'},
 	{type = 'header', text = 'AoE Lowest Healing', align = 'center'},
 	{type = 'text', text = 'Toggle Multitarget on NeP Bar.'},
@@ -97,7 +105,7 @@ local exeOnLoad = function()
 	-- Rotation loaded message.
 	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cff0070de --- |rShaman: |cff0070deRESTORATION|r')
-	print('|cff0070de --- |rRecommended Talents: 1/3 - 2/2 - 3/1 - 4/2 - 5/3 - 6/2 - 7/?')
+	print('|cff0070de --- |rTalents: 1/3 - 2/2 - 3/1 - 4/2 - 5/3 - 6/2 - 7/?')
 	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 
@@ -122,11 +130,11 @@ local Survival = {
 	-- Astral Shift usage if enabled in UI.
 	{'&Astral Shift', 'UI(S_ASE)&player.health<=UI(S_AS)'},
 	-- Gift of the Naaru usage if enabled in UI.
-	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
+	{'&Gift of the Naaru', 'UI(S_GOTNE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
-	--{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
+	{'#5512', 'UI(S_HSE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
-	--{'#Ancient Healing Potion', 'UI(S_AHPE)&player.health<=UI(S_AHP)'},
+	{'#127834', 'UI(S_AHPE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_AHP)'},
 }
 
 local Keybinds = {
@@ -154,9 +162,9 @@ local Totems = {
 
 local Emergency = {
 	-- Riptide usage if enabled in UI.
-	{'!Riptide', '{!moving||moving}&UI(E_EH)&lowest.health<=UI(E_RT)', 'lowest'},
+	{'!Riptide', '{!moving||moving}&{!lowest.debuff(Ignite Soul)}&UI(E_EH)&lowest.health<=UI(E_RT)', 'lowest'},
 	-- Healing Surge usage if enabled in UI.
-	{'!Healing Surge', 'UI(E_EH)&lowest.health<=UI(E_HSG)', 'lowest'},
+	{'!Healing Surge', '!moving&UI(E_EH)&{!lowest.debuff(Ignite Soul)}&lowest.health<=UI(E_HSG)', 'lowest'},
 }
 
 local Interrupts = {
@@ -218,9 +226,9 @@ local inCombat = {
 
 local outCombat = {
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Purify Spirit).cooldown=0'},
+	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 	{'Riptide', '{!moving||moving}&lowest.health<100', 'lowest'},
 	{Lowest, 'lowest.health<100'},
-	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 }
 
 NeP.CR:Add(264, {

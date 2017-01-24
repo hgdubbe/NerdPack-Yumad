@@ -2,24 +2,24 @@ local GUI = {
 	-- GUI Survival
 	{type = 'header', text = 'Survival', align = 'center'},
 	{type = 'checkbox', text = 'Enable Astral Shift', key = 'S_ASE', default = true},
-	{type = 'spinner', text = 'Astral Shift (Health %)', key = 'S_AS', default = 40},
+	{type = 'spinner', text = '', key = 'S_AS', default = 40},
 	{type = 'checkbox', text = 'Enable Healing Surge', key = 'S_HSGE', default = true},
-	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'S_HSG', default = 35},
+	{type = 'spinner', text = '', key = 'S_HSG', default = 35},
 	{type = 'checkbox', text = 'Enable Earth Elemental', key = 'S_EEE', default = true},
-	{type = 'spinner', text = 'Earth Elemental (Health %)', key = 'S_EE', default = 50},
+	{type = 'spinner', text = '', key = 'S_EE', default = 20},
 	{type = 'checkbox', text = 'Enable Gift of the Naaru', key = 'S_GOTNE', default = true},
-	{type = 'spinner', text = 'Gift of the Naaru (Health %)', key = 'S_GOTN', default = 40},
-	--{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
-	--{type = 'spinner', text = 'Healthstone (Health %)', key = 'S_HS', default = 20},
-	--{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
-	--{type = 'spinner', text = 'Ancient Healing Potion (Health %)', key = 'S_AHP', default = 20},
+	{type = 'spinner', text = '', key = 'S_GOTN', default = 40},
+	{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
+	{type = 'spinner', text = '', key = 'S_HS', default = 20},
+	{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
+	{type = 'spinner', text = '', key = 'S_AHP', default = 20},
 	{type = 'ruler'},{type = 'spacer'},
 
 	-- GUI Emergency Group Healing
 	{type = 'header', text = 'Emergency Group Healing', align = 'center'},
 	{type = 'checkbox', text = 'Enable Emergency Group Healing', key = 'E_HSGE', default = false},
-	{type = 'text', text = 'Thresholds set to ensure party member survival.'},
-	{type = 'spinner', text = 'Healing Surge (Health %)', key = 'E_HSG', default = 35},
+	{type = 'text', text = 'Healing Surge'},
+	{type = 'spinner', text = '', key = 'E_HSG', default = 35},
 	{type = 'ruler'},{type = 'spacer'},
 
 	-- GUI Keybinds
@@ -31,7 +31,7 @@ local GUI = {
 
 	-- GUI Trinkets
 	{type = 'header', text = 'Trinkets', align = 'center'},
-	{type = 'text', text = 'Activate on-use trinkets on cooldown.'},
+	{type = 'text', text = 'Activate on-use trinkets on cooldown'},
 	{type = 'checkbox', text = 'Enable Top Trinket', key = 'trinket_1', default = false},
 	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'trinket_2', default = false},
 	{type = 'ruler'},{type = 'spacer'},
@@ -62,21 +62,21 @@ local Survival = {
 	-- Earth Elemental usage if enabled in UI.
 	{'Earth Elemental', '!ingroup&UI(S_EEE)&player.health<=UI(S_EE)'},
 	-- Gift of the Naaru usage if enabled in UI.
-	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
+	{'&Gift of the Naaru', 'UI(S_GOTNE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
-	--{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
+	{'#5512', 'UI(S_HSE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
-	--{'#Ancient Healing Potion', 'UI(S_AHPE)&player.health<=UI(S_AHP)'},
+	{'#127834', 'UI(S_AHPE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_AHP)'},
 }
 
 local Player = {
 	-- Healing Surge usage if enabled in UI.
-	{'!Healing Surge', '!moving&{!player.debuff(Ignite Soul)}&UI(S_HSGE)&player.health<=UI(S_HSG)', 'player'},
+	{'!Healing Surge', 'UI(S_HSGE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_HSG)', 'player'},
 }
 
 local Emergency = {
 	-- Healing Surge usage if enabled in UI.
-	{'!Healing Surge', '!moving&{!lowest.debuff(Ignite Soul)}&UI(E_HSGE)&lowest.health<=UI(E_HSG)', 'lowest'},
+	{'!Healing Surge', 'UI(E_HSGE)&{!lowest.debuff(Ignite Soul)}&lowest.health<=UI(E_HSG)', 'lowest'},
 }
 
 local Keybinds = {
@@ -291,8 +291,8 @@ local inCombat = {
 	{Keybinds, '{!moving||moving}'},
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
 	{Survival, '{!moving||moving}'},
-	{Player, '{!ingroup||ingroup}&player.health<100'},
-	{Emergency, 'ingroup'},
+	{Player, '!moving&{!ingroup||ingroup}'},
+	{Emergency, '!moving&ingroup'},
 	{Trinkets, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
 	{LRCooldowns, '{!moving||moving}&talent(7,2)&toggle(cooldowns)'},
@@ -307,7 +307,7 @@ local inCombat = {
 local outCombat = {
 	{Dispel, '{!moving||moving}&toggle(yuPS)&spell(Cleanse Spirit).cooldown=0'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront&target.range<=30'},
-	{Emergency, 'ingroup'},
+	{Emergency, '!moving&ingroup'},
 	{'Healing Surge', '!moving&player.health<=70', 'player'},
 	{'Ghost Wolf', 'movingfor>=2&!player.buff(Ghost Wolf)'},
 }

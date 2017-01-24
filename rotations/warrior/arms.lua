@@ -2,19 +2,19 @@ local GUI = {
 	-- GUI Survival
 	{type = 'header', text = 'Survival', align = 'center'},
 	{type = 'checkbox', text = 'Enable Victory Rush', key = 'S_VRE', default = true},
-	{type = 'spinner', text = 'Victory Rush (Health %)', key = 'S_VR', default = 70},
+	{type = 'spinner', text = '', key = 'S_VR', default = 70},
 	{type = 'checkbox', text = 'Enable Die by the Sword', key = 'S_DBTSE', default = true},
-	{type = 'spinner', text = 'Die by the Sword (Health %)', key = 'S_DBTS', default = 40},
+	{type = 'spinner', text = '', key = 'S_DBTS', default = 40},
 	{type = 'checkbox', text = 'Enable Commanding Shout', key = 'S_CSE', default = true},
-	{type = 'spinner', text = 'Commanding Shout (Health %)', key = 'S_CS', default = 20},
+	{type = 'spinner', text = '', key = 'S_CS', default = 20},
 	{type = 'checkbox', text = 'Enable Intimidating Shout', key = 'S_ISE', default = true},
-	{type = 'spinner', text = 'Intimidating Shout (Health %)', key = 'S_IS', default = 30},
+	{type = 'spinner', text = '', key = 'S_IS', default = 30},
 	{type = 'checkbox', text = 'Enable Gift of the Naaru', key = 'S_GOTNE', default = true},
-	{type = 'spinner', text = 'Gift of the Naaru (Health %)', key = 'S_GOTN', default = 40},
-	--{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
-	--{type = 'spinner', text = 'Healthstone (Health %)', key = 'S_HS', default = 20},
-	--{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
-	--{type = 'spinner', text = 'Ancient Healing Potion (Health %)', key = 'S_AHP', default = 20},
+	{type = 'spinner', text = '', key = 'S_GOTN', default = 40},
+	{type = 'checkbox', text = 'Enable Healthstone', key = 'S_HSE', default = true},
+	{type = 'spinner', text = '', key = 'S_HS', default = 20},
+	{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
+	{type = 'spinner', text = '', key = 'S_AHP', default = 20},
 	{type = 'ruler'},{type = 'spacer'},
 
 	-- GUI Keybinds
@@ -24,7 +24,7 @@ local GUI = {
 
 	-- GUI Trinkets
 	{type = 'header', text = 'Trinkets', align = 'center'},
-	{type = 'text', text = 'Activate on-use trinkets on cooldown.'},
+	{type = 'text', text = 'Activate on-use trinkets on cooldown'},
 	{type = 'checkbox', text = 'Enable Top Trinket', key = 'trinket_1', default = false},
 	{type = 'checkbox', text = 'Enable Bottom Trinket', key = 'trinket_2', default = false},
 	{type = 'ruler'},{type = 'spacer'},
@@ -41,7 +41,7 @@ end
 
 local Survival = {
 	-- Victory Rush usage if enabled in UI.
-	{'Victory Rush', '{!player.debuff(Ignite Soul)}&UI(S_VRE)&player.health<=UI(S_VR)'},
+	{'Victory Rush', 'UI(S_VRE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_VR)'},
 	-- Die by the Sword usage if enabled in UI.
 	{'&Die by the Sword', 'UI(S_DBTSE)&player.health<=UI(S_DBTS)'},
 	-- Commanding Shout usage if enabled in UI.
@@ -49,11 +49,11 @@ local Survival = {
 	-- Intimidating Shout usage if enabled in UI.
 	{'Intimidating Shout', 'UI(S_ISE)&player.area(8).enemies>2&player.health<=UI(S_IS)'},
 	-- Gift of the Naaru usage if enabled in UI.
-	{'&Gift of the Naaru', '{!player.debuff(Ignite Soul)}&UI(S_GOTNE)&player.health<=UI(S_GOTN)'},
+	{'&Gift of the Naaru', 'UI(S_GOTNE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
-	--{'#Healthstone', 'UI(S_HSE)&player.health<=UI(S_HS)'},
+	{'#5512', 'UI(S_HSE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
-	--{'#Ancient Healing Potion', 'UI(S_AHPE)&player.health<=UI(S_AHP)'},
+	{'#127834', 'UI(S_AHPE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_AHP)'},
 }
 
 local Keybinds = {
@@ -71,10 +71,6 @@ local Trinkets = {
 local Interrupts = {
 	{'&Pummel', 'target.range<=5'},
 	{'&Arcane Torrent', 'target.range<=8&spell(Pummel).cooldown>gcd&!lastgcd(Pummel)'},
-}
-
-local Attack = {
-	{'/startattack', '!isattacking'},
 }
 
 -- ####################################################################################
@@ -104,6 +100,7 @@ local Cooldowns = {
 
 local Available = {
 	{Cooldowns, 'toggle(cooldowns)'},
+	{'/startattack', '!isattacking'},
 	--actions+=/rend,if=remains<gcd
 	{'Rend', 'talent(3,2)&target.debuff(Rend).duration<gcd'},
 	--actions+=/focused_rage,if=buff.battle_cry_deadly_calm.remains>cooldown.focused_rage.remains&(buff.focused_rage.stack<3|cooldown.mortal_strike.remains)
@@ -119,6 +116,7 @@ local Available = {
 }
 
 local Cleave = {
+	{'/startattack', '!isattacking'},
 	--actions.cleave=mortal_strike
 	{'Mortal Strike'},
 	--actions.cleave+=/execute,if=buff.stone_heart.react
@@ -146,6 +144,7 @@ local Cleave = {
 }
 
 local AoE = {
+	{'/startattack', '!isattacking'},
 	--actions.aoe=mortal_strike,if=cooldown_react
 	{'Mortal Strike'},
 	--actions.aoe+=/execute,if=buff.stone_heart.react
@@ -173,6 +172,7 @@ local AoE = {
 }
 
 local Execute = {
+	{'/startattack', '!isattacking'},
 	--actions.execute=mortal_strike,if=cooldown_react&buff.battle_cry.up&buff.focused_rage.stack=3
 	{'Mortal Strike', 'player.buff(Battle Cry)&player.buff(Focused Rage).count=3'},
 	--actions.execute+=/execute,if=buff.battle_cry_deadly_calm.up
@@ -190,6 +190,7 @@ local Execute = {
 }
 
 local ST = {
+	{'/startattack', '!isattacking'},
 	--actions.single=colossus_smash,if=cooldown_react&buff.shattered_defenses.down&(buff.battle_cry.down|buff.battle_cry.up&buff.battle_cry.remains>=gcd|buff.corrupted_blood_of_zakajz.remains>=gcd)
 	{'Colossus Smash', '!player.buff(Shattered Defenses)&{!player.buff(Battle Cry)||player.buff(Battle Cry)&player.buff(Battle Cry).duration>=gcd||player.buff(Corrupted Blood of Zakajz).duration>=gcd}'},
 	--actions.single+=/focused_rage,if=!buff.battle_cry_deadly_calm.up&buff.focused_rage.stack<3&!cooldown.colossus_smash.up&(rage>=50|debuff.colossus_smash.down|cooldown.battle_cry.remains<=8)|cooldown.battle_cry.remains<=8&cooldown.battle_cry.remains>0&rage>100
@@ -208,9 +209,8 @@ local ST = {
 
 local inCombat = {
 	{Keybinds, '{!moving||moving}'},
-	{Survival, '{!moving||moving}&player.health<100'},
+	{Survival, '{!moving||moving}'},
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront'},
-	{Attack, '{!moving||moving}'},
 	{Available, '{!moving||moving}&target.range<=8'},
 	{Cleave, '{!moving||moving}&toggle(aoe)&player.area(8).enemies>=2&talent(1,3)'},
 	{AoE, '{!moving||moving}&toggle(aoe)&player.area(8).enemies>=5&!talent(1,3)'},

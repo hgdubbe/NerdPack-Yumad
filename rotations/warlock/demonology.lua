@@ -6,9 +6,8 @@ local exeOnLoad = function()
 	-- Rotation loaded message.
 	print('|cff8788ee ----------------------------------------------------------------------|r')
 	print('|cff8788ee --- |rWarlock: |cff8788eeDEMONOLOGY|r')
-	print('|cff8788ee --- |rTalents: 1/3 - 2/2 - 3/X - 4/2 - 5/X - 6/2 - 7/2')
+	print('|cff8788ee --- |rSpecific Talents: 1/3 - 2/2 - 3/X - 4/2 - 5/X - 6/2 - 7/2')
 	print('|cff8788ee ----------------------------------------------------------------------|r')
-	print('|cffff0000 Note: |rWild Imp duration is hard to track making Implosion a hit or miss.|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 
 	NeP.Interface:AddToggle({
@@ -42,10 +41,6 @@ local Cooldowns = {
 	{'Grimoire: Felguard', 'talent(6,2)'},
 	--actions+=/summon_doomguard,if=!talent.grimoire_of_supremacy.enabled&spell_targets.infernal_awakening<=2&(target.time_to_die>180|target.health.pct<=20|target.time_to_die<30)
 	{'Summon Doomguard', '!talent(6,1)'},
-	--actions+=/summon_doomguard,if=talent.grimoire_of_supremacy.enabled&spell_targets.summon_infernal=1&equipped.132379&!cooldown.sindorei_spite_icd.remains
-	{'Summon Doomguard', 'talent(6,1)&equipped(Sin\'dorei Spite)&player.buff(Sin\'dorei Spite)'},
-	--actions+=/soul_harvest
-	{'Soul Harvest', 'talent(4,3)&spell(Thal\'kiel\'s Consumption).cooldown=0'},
 	--actions+=/berserking
 	{'&Berserking'},
 	--actions+=/blood_fury
@@ -54,7 +49,7 @@ local Cooldowns = {
 }
 
 local DW_Clip = {
-	--actions+=/service_pet
+	--actions+=/summon_pet,if=!talent.grimoire_of_supremacy.enabled&(!talent.grimoire_of_sacrifice.enabled|buff.demonic_power.down)
 	{'!Summon Felguard', '!moving&!pet.exists&!talent(6,1)'},
 	--actions+=/implosion,if=prev_gcd.1.hand_of_guldan&((wild_imp_remaining_duration<=3&buff.demonic_synergy.remains)|(wild_imp_remaining_duration<=4&spell_targets.implosion>2))	
 	{'!Implosion', '!moving&talent(2,3)&combat(player).time>5&lastgcd(Hand of Gul\'dan)'},
@@ -67,7 +62,7 @@ local DW_Clip = {
 	--actions+=/doom,cycle_targets=1,if=!talent.hand_of_doom.enabled&target.time_to_die>duration&(!ticking|remains<duration*0.3)
 	{'!Doom', '{moving||!moving}&toggle(yuDoom)&!target.debuff(Doom)'},
 	--actions+=/thalkiels_consumption,if=(dreadstalker_remaining_duration>execute_time|talent.implosion.enabled&spell_targets.implosion>=3)&wild_imp_count>3&wild_imp_remaining_duration>execute_time
-	{'!Thal\'kiel\'s Consumption', '!moving&!talent(4,3)&warlock(Wild Imp).count>=3&warlock(Dreadstalker).count=2'},
+	{'!Thal\'kiel\'s Consumption', '!moving&warlock(Wild Imp).count>=3&warlock(Dreadstalker).count=2'},
 	--actions+=/life_tap,if=mana.pct<=30
 	{'!Life Tap', '{moving||!moving}&mana<=30&player.health>=15'},
 	--actions+=/demonbolt
@@ -75,12 +70,12 @@ local DW_Clip = {
 	--actions+=/shadow_bolt
 	{'!Shadow Bolt', '!moving&!talent(7,2)&soulshards<=4'},
 	--actions+=/felstorm
-	{'!Felstorm', 'combat(player).time>2'},
+	{'!&Felstorm', 'combat(player).time>2'},
 }
 
 local ST = {
 	{DW_Clip, 'player.channeling(Demonwrath)'},
-	--actions+=/service_pet
+	--actions+=/summon_pet,if=!talent.grimoire_of_supremacy.enabled&(!talent.grimoire_of_sacrifice.enabled|buff.demonic_power.down)
 	{'!Summon Felguard', '!moving&!pet.exists&!talent(6,1)'},
 	--actions+=/implosion,if=prev_gcd.1.hand_of_guldan&((wild_imp_remaining_duration<=3&buff.demonic_synergy.remains)|(wild_imp_remaining_duration<=4&spell_targets.implosion>2))		
 	{'!Implosion', '!moving&talent(2,3)&combat(player).time>5&lastgcd(Hand of Gul\'dan)'},
@@ -93,7 +88,7 @@ local ST = {
 	--actions+=/doom,cycle_targets=1,if=!talent.hand_of_doom.enabled&target.time_to_die>duration&(!ticking|remains<duration*0.3)
 	{'Doom', '{moving||!moving}&toggle(yuDoom)&!target.debuff(Doom)'},
 	--actions+=/thalkiels_consumption,if=(dreadstalker_remaining_duration>execute_time|talent.implosion.enabled&spell_targets.implosion>=3)&wild_imp_count>3&wild_imp_remaining_duration>execute_time
-	{'Thal\'kiel\'s Consumption', '!moving&!talent(4,3)&warlock(Wild Imp).count>=3&warlock(Dreadstalker).count=2'},
+	{'Thal\'kiel\'s Consumption', '!moving&warlock(Wild Imp).count>=3&warlock(Dreadstalker).count=2'},
 	--actions+=/life_tap,if=mana.pct<=30
 	{'Life Tap', '{moving||!moving}&mana<=30&player.health>=15'},
 	--actions+=/demonwrath,chain=1,interrupt=1,if=spell_targets.demonwrath>=3
@@ -103,7 +98,7 @@ local ST = {
 	--actions+=/shadow_bolt
 	{'Shadow Bolt', '!moving&!talent(7,2)&soulshards<=4'},
 	--actions+=/felstorm
-	{'Felstorm', 'combat(player).time>2'},
+	{'&Felstorm', 'combat(player).time>2'},
 }
 
 local inCombat = {
