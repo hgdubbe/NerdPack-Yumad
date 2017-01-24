@@ -125,9 +125,9 @@ local DW_Clip = {
 	--actions+=/life_tap,if=mana.pct<=30
 	{'!Life Tap', '{moving||!moving}&mana<=30&player.health>=15&{!lastgcd(Summon Felguard)||!lastgcd(Call Dreadstalkers)||!lastgcd(Hand of Gul\'dan)||!lastgcd(Summon Darkglare)||!lastgcd(Summon Doomguard)||!lastgcd(Grimoire: Felguard)}'},
 	--actions+=/demonbolt
-	{'!Demonbolt', '!moving&talent(7,2)&soulshards<=4'},
+	{'!Demonbolt', '!moving&talent(7,2)&!soulshards=4'},
 	--actions+=/shadow_bolt
-	{'!Shadow Bolt', '!moving&!talent(7,2)&soulshards<=4'},
+	{'!Shadow Bolt', '!moving&!talent(7,2)&!soulshards=4'},
 	--actions+=/felstorm
 	{'!&Felstorm', 'combat(player).time>2'},
 }
@@ -153,9 +153,9 @@ local ST = {
 	--actions+=/demonwrath,chain=1,interrupt=1,if=spell_targets.demonwrath>=3
 	{'Demonwrath', 'moving'},
 	--actions+=/demonbolt
-	{'Demonbolt', '!moving&talent(7,2)&soulshards<=4'},
+	{'Demonbolt', '!moving&talent(7,2)&!soulshards=4'},
 	--actions+=/shadow_bolt
-	{'Shadow Bolt', '!moving&!talent(7,2)&soulshards<=4'},
+	{'Shadow Bolt', '!moving&!talent(7,2)&!soulshards=4'},
 	--actions+=/felstorm
 	{'&Felstorm', 'combat(player).time>2'},
 }
