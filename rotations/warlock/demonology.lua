@@ -3,6 +3,8 @@ local GUI = {
 	{type = 'header', text = 'Survival', align = 'center'},
 	{type = 'checkbox', text = 'Enable Unending Resolve', key = 'S_UEE', default = true},
 	{type = 'spinner', text = '', key = 'S_UE', default = 40},
+	{type = 'checkbox', text = 'Enable Dark Pact', key = 'S_DPE', default = true},
+	{type = 'spinner', text = '', key = 'S_DP', default = 50},
 	{type = 'checkbox', text = 'Enable Drain Life', key = 'S_DLE', default = true},
 	{type = 'spinner', text = '', key = 'S_DL', default = 30},
 	{type = 'checkbox', text = 'Enable Health Funnel', key = 'S_HFE', default = true},
@@ -49,6 +51,8 @@ end
 local Survival = {
 	-- Unending Resolve usage if enabled in UI.
 	{'&Unending Resolve', 'UI(S_UEE)&player.health<=UI(S_UE)'},
+	-- Dark Pact usage if enabled in UI.
+	{'&Dark Pact', 'UI(S_DPE)&talent(5,3)&pet.exists&player.health<=UI(S_DP)'},
 	-- Gift of the Naaru usage if enabled in UI.
 	{'&Gift of the Naaru', 'UI(S_GOTNE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_GOTN)'},
 	-- Healthstone usage if enabled in UI.
