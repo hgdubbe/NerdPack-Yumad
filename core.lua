@@ -33,7 +33,6 @@ function Yumad.update_demons()
     if (Yumad.is_demon_dead(Yumad.active_demons[key].name, Yumad.active_demons[key].time)) then
       Yumad.active_demons[key] = nil
       Yumad.demon_count = Yumad.demon_count - 1
-      --Yumad.sort_demons()
     end
   end
 end
@@ -68,37 +67,6 @@ function Yumad.Empower()
     end
   end
   return Yumad.empower
-end
-
-function Yumad.count_active_demon_type(demon)
-  --print('Yumad.count_active_demon_type')
-  local count = 0
-  for _,v in pairs(Yumad.active_demons) do
-    if v.name == demon then
-      count = count + 1
-    end
-  end
-  return count
-end
-
-function Yumad.remaining_duration(demon)
-  --print('Yumad.remaining_duration')
-  for _,v in pairs(Yumad.active_demons) do
-    if v.name == demon then
-      return Yumad.get_remaining_time(v.name, v.time)
-    end
-  end
-end
-
-function Yumad.implosion_cast()
-  --print('Yumad.implosion_cast')
-  for key,v in pairs(Yumad.active_demons) do
-    if (Yumad.active_demons[key].name == "Wild Imp") then
-      Yumad.active_demons[key] = nil
-      Yumad.demon_count = Yumad.demon_count - 1
-      --Yumad.sort_demons()
-    end
-  end
 end
 
 function Yumad.is_demon_dead(name, spawn)
@@ -140,7 +108,6 @@ NeP.Listener:Add('Yumad_Warlock_Pets', 'COMBAT_LOG_EVENT_UNFILTERED', function(t
         Yumad.active_demons[destGUID].empower_time = 0
         Yumad.active_demons[destGUID].duration     = Yumad.durations[destName]
         Yumad.demon_count                          = Yumad.demon_count + 1
-        --Yumad.sort_demons()
       end
     end
 
@@ -151,10 +118,6 @@ NeP.Listener:Add('Yumad_Warlock_Pets', 'COMBAT_LOG_EVENT_UNFILTERED', function(t
       end
     end
 
-    if (combatevent == "SPELL_CAST_SUCCESS" and spellID == 196277 and sourceName == UnitName("player")) then
-      --print('Implosion')
-      Yumad.implosion_cast()
-    end
     Yumad.update_demons()
     return true
   end

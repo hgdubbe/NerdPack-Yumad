@@ -110,18 +110,16 @@ local Cooldowns = {
 local DW_Clip = {
 	--actions+=/summon_pet,if=!talent.grimoire_of_supremacy.enabled&(!talent.grimoire_of_sacrifice.enabled|buff.demonic_power.down)
 	{'!Summon Felguard', '!moving&!pet.exists&!talent(6,1)'},
-	--actions+=/implosion,if=prev_gcd.1.hand_of_guldan&((wild_imp_remaining_duration<=3&buff.demonic_synergy.remains)|(wild_imp_remaining_duration<=4&spell_targets.implosion>2))	
-	--{'!Implosion', '!moving&talent(2,3)&combat(player).time>5&lastgcd(Hand of Gul\'dan)'},
 	--actions+=/call_dreadstalkers,if=(!talent.summon_darkglare.enabled|talent.power_trip.enabled)&(spell_targets.implosion<3|!talent.implosion.enabled)
 	{'!Call Dreadstalkers', '!moving||!moving&player.buff(Demonic Calling)'},
 	--actions+=/hand_of_guldan,if=soul_shard>=4&!talent.summon_darkglare.enabled
 	{'!Hand of Gul\'dan', '!moving&soulshards>=4'},
+	--actions+=/thalkiels_consumption,if=(dreadstalker_remaining_duration>execute_time|talent.implosion.enabled&spell_targets.implosion>=3)&wild_imp_count>3&wild_imp_remaining_duration>execute_time
+	{'!Thal\'kiel\'s Consumption', '!moving&spell(Call Dreadstalkers).cooldown>3&lastgcd(Hand of Gul\'dan)'},
 	--actions+=/demonic_empowerment,if=dreadstalker_no_de>0|darkglare_no_de>0|doomguard_no_de>0|infernal_no_de>0|service_no_de>0
-	{'!Demonic Empowerment', '!moving&!lastgcd(Demonic Empowerment)&{warlock.empower=0||lastgcd(Summon Felguard)||lastgcd(Call Dreadstalkers)||lastgcd(Hand of Gul\'dan)||lastgcd(Summon Darkglare)||lastgcd(Summon Doomguard)||lastgcd(Grimoire: Felguard)}'},	
+	{'!Demonic Empowerment', '!moving&!lastgcd(Demonic Empowerment)&{warlock.empower=0||lastgcd(Summon Felguard)||lastgcd(Call Dreadstalkers)||lastgcd(Hand of Gul\'dan)||lastgcd(Summon Darkglare)||lastgcd(Summon Doomguard)||lastgcd(Grimoire: Felguard)||lastgcd(Thal\'kiel\'s Consumption)}'},	
 	--actions+=/doom,cycle_targets=1,if=!talent.hand_of_doom.enabled&target.time_to_die>duration&(!ticking|remains<duration*0.3)
 	{'!Doom', '{moving||!moving}&!talent(4,1)&toggle(yuDoom)&!target.debuff(Doom)'},
-	--actions+=/thalkiels_consumption,if=(dreadstalker_remaining_duration>execute_time|talent.implosion.enabled&spell_targets.implosion>=3)&wild_imp_count>3&wild_imp_remaining_duration>execute_time
-	{'!Thal\'kiel\'s Consumption', '!moving&warlock(Wild Imp).count>=3&warlock(Dreadstalker).count=2'},
 	--actions+=/life_tap,if=mana.pct<=30
 	{'!Life Tap', '{moving||!moving}&mana<=30&player.health>=15&{!lastgcd(Summon Felguard)||!lastgcd(Call Dreadstalkers)||!lastgcd(Hand of Gul\'dan)||!lastgcd(Summon Darkglare)||!lastgcd(Summon Doomguard)||!lastgcd(Grimoire: Felguard)}'},
 	--actions+=/demonbolt
@@ -136,22 +134,20 @@ local ST = {
 	{DW_Clip, 'player.channeling(Demonwrath)'},
 	--actions+=/summon_pet,if=!talent.grimoire_of_supremacy.enabled&(!talent.grimoire_of_sacrifice.enabled|buff.demonic_power.down)
 	{'!Summon Felguard', '!moving&!pet.exists&!talent(6,1)'},
-	--actions+=/implosion,if=prev_gcd.1.hand_of_guldan&((wild_imp_remaining_duration<=3&buff.demonic_synergy.remains)|(wild_imp_remaining_duration<=4&spell_targets.implosion>2))		
-	--{'!Implosion', '!moving&talent(2,3)&combat(player).time>5&lastgcd(Hand of Gul\'dan)'},
 	--actions+=/call_dreadstalkers,if=(!talent.summon_darkglare.enabled|talent.power_trip.enabled)&(spell_targets.implosion<3|!talent.implosion.enabled)
 	{'Call Dreadstalkers', '!moving||!moving&player.buff(Demonic Calling)'},
 	--actions+=/hand_of_guldan,if=soul_shard>=4&!talent.summon_darkglare.enabled
 	{'Hand of Gul\'dan', '!moving&soulshards>=4'},
+	--actions+=/thalkiels_consumption,if=(dreadstalker_remaining_duration>execute_time|talent.implosion.enabled&spell_targets.implosion>=3)&wild_imp_count>3&wild_imp_remaining_duration>execute_time
+	{'Thal\'kiel\'s Consumption', '!moving&spell(Call Dreadstalkers).cooldown>3&lastgcd(Hand of Gul\'dan)'},
 	--actions+=/demonic_empowerment,if=dreadstalker_no_de>0|darkglare_no_de>0|doomguard_no_de>0|infernal_no_de>0|service_no_de>0
-	{'Demonic Empowerment', '!moving&!lastgcd(Demonic Empowerment)&{warlock.empower=0||lastgcd(Summon Felguard)||lastgcd(Call Dreadstalkers)||lastgcd(Hand of Gul\'dan)||lastgcd(Summon Darkglare)||lastgcd(Summon Doomguard)||lastgcd(Grimoire: Felguard)}'},	
+	{'Demonic Empowerment', '!moving&!lastgcd(Demonic Empowerment)&{warlock.empower=0||lastgcd(Summon Felguard)||lastgcd(Call Dreadstalkers)||lastgcd(Hand of Gul\'dan)||lastgcd(Summon Darkglare)||lastgcd(Summon Doomguard)||lastgcd(Grimoire: Felguard)||lastgcd(Thal\'kiel\'s Consumption)}'},	
 	--actions+=/doom,cycle_targets=1,if=!talent.hand_of_doom.enabled&target.time_to_die>duration&(!ticking|remains<duration*0.3)
 	{'Doom', '{moving||!moving}&!talent(4,1)&toggle(yuDoom)&!target.debuff(Doom)'},
-	--actions+=/thalkiels_consumption,if=(dreadstalker_remaining_duration>execute_time|talent.implosion.enabled&spell_targets.implosion>=3)&wild_imp_count>3&wild_imp_remaining_duration>execute_time
-	{'Thal\'kiel\'s Consumption', '!moving&warlock(Wild Imp).count>=3&warlock(Dreadstalker).count=2'},
 	--actions+=/life_tap,if=mana.pct<=30
 	{'Life Tap', '{moving||!moving}&mana<=30&player.health>=15&{!lastgcd(Summon Felguard)||!lastgcd(Call Dreadstalkers)||!lastgcd(Hand of Gul\'dan)||!lastgcd(Summon Darkglare)||!lastgcd(Summon Doomguard)||!lastgcd(Grimoire: Felguard)}'},
 	--actions+=/demonwrath,chain=1,interrupt=1,if=spell_targets.demonwrath>=3
-	{'Demonwrath', 'moving'},
+	{'Demonwrath', 'moving&combat(player).time>2'},
 	--actions+=/demonbolt
 	{'Demonbolt', '!moving&talent(7,2)&!soulshards=4'},
 	--actions+=/shadow_bolt
