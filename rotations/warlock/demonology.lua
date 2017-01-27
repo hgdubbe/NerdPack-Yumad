@@ -92,18 +92,14 @@ local Trinkets = {
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Warlock_Demonology_T19M.simc
 
 local PreCombat = {
-	--actions.precombat+=/summon_pet,if=!talent.grimoire_of_supremacy.enabled&(!talent.grimoire_of_sacrifice.enabled|buff.demonic_power.down)
 	{'Summon Felguard', '!moving&!pet.exists&!talent(6,1)'},
 }
 
 local Cooldowns = {
-	--actions+=/berserking
+	{'&Arcane Torrent'},
 	{'&Berserking'},
-	--actions+=/blood_fury
 	{'&Blood Fury'},
-	--actions+=/service_pet
 	{'Grimoire: Felguard', 'talent(6,2)'},
-	--actions+=/summon_doomguard,if=!talent.grimoire_of_supremacy.enabled&spell_targets.infernal_awakening<=2&(target.time_to_die>180|target.health.pct<=20|target.time_to_die<30)
 	{'Summon Doomguard', '!talent(6,1)'},
 }
 
@@ -117,7 +113,7 @@ local DW_Clip = {
 	--actions+=/thalkiels_consumption,if=(dreadstalker_remaining_duration>execute_time|talent.implosion.enabled&spell_targets.implosion>=3)&wild_imp_count>3&wild_imp_remaining_duration>execute_time
 	{'!Thal\'kiel\'s Consumption', '!moving&spell(Call Dreadstalkers).cooldown>3&lastgcd(Hand of Gul\'dan)'},
 	--actions+=/demonic_empowerment,if=dreadstalker_no_de>0|darkglare_no_de>0|doomguard_no_de>0|infernal_no_de>0|service_no_de>0
-	{'!Demonic Empowerment', '!moving&!lastgcd(Demonic Empowerment)&{warlock.empower=0||lastgcd(Summon Felguard)||lastgcd(Call Dreadstalkers)||lastgcd(Hand of Gul\'dan)||lastgcd(Summon Darkglare)||lastgcd(Summon Doomguard)||lastgcd(Grimoire: Felguard)||lastgcd(Thal\'kiel\'s Consumption)}'},	
+	{'!Demonic Empowerment', '!moving&!lastgcd(Demonic Empowerment)&{warlock.empower=0||lastgcd(Summon Felguard)||lastgcd(Call Dreadstalkers)||lastgcd(Hand of Gul\'dan)||lastgcd(Summon Darkglare)||lastgcd(Summon Doomguard)||lastgcd(Grimoire: Felguard)||lastgcd(Thal\'kiel\'s Consumption)}'},
 	--actions+=/doom,cycle_targets=1,if=!talent.hand_of_doom.enabled&target.time_to_die>duration&(!ticking|remains<duration*0.3)
 	{'!Doom', '{moving||!moving}&!talent(4,1)&toggle(yuDoom)&!target.debuff(Doom)'},
 	--actions+=/life_tap,if=mana.pct<=30
@@ -141,13 +137,13 @@ local ST = {
 	--actions+=/thalkiels_consumption,if=(dreadstalker_remaining_duration>execute_time|talent.implosion.enabled&spell_targets.implosion>=3)&wild_imp_count>3&wild_imp_remaining_duration>execute_time
 	{'Thal\'kiel\'s Consumption', '!moving&spell(Call Dreadstalkers).cooldown>3&lastgcd(Hand of Gul\'dan)'},
 	--actions+=/demonic_empowerment,if=dreadstalker_no_de>0|darkglare_no_de>0|doomguard_no_de>0|infernal_no_de>0|service_no_de>0
-	{'Demonic Empowerment', '!moving&!lastgcd(Demonic Empowerment)&{warlock.empower=0||lastgcd(Summon Felguard)||lastgcd(Call Dreadstalkers)||lastgcd(Hand of Gul\'dan)||lastgcd(Summon Darkglare)||lastgcd(Summon Doomguard)||lastgcd(Grimoire: Felguard)||lastgcd(Thal\'kiel\'s Consumption)}'},	
+	{'Demonic Empowerment', '!moving&!lastgcd(Demonic Empowerment)&{warlock.empower=0||lastgcd(Summon Felguard)||lastgcd(Call Dreadstalkers)||lastgcd(Hand of Gul\'dan)||lastgcd(Summon Darkglare)||lastgcd(Summon Doomguard)||lastgcd(Grimoire: Felguard)||lastgcd(Thal\'kiel\'s Consumption)}'},
 	--actions+=/doom,cycle_targets=1,if=!talent.hand_of_doom.enabled&target.time_to_die>duration&(!ticking|remains<duration*0.3)
 	{'Doom', '{moving||!moving}&!talent(4,1)&toggle(yuDoom)&!target.debuff(Doom)'},
 	--actions+=/life_tap,if=mana.pct<=30
 	{'Life Tap', '{moving||!moving}&mana<=30&player.health>=15&{!lastgcd(Summon Felguard)||!lastgcd(Call Dreadstalkers)||!lastgcd(Hand of Gul\'dan)||!lastgcd(Summon Darkglare)||!lastgcd(Summon Doomguard)||!lastgcd(Grimoire: Felguard)}'},
 	--actions+=/demonwrath,chain=1,interrupt=1,if=spell_targets.demonwrath>=3
-	{'Demonwrath', 'moving&combat(player).time>2'},
+	{'Demonwrath', 'movingfor>=2&combat(player).time>2'},
 	--actions+=/demonbolt
 	{'Demonbolt', '!moving&talent(7,2)&!soulshards=4'},
 	--actions+=/shadow_bolt
