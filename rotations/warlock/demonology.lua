@@ -73,7 +73,6 @@ local Keybinds = {
 	{'!Shadowfury', '!moving&UI(K_SF)&talent(3,3)&keybind(lcontrol)', 'cursor.ground'},
 	-- Demonic Circle on Left-Alt if enabled in UI.
 	{'!Demonic Circle', '{!moving||moving}UI(K_DC)&talent(3,1)&keybind(lalt)'},
-
 }
 
 local Trinkets = {
