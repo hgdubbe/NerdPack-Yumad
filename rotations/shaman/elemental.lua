@@ -41,9 +41,9 @@ local exeOnLoad = function()
 	-- Rotation loaded message.
 	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cff0070de --- |rShaman: |cff0070deELEMENTAL|r')
-	print('|cff0070de --- |rLightning Rod: 1/3 - 2/1 - 3/1 - 4/2 - 5/3||5/2 (Tyrannical) - 6/1 - 7/2')
-	print('|cff0070de --- |rIcefury: 1/3 - 2/1 - 3/1 - 4/2 - 5/3 - 6/3||6/1 (Mythic+ AoE) - 7/3')
-	print('|cff0070de --- |rAscendance: 1/1 - 2/1 - 3/1 - 4/2 - 5/3 - 6/3||6/1 (Mythic+ AoE)- 7/1')
+	print('|cff0070de --- |rLightning Rod: 1/3 - 2/1 - 3/1 - 4/2 - 5/3||5/2 (Tyrannical) - 6/1 - 7/2|r')
+	print('|cff0070de --- |rIcefury: 1/3 - 2/1 - 3/1 - 4/2 - 5/3 - 6/3||6/1 (Mythic+ AoE) - 7/3|r')
+	print('|cff0070de --- |rAscendance: 1/1 - 2/1 - 3/1 - 4/2 - 5/3 - 6/3||6/1 (Mythic+ AoE)- 7/1|r')
 	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 
@@ -51,7 +51,7 @@ local exeOnLoad = function()
 		-- Cleanse Spirit
 		key = 'yuPS',
 		name = 'Cleanse Spirit',
-		text = 'Enable/Disable: Automatic removal of curses.',
+		text = 'Enable/Disable: Automatic removal of curses',
 		icon = 'Interface\\ICONS\\ability_shaman_cleansespirit',
 	})
 end
@@ -122,15 +122,13 @@ local AoE = {
 	{'Totem Mastery', '{!moving||moving}&talent(1,3)&{totem(Totem Mastery).duration<1||!player.buff(Tailwind Totem)||!player.buff(Storm Totem)||!player.buff(Resonance Totem)||!player.buff(Ember Totem)}'},
 	--actions.aoe=stormkeeper
 	{'Stormkeeper'},
-	--actions.aoe+=/ascendance
-	{'Ascendance', '{!moving||moving}&talent(7,1)'},
 	--actions.aoe+=/liquid_magma_totem
 	{'Liquid Magma Totem', '{!moving||moving}&talent(6,1)&!advanced', 'cursor.ground'},
 	{'Liquid Magma Totem', '{!moving||moving}&talent(6,1)&advanced', 'target.ground'},
 	--actions.aoe+=/flame_shock,if=spell_targets.chain_lightning<4&maelstrom>=20&!talent.lightning_rod.enabled,target_if=refreshable
 	--***Flame Shock according to AoE Lightning Rod Rotaion from Storm, Earth and Lava***
 	{'Flame Shock', '{!moving||moving}&!talent(7,2)&player.maelstrom>=20&target.debuff(Flame Shock).duration<gcd'},
-	{'Flame Shock', '{!moving||moving}&talent(7,2)&{player.area(40).enemies<4&!target.debuff(Flame Shock)||player.maelstrom>=20&player.buff(Elemental Focus)&target.debuff(Flame Shock).duration<9}'},
+	{'Flame Shock', '{!moving||moving}&talent(7,2)&target.area(10).enemies<4&!target.debuff(Flame Shock)'},
 	--actions.aoe+=/earthquake
 	{'Earthquake', '{!moving||moving}&player.maelstrom>=50&!advanced', 'cursor.ground'},
 	{'Earthquake', '{!moving||moving}&player.maelstrom>=50&advanced', 'target.ground'},

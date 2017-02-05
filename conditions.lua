@@ -188,6 +188,16 @@ NeP.DSL:Register('artifact.enabled', function(_, spell)
     end
 end)
 
+--/dump NeP.DSL:Get('artifact.rank')('player', 'Lord of Flames')
+NeP.DSL:Register('artifact.rank', function(_, spell)
+    local rank = select(9,NeP.DSL:Get('artifact.trait_info')(_, spell))
+    if rank then
+        return rank
+    else
+        return 0
+    end
+end)
+
 --/dump NeP.DSL:Get('spell_haste')()
 --/dump NeP.DSL:Get('haste')('player') -- NeP condition
 NeP.DSL:Register('spell_haste', function()

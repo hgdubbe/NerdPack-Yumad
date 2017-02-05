@@ -105,7 +105,7 @@ local exeOnLoad = function()
 	-- Rotation loaded message.
 	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cff0070de --- |rShaman: |cff0070deRESTORATION|r')
-	print('|cff0070de --- |rTalents: 1/3 - 2/2 - 3/1 - 4/2 - 5/3 - 6/2 - 7/?')
+	print('|cff0070de --- |rTalents: 1/3 - 2/2 - 3/1 - 4/2 - 5/3 - 6/2 - 7/?|r')
 	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 
@@ -113,7 +113,7 @@ local exeOnLoad = function()
 		-- Purify Spirit
 		key = 'yuPS',
 		name = 'Purify Spirit',
-		text = 'Enable/Disable: Automatic removal of a curse or magic effect.',
+		text = 'Enable/Disable: Automatic removal of a curse or magic effect',
 		icon = 'Interface\\ICONS\\ability_shaman_cleansespirit',
 	})
 	
@@ -121,7 +121,7 @@ local exeOnLoad = function()
 		-- Elemental DPS
 		key = 'yuDPS',
 		name = 'Elemental DPS',
-		text = 'Enable/Disable: Elemental DPS in rotation. Set Healing Wave value to < 100.',
+		text = 'Enable/Disable: Elemental DPS in rotation. Set Healing Wave value to < 100',
 		icon = 'Interface\\ICONS\\spell_fire_flameshock',
 	})
 end

@@ -34,7 +34,8 @@ local exeOnLoad = function()
 	-- Rotation loaded message.
 	print('|cffc79c6e ----------------------------------------------------------------------|r')
 	print('|cffc79c6e --- |rWarrior: |cffc79c6eARMS|r')
-	print('|cffc79c6e --- |rTalents: 1/1 - 2/3 - 3/3 - 4/2 - 5/3 - 6/1 - 7/1')
+	print('|cffc79c6e --- |rTalents: 1/1 - 2/3 - 3/3 - 4/2 - 5/3 - 6/1 - 7/1|r')
+	print('|cffc79c6e --- |rTrinkets: Top=Draught of Souls|r')
 	print('|cffc79c6e ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 end
@@ -78,8 +79,9 @@ local Interrupts = {
 -- Updates to rotations from sources are considered for implementation.
 -- ####################################################################################
 
--- SimC APL 1/17/2017
+-- SimC APL 1/28/2017
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Warrior_Arms_T19M.simc
+-- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M_NH/Warrior_Arms_T19M_NH.simc
 
 local Cooldowns = {
 	--actions+=/blood_fury,if=buff.battle_cry.up|target.time_to_die<=16
@@ -88,14 +90,12 @@ local Cooldowns = {
 	{'&Berserking', 'player.buff(Battle Cry)'},
 	--actions+=/arcane_torrent,if=buff.battle_cry_deadly_calm.down&rage.deficit>40&cooldown.battle_cry.remains
 	{'&Arcane Torrent', '!player.buff(Battle Cry)&talent(6,1)&player.rage>=40&spell(Battle Cry).cooldown>gcd'},
-	--actions+=/battle_cry,if=gcd.remains<0.25&cooldown.avatar.remains>=10&(buff.shattered_defenses.up|cooldown.warbreaker.remains>7&cooldown.colossus_smash.remains>7|cooldown.colossus_smash.remains&debuff.colossus_smash.remains>gcd)|!cooldown.colossus_smash.remains<gcd|target.time_to_die<=7
-	{'&Battle Cry', 'gcd.remains<0.25&spell(Avatar).cooldown>=10&{player.buff(Shattered Defenses)||spell(Warbreaker).cooldown>=7&spell(Colossus Smash).cooldown>=7||spell(Colossus Smash).cooldown>gcd&target.debuff(Colossus Smash).duration>gcd||!spell(Colossus Smash).cooldown<gcd}'},
+	--actions+=/battle_cry,if=gcd.remains<0.25&cooldown.avatar.remains>=10&(buff.shattered_defenses.up|cooldown.warbreaker.remains>7&cooldown.colossus_smash.remains>7|cooldown.colossus_smash.remains&debuff.colossus_smash.remains>gcd)|target.time_to_die<=7
+	{'&Battle Cry', 'gcd.remains<0.25&spell(Avatar).cooldown>=10&{player.buff(Shattered Defenses)||spell(Warbreaker).cooldown>=7&spell(Colossus Smash).cooldown>=7||spell(Colossus Smash).cooldown>gcd&target.debuff(Colossus Smash).duration>gcd}'},
 	--actions+=/avatar,if=gcd.remains<0.25&(buff.battle_cry.up|cooldown.battle_cry.remains<15)|target.time_to_die<=20
 	{'&Avatar', 'talent(3,3)&gcd.remains<0.25&{player.buff(Battle Cry)||spell(Battle Cry).cooldown<=15}'},
 	--actions+=/use_item,name=draught_of_souls,if=equipped.draught_of_souls&((prev_gcd.1.mortal_strike|cooldown.mortal_strike.remains>=3)&buff.battle_cry.remains>=3&debuff.colossus_smash.up&buff.avatar.remains>=3)
 	{'#trinket1', 'equipped(Draught of Souls)&{lastgcd(Mortal Strike)||spell(Mortal Strike).cooldown>=3}&player.buff(Battle Cry).duration>=3&target.debuff(Colossus Smash)&player.buff(Avatar).duration>=3'},
-	--actions+=/use_item,name=kiljaedens_burning_wish,if=equipped.kiljaedens_burning_wish&debuff.colossus_smash.up
-	{'#trinket2', 'equipped(Kil\'jaeden\'s Burning Wish)&target.debuff(Colossus Smash)'},
 }
 
 local Available = {
@@ -195,7 +195,7 @@ local ST = {
 	{'Colossus Smash', '!player.buff(Shattered Defenses)&{!player.buff(Battle Cry)||player.buff(Battle Cry)&player.buff(Battle Cry).duration>=gcd||player.buff(Corrupted Blood of Zakajz).duration>=gcd}'},
 	--actions.single+=/focused_rage,if=!buff.battle_cry_deadly_calm.up&buff.focused_rage.stack<3&!cooldown.colossus_smash.up&(rage>=50|debuff.colossus_smash.down|cooldown.battle_cry.remains<=8)|cooldown.battle_cry.remains<=8&cooldown.battle_cry.remains>0&rage>100
 	{'&Focused Rage', '!player.buff(Battle Cry)&talent(6,1)&player.buff(Focused Rage).count<3&spell(Colossus Smash).cooldown>gcd&{player.rage>=50||!target.debuff(Colossus Smash)||spell(Battle Cry).cooldown<=8}||spell(Battle Cry).cooldown<=8&spell(Battle Cry).cooldown>0&player.rage>=100'},
-	--actions.single+=/mortal_strike,if=cooldown.battle_cry.remains>8|!buff.battle_cry.remains>(gcd.max*2)&buff.focused_rage.stack<3|buff.battle_cry.remains<=gcd
+	--actions.single+=/mortal_strike,if=cooldown.battle_cry.remains>8|!buff.battle_cry.up&buff.focused_rage.stack<3|buff.battle_cry.remains<=gcd
 	{'Mortal Strike', 'spell(Battle Cry).cooldown>=8||!player.buff(Battle Cry)&player.buff(Focused Rage).count<3||player.buff(Battle Cry).duration<=gcd'},
 	--actions.single+=/execute,if=buff.stone_heart.react
 	{'Execute', 'player.buff(Ayala\'s Stone Heart)'},

@@ -35,7 +35,8 @@ local exeOnLoad = function()
 	-- Rotation loaded message.
 	print('|cff8788ee ----------------------------------------------------------------------|r')
 	print('|cff8788ee --- |rWarlock: |cff8788eeDEMONOLOGY|r')
-	print('|cff8788ee --- |rSpecific Talents: 1/3 - 2/2 - 3/X - 4/2 - 5/X - 6/2 - 7/2')
+	print('|cff8788ee --- |rSpecific Talents: 1/3 - 2/2 - 3/X - 4/2 - 5/X - 6/2 - 7/2|r')
+	print('|cff8788ee --- |rPet: Felguard|r')
 	print('|cff8788ee ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 
@@ -43,7 +44,7 @@ local exeOnLoad = function()
 		-- Doom
 		key = 'yuDoom',
 		name = 'Doom',
-		text = 'Enable/Disable: Casting of Doom on targets.',
+		text = 'Enable/Disable: Casting of Doom on targets',
 		icon = 'Interface\\ICONS\\spell_shadow_auraofdarkness',
 	})
 end
@@ -90,16 +91,17 @@ local Trinkets = {
 -- SimC APL 1/17/2017
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Warlock_Demonology_T19M.simc
 
-local PreCombat = {
-	{'Summon Felguard', '!moving&!pet.exists&!talent(6,1)'},
-}
-
 local Cooldowns = {
 	{'&Arcane Torrent'},
 	{'&Berserking'},
 	{'&Blood Fury'},
-	{'Grimoire: Felguard', 'talent(6,2)'},
-	{'Summon Doomguard', '!talent(6,1)'},
+	{'Grimoire: Felguard', 'talent(6,2)'},	
+	{'Summon Doomguard', '!talent(6,1)&target.area(10).enemies<=2'},
+	{'Summon Infernal', '!talent(6,1)&target.area(10).enemies>2&!advanced', 'cursor.ground'},
+	{'Summon Infernal', '!talent(6,1)&target.area(10).enemies>2&advanced', 'target.ground'},
+	{'Summon Doomguard', 'talent(6,1)&target.area(10).enemies=1&player.buff(Sin\'dorei Spite)'},
+	{'Summon Infernal', 'talent(6,1)&target.area(10).enemies>1&player.buff(Sin\'dorei Spite)&!advanced', 'cursor.ground'},
+	{'Summon Infernal', 'talent(6,1)&target.area(10).enemies>1&player.buff(Sin\'dorei Spite)&advanced', 'target.ground'},
 }
 
 local DW_Clip = {
@@ -126,7 +128,7 @@ local DW_Clip = {
 }
 
 local ST = {
-	{DW_Clip, 'player.channeling(Demonwrath)'},
+	{DW_Clip, 'player.channeling(Demonwrath)&pet.exists'},
 	--actions+=/summon_pet,if=!talent.grimoire_of_supremacy.enabled&(!talent.grimoire_of_sacrifice.enabled|buff.demonic_power.down)
 	{'!Summon Felguard', '!moving&!pet.exists&!talent(6,1)'},
 	--actions+=/call_dreadstalkers,if=(!talent.summon_darkglare.enabled|talent.power_trip.enabled)&(spell_targets.implosion<3|!talent.implosion.enabled)
@@ -161,7 +163,6 @@ local inCombat = {
 }
 
 local outCombat = {
-	{PreCombat},
 	{'Life Tap', '{moving||!moving}&mana<=60&player.health>=60'},
 }
 

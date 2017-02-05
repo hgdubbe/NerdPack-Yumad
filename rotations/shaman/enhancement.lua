@@ -38,8 +38,8 @@ local exeOnLoad = function()
 	-- Rotation loaded message.
 	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cff0070de --- |rShaman: |cff0070deENHANCEMENT|r')
-	print('|cff0070de --- |rSuggested Talents: 1/2 - 2/X - 3/1 - 4/2 - 5/2 - 6/2 - 7/2')
-	print('|cff0070de --- |rNo Multitarget (AoE) enabled settings')
+	print('|cff0070de --- |rSuggested Talents: 1/2 - 2/X - 3/1 - 4/2 - 5/2 - 6/2 - 7/2|r')
+	print('|cff0070de --- |rNo Multitarget (AoE) enabled settings|r')
 	print('|cff0070de ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 
@@ -47,7 +47,7 @@ local exeOnLoad = function()
 		-- Cleanse Spirit
 		key = 'yuPS',
 		name = 'Cleanse Spirit',
-		text = 'Enable/Disable: Automatic removal of curses.',
+		text = 'Enable/Disable: Automatic removal of curses',
 		icon = 'Interface\\ICONS\\ability_shaman_cleansespirit',
 	})
 end
