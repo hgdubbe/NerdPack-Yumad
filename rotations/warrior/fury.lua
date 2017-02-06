@@ -33,7 +33,6 @@ local exeOnLoad = function()
 	print('|cffc79c6e ----------------------------------------------------------------------|r')
 	print('|cffc79c6e --- |rWarrior: |cffc79c6eFURY|r')
 	print('|cffc79c6e --- |rTalents: 1/2 - 2/3 - 3/3 - 4/3 - 5/2 - 6/3 - 7/2|r')
-	print('|cffc79c6e --- |rTrinkets: Top=Draught of Souls - Bottom=Faulty Countermeasure|r')
 	print('|cffc79c6e ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 end
@@ -80,15 +79,10 @@ local Interrupts = {
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M_NH/Warrior_Fury_T19M_NH.simc
 
 local Cooldowns = {
-	--actions+=/use_item,name=faulty_countermeasure,if=buff.battle_cry.up&buff.enrage.up
-	{'#trinket2', 'equipped(Faulty Countermeasure)&player.buff(Battle Cry)&player.buff(Enrage)'},
---actions+=/use_item,name=ring_of_collapsing_futures,if=equipped.ring_of_collapsing_futures&buff.battle_cry.up&buff.enrage.up&!buff.temptation.up
---NEED RING ITEM USE
---{'#ring1', 'equipped(Ring of Collapsing Futures)&player.buff(Battle Cry)&player.buff(Enrage)&!player.debuff(Temptation)'},
 	--actions+=/battle_cry,if=gcd.remains=0&(!talent.reckless_abandon.enabled&(cooldown.bloodthirst.remains=0|buff.enrage.remains>cooldown.bloodthirst.remains))|(talent.reckless_abandon.enabled&(talent.dragon_roar.enabled&buff.dragon_roar.up|!talent.dragon_roar.enabled))
 	{'&Battle Cry', 'gcd.remains=0&{!talent(7,2)&{spell(Bloodthirst).cooldown=0||player.buff(Enrage).duration>spell(Bloodthirst).cooldown}}||talent(7,2)'},
 	--actions+=/battle_cry,if=gcd.remains=0&!talent.dragon_roar.enabled&(!equipped.convergence_of_fates|!talent.bloodbath.enabled|!cooldown.bloodbath.remains|cooldown.bloodbath.remains>=10)
-	{'&Battle Cry', 'gcd.remains=0&!talent(7,3)&{!equipped(Convergence of Fates)||!talent(6,1)||spell(Bloodbath).cooldown=0||spell(Bloodbath).cooldown>=10}'},
+	{'&Battle Cry', 'gcd.remains=0&!talent(7,3)&{!talent(6,1)||spell(Bloodbath).cooldown=0||spell(Bloodbath).cooldown>=10}'},
 	--actions+=/battle_cry,if=gcd.remains=0&buff.dragon_roar.up&(cooldown.bloodthirst.remains=0|buff.enrage.remains>cooldown.bloodthirst.remains)
 	{'&Battle Cry', 'gcd.remains=0&player.buff(Dragon Roar)&{spell(Bloodthirst).cooldown=0||player.buff(Enrage).duration>spell(Bloodthirst).cooldown}'},
 	--actions+=/avatar,if=buff.battle_cry.up|(target.time_to_die<(cooldown.battle_cry.remains+10))
@@ -109,11 +103,6 @@ local BattleCry = {
 	{'Rampage', 'talent(5,1)&player.buff(Massacre)&player.buff(Enrage).duration<1'},
 	--actions.cooldowns+=/bloodthirst,if=target.health.pct<20&buff.enrage.remains<1
 	{'Bloodthirst', 'target.health<=20&player.buff(Enrage).duration<1'},
---actions.cooldowns+=/execute,if=equipped.draught_of_souls&cooldown.draught_of_souls.remains<1&buff.juggernaut.remains<3
---NEED TRINKET COOLDOWN CONDITION CHECK
---{'Execute', 'equipped(Draught of Souls)&player.buff(Juggernaut).duration<3'},
-	--actions.cooldowns+=/use_item,name=draught_of_souls,if=equipped.draught_of_souls&buff.battle_cry.remains>2&buff.enrage.remains>2&((talent.dragon_roar.enabled&buff.dragon_roar.remains>=3)|!talent.dragon_roar.enabled)
-	{'#trinket1', 'equipped(Draught of Souls)&player.buff(Battle Cry).duration>2&player.buff(Enrage).duration>2&{{talent(7,3)&player.buff(Dragon Roar).duration>=3}||!talent(7,3)}'},
 	--actions.cooldowns+=/odyns_fury,if=spell_targets.odyns_fury>1
 	{'Odyn\'s Fury', 'player.area(14).enemies>1&player.buff(Enrage)'},
 	--actions.cooldowns+=/whirlwind,if=spell_targets.whirlwind>1&buff.meat_cleaver.down

@@ -41,7 +41,6 @@ local exeOnLoad = function()
 	print('|cfff58cba --- |rPaladin: |cfff58cbaRETRIBUTION|r')
 	print('|cfff58cba --- |rTalents: 1/2 - 2/2 - 3/1 - 4/2 - 5/2 - 6/1 - 7/2|r')
 	print('|cfff58cba --- |rNo Multitarget (AoE) enabled settings|r')
-	print('|cfff58cba --- |rTrinkets: Top=Faulty Countermeasure|r')
 	print('|cfff58cba ----------------------------------------------------------------------|r')
 	print('|cffff0000 Configuration: |rRight-click the MasterToggle and go to Combat Routines Settings|r')
 
@@ -87,7 +86,7 @@ local Emergency = {
 
 local Trinkets = {
 	-- Top Trinket usage if enabled in UI.
-	{'#trinket1', 'UI(trinket_1)&!equipped(Faulty Countermeasure)'},
+	{'#trinket1', 'UI(trinket_1)'},
 	-- Bottom Trinket usage if enabled in UI.
 	{'#trinket2', 'UI(trinket_2)'},
 }
@@ -117,8 +116,6 @@ local Blessings = {
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Paladin_Retribution_T19M.simc
 
 local Cooldowns = {
-	--actions+=/use_item,name=faulty_countermeasure,if=(buff.avenging_wrath.up|buff.crusade.up)
-	{'#trinket1', 'equipped(Faulty Countermeasure)&{player.buff(Avenging Wrath)||player.buff(Crusade)}'},
 	--actions+=/arcane_torrent,if=holy_power<5&(buff.crusade.up|buff.avenging_wrath.up|time<2)
 	{'&Arcane Torrent', 'holypower<5&{player.buff(Crusade)||player.buff(Avenging Wrath)||combat(player).time<2}'},
 	--actions+=/holy_wrath

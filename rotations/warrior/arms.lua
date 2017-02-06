@@ -94,8 +94,6 @@ local Cooldowns = {
 	{'&Battle Cry', 'gcd.remains<0.25&spell(Avatar).cooldown>=10&{player.buff(Shattered Defenses)||spell(Warbreaker).cooldown>=7&spell(Colossus Smash).cooldown>=7||spell(Colossus Smash).cooldown>gcd&target.debuff(Colossus Smash).duration>gcd}'},
 	--actions+=/avatar,if=gcd.remains<0.25&(buff.battle_cry.up|cooldown.battle_cry.remains<15)|target.time_to_die<=20
 	{'&Avatar', 'talent(3,3)&gcd.remains<0.25&{player.buff(Battle Cry)||spell(Battle Cry).cooldown<=15}'},
-	--actions+=/use_item,name=draught_of_souls,if=equipped.draught_of_souls&((prev_gcd.1.mortal_strike|cooldown.mortal_strike.remains>=3)&buff.battle_cry.remains>=3&debuff.colossus_smash.up&buff.avatar.remains>=3)
-	{'#trinket1', 'equipped(Draught of Souls)&{lastgcd(Mortal Strike)||spell(Mortal Strike).cooldown>=3}&player.buff(Battle Cry).duration>=3&target.debuff(Colossus Smash)&player.buff(Avatar).duration>=3'},
 }
 
 local Available = {
