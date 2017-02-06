@@ -75,7 +75,7 @@ local Interrupts = {
 -- Updates to rotations from sources are considered for implementation.
 -- ####################################################################################
 
--- SimC APL 2/4/2017
+-- SimC APL 2/5/2017
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M/Warrior_Fury_T19M.simc
 -- https://github.com/simulationcraft/simc/blob/legion-dev/profiles/Tier19M_NH/Warrior_Fury_T19M_NH.simc
 
@@ -87,14 +87,14 @@ local Cooldowns = {
 --{'#ring1', 'equipped(Ring of Collapsing Futures)&player.buff(Battle Cry)&player.buff(Enrage)&!player.debuff(Temptation)'},
 	--actions+=/battle_cry,if=gcd.remains=0&(!talent.reckless_abandon.enabled&(cooldown.bloodthirst.remains=0|buff.enrage.remains>cooldown.bloodthirst.remains))|(talent.reckless_abandon.enabled&(talent.dragon_roar.enabled&buff.dragon_roar.up|!talent.dragon_roar.enabled))
 	{'&Battle Cry', 'gcd.remains=0&{!talent(7,2)&{spell(Bloodthirst).cooldown=0||player.buff(Enrage).duration>spell(Bloodthirst).cooldown}}||talent(7,2)'},
-	--actions+=/battle_cry,if=gcd.remains=0&talent.reckless_abandon.enabled
-	{'&Battle Cry', 'gcd.remains=0&talent(7,2)'},
+	--actions+=/battle_cry,if=gcd.remains=0&!talent.dragon_roar.enabled&(!equipped.convergence_of_fates|!talent.bloodbath.enabled|!cooldown.bloodbath.remains|cooldown.bloodbath.remains>=10)
+	{'&Battle Cry', 'gcd.remains=0&!talent(7,3)&{!equipped(Convergence of Fates)||!talent(6,1)||spell(Bloodbath).cooldown=0||spell(Bloodbath).cooldown>=10}'},
 	--actions+=/battle_cry,if=gcd.remains=0&buff.dragon_roar.up&(cooldown.bloodthirst.remains=0|buff.enrage.remains>cooldown.bloodthirst.remains)
 	{'&Battle Cry', 'gcd.remains=0&player.buff(Dragon Roar)&{spell(Bloodthirst).cooldown=0||player.buff(Enrage).duration>spell(Bloodthirst).cooldown}'},
 	--actions+=/avatar,if=buff.battle_cry.up|(target.time_to_die<(cooldown.battle_cry.remains+10))
 	{'&Avatar', 'talent(3,3)&player.buff(Battle Cry)'},
-	--actions+=/bloodbath,if=buff.dragon_roar.up|(!talent.dragon_roar.enabled&(buff.battle_cry.up|cooldown.battle_cry.remains>10))
-	{'&Bloodbath', 'talent(6,1)&{player.buff(Dragon Roar)||{!talent(7,3)&{player.buff(Battle Cry)||spell(Battle Cry).cooldown>10}}}'},
+	--actions+=/bloodbath,if=buff.dragon_roar.up|!talent.dragon_roar.enabled&buff.battle_cry.up
+	{'&Bloodbath', 'talent(6,1)&{player.buff(Dragon Roar)||!talent(7,3)&player.buff(Battle Cry)}'},
 	--actions+=/blood_fury,if=buff.battle_cry.up
 	{'&Blood Fury', 'player.buff(Battle Cry)'},
 	--actions+=/berserking,if=buff.battle_cry.up
@@ -109,65 +109,53 @@ local BattleCry = {
 	{'Rampage', 'talent(5,1)&player.buff(Massacre)&player.buff(Enrage).duration<1'},
 	--actions.cooldowns+=/bloodthirst,if=target.health.pct<20&buff.enrage.remains<1
 	{'Bloodthirst', 'target.health<=20&player.buff(Enrage).duration<1'},
---actions.cooldowns+=/execute,if=cooldown.draught_of_souls.remains<1&buff.juggernaut.remains<3
+--actions.cooldowns+=/execute,if=equipped.draught_of_souls&cooldown.draught_of_souls.remains<1&buff.juggernaut.remains<3
 --NEED TRINKET COOLDOWN CONDITION CHECK
 --{'Execute', 'equipped(Draught of Souls)&player.buff(Juggernaut).duration<3'},
-	--actions.cooldowns+=/use_item,name=draught_of_souls,if=equipped.trinket=draught_of_souls,if=buff.battle_cry.remains>2&buff.enrage.remains>2&((talent.dragon_roar.enabled&buff.dragon_roar.remains>=3)|!talent.dragon_roar.enabled)
+	--actions.cooldowns+=/use_item,name=draught_of_souls,if=equipped.draught_of_souls&buff.battle_cry.remains>2&buff.enrage.remains>2&((talent.dragon_roar.enabled&buff.dragon_roar.remains>=3)|!talent.dragon_roar.enabled)
 	{'#trinket1', 'equipped(Draught of Souls)&player.buff(Battle Cry).duration>2&player.buff(Enrage).duration>2&{{talent(7,3)&player.buff(Dragon Roar).duration>=3}||!talent(7,3)}'},
+	--actions.cooldowns+=/odyns_fury,if=spell_targets.odyns_fury>1
+	{'Odyn\'s Fury', 'player.area(14).enemies>1&player.buff(Enrage)'},
+	--actions.cooldowns+=/whirlwind,if=spell_targets.whirlwind>1&buff.meat_cleaver.down
+	{'Whirlwind', 'player.area(8).enemies>1&!player.buff(Meat Cleaver)'},
 	--actions.cooldowns+=/execute
 	{'Execute'},
-	--actions.cooldowns+=/raging_blow,if=buff.enrage.up
-	{'Raging Blow', 'player.buff(Enrage)'},
+	--actions.cooldowns+=/raging_blow,if=talent.inner_rage.enabled&buff.enrage.up
+	{'Raging Blow', 'talent(6,3)&player.buff(Enrage)'},
 	--actions.cooldowns+=/odyns_fury
 	{'Odyn\'s Fury', 'player.buff(Enrage)'},
-	--actions.cooldowns+=/rampage,if=talent.reckless_abandon.enabled&!talent.frothing_berserker.enabled|(talent.frothing_berserker.enabled&rage>=100)
-	{'Rampage', 'talent(7,2)&!talent(5,2)||{talent(5,2)&player.rage>=100}'},
+	--actions.cooldowns+=/rampage,if=!talent.frothing_berserker.enabled|(talent.frothing_berserker.enabled&rage>=100)
+	{'Rampage', '!talent(5,2)||{talent(5,2)&player.rage>=100}'},
 	--actions.cooldowns+=/berserker_rage,if=talent.outburst.enabled&buff.enrage.down&buff.battle_cry.up
 	{'&Berserker Rage', 'talent(3,2)&!player.buff(Enrage)&player.buff(Battle Cry)'},
 	--actions.cooldowns+=/bloodthirst,if=buff.enrage.remains<1&!talent.outburst.enabled
 	{'Bloodthirst', 'player.buff(Enrage).duration<1&!talent(3,2)'},
-	--actions.cooldowns+=/raging_blow
-	{'Raging Blow'},
-	--actions.cooldowns+=/bloodthirst
-	{'Bloodthirst'},
+	--actions.cooldowns+=/raging_blow,if=talent.inner_rage.enabled
+	{'Raging Blow', 'talent(6,3)'},
+	--actions.cooldowns+=/odyns_fury
+	{'Odyn\'s Fury', 'player.buff(Enrage)'},
 	--actions.cooldowns+=/whirlwind,if=buff.wrecking_ball.react&buff.enrage.up
 	{'Whirlwind', 'talent(3,1)&player.buff(Wrecking Ball)&player.buff(Enrage)'},
+	--actions.cooldowns+=/raging_blow,if=!talent.inner_rage.enabled
+	{'Raging Blow', '!talent(6,3)'},
+	--actions.cooldowns+=/bloodthirst
+	{'Bloodthirst'},
 	--actions.cooldowns+=/furious_slash
 	{'Furious Slash'},
-}
-
-local TwoTargets = {
-	{'/startattack', '!isattacking'},
-	--actions.two_targets+=/execute
-	{'Execute'},
-	--actions.two_targets=whirlwind,if=buff.meat_cleaver.down
-	{'Whirlwind', '!player.buff(Meat Cleaver)'},
-	--actions.two_targets+=/rampage,if=target.health.pct>20&((buff.enrage.down&!talent.frothing_berserker.enabled)|(rage>=100&talent.frothing_berserker.enabled))|buff.massacre.react
-	{'Rampage', 'target.health>20&{{!player.buff(Enrage)&!talent(5,2)}||{player.rage>=100&talent(5,2)}}||talent(5,1)&player.buff(Massacre)'},
-	--actions.two_targets+=/bloodthirst,if=buff.enrage.down
-	{'Bloodthirst', '!player.buff(Enrage)'},
-	--actions.two_targets+=/raging_blow,if=talent.inner_rage.enabled&spell_targets.whirlwind=2
-	{'Raging Blow', 'talent(6,3)&player.area(8).enemies=2'},
-	--actions.two_targets+=/whirlwind,if=spell_targets.whirlwind>2
-	{'Whirlwind', 'player.area(8).enemies>2'},
-	--actions.two_targets+=/dragon_roar
-	{'Dragon Roar', 'talent(7,3)'},
-	--actions.two_targets+=/bloodthirst
-	{'Bloodthirst'},
-	--actions.two_targets+=/whirlwind
-	{'Whirlwind'},
 }
 
 local AoE = {
 	{'/startattack', '!isattacking'},
 	--actions.aoe=bloodthirst,if=buff.enrage.down|rage<50
 	{'Bloodthirst', '!player.buff(Enrage)||player.rage<=50'},
+	--actions.aoe+=/bladestorm,if=raid_event.adds.in>90|!raid_event.adds.exists|spell_targets.bladestorm_mh>1
+	{'Bladestorm', 'talent(7,1)'},
 	--actions.aoe+=/whirlwind,if=buff.meat_cleaver.down
 	{'Whirlwind', '!player.buff(Meat Cleaver)'},
-	--actions.aoe+=/dragon_roar
-	{'Dragon Roar', 'talent(7,3)'},
-	--actions.aoe+=/rampage,if=buff.meat_cleaver.up
-	{'Rampage', 'player.buff(Meat Cleaver)'},
+	--actions.aoe+=/execute,if=spell_targets.whirlwind<6&talent.massacre.enabled&!buff.massacre.react
+	{'Execute', 'player.area(8).enemies<6&talent(5,1)&!player.buff(Massacre)'},
+	--actions.aoe+=/rampage,if=buff.meat_cleaver.up&(buff.enrage.down&!talent.frothing_berserker.enabled|buff.massacre.react|rage>=100)
+	{'Rampage', 'player.buff(Meat Cleaver)&{!player.buff(Enrage)&!talent(5,2)||player.buff(Massacre)||player.rage>=100}'},
 	--actions.aoe+=/bloodthirst
 	{'Bloodthirst'},
 	--actions.aoe+=/whirlwind
@@ -180,12 +168,20 @@ local Execute = {
 	{'Bloodthirst', 'player.buff(Fujieda\'s Fury)&player.buff(Fujieda\'s Fury).count<2'},
 	--actions.execute+=/execute,if=artifact.juggernaut.enabled&(!buff.juggernaut.up|buff.juggernaut.remains<2)|buff.stone_heart.react
 	{'Execute', 'artifact(Juggernaut).enabled&{!player.buff(Juggernaut)||player.buff(Juggernaut).duration<2}||player.buff(Stone Heart)'},
+	--actions.execute+=/furious_slash,if=talent.frenzy.enabled&buff.frenzy.remains<=2
+	{'Furious Slash', 'talent(6,2)&player.buff(Frenzy).count<=2}'},
 	--actions.execute+=/rampage,if=buff.massacre.react&buff.enrage.remains<1
 	{'Rampage', 'talent(5,1)&player.buff(Massacre)&player.buff(Enrage).duration<1'},
 	--actions.execute+=/execute
 	{'Execute'},
 	--actions.execute+=/bloodthirst
 	{'Bloodthirst'},
+	--actions.execute+=/whirlwind,if=spell_targets.whirlwind=3&buff.wrecking_ball.react&buff.enrage.up
+	{'Whirlwind', 'player.area(8).enemies=3&talent(3,1)&player.buff(Wrecking Ball)&player.buff(Enrage)'},
+	--actions.execute+=/furious_slash,if=set_bonus.tier19_2pc
+	{'Furious Slash', 'set_bonus(T19)>1'},
+	--actions.execute+=/raging_blow
+	{'Raging Blow'},
 	--actions.execute+=/furious_slash
 	{'Furious Slash'},
 }
@@ -194,20 +190,30 @@ local ST ={
 	{'/startattack', '!isattacking'},
 	--actions.single_target=bloodthirst,if=buff.fujiedas_fury.up&buff.fujiedas_fury.remains<2
 	{'Bloodthirst', 'player.buff(Fujieda\'s Fury)&player.buff(Fujieda\'s Fury).count<2'},
-	--actions.single_target+=/furious_slash,if=talent.frenzy.enabled&(buff.frenzy.down|buff.frenzy.remains<=3)
-	{'Furious Slash', 'talent(6,2)&{!player.buff(Frenzy)||player.buff(Frenzy).count<=3}'},
-	--actions.single_target+=/raging_blow,if=buff.enrage.up
-	{'Raging Blow', 'player.buff(Enrage)'},
-	--actions.single_target+=/rampage,if=(buff.enrage.down&!talent.frothing_berserker.enabled)|buff.massacre.react&cooldown.raging_blow.remains>1|rage=100
-	{'Rampage', '{!player.buff(Enrage)&!talent(5,2)}||talent(5,1)&player.buff(Massacre)&spell(Raging Blow).cooldown>1||player.rage=100'},
-	--actions.single_target+=/raging_blow
-	{'Raging Blow'},
+	--actions.single_target+=/furious_slash,if=talent.frenzy.enabled&(buff.frenzy.down|buff.frenzy.remains<=2)
+	{'Furious Slash', 'talent(6,2)&{!player.buff(Frenzy)||player.buff(Frenzy).count<=2}'},
+	--actions.single_target+=/whirlwind,if=spell_targets.whirlwind=3&buff.wrecking_ball.react
+	{'Whirlwind', 'player.area(8).enemies=3&talent(3,1)&player.buff(Wrecking Ball)'},
+	--actions.single_target+=/raging_blow,if=talent.inner_rage.enabled&buff.enrage.up
+	{'Raging Blow', 'talent(6,3)&player.buff(Enrage)'},
+	--actions.single_target+=/whirlwind,if=spell_targets.whirlwind>1&buff.meat_cleaver.down
+	{'Whirlwind', 'player.area(8).enemies>1&!player.buff(Meat Cleaver)'},
+	--actions.single_target+=/rampage,if=(buff.enrage.down&!talent.frothing_berserker.enabled)|buff.massacre.react|rage>=100
+	{'Rampage', '{!player.buff(Enrage)&!talent(5,2)}||talent(5,1)&player.buff(Massacre)||player.rage>=100'},
+	--actions.single_target+=/raging_blow,if=talent.inner_rage.enabled
+	{'Raging Blow', 'talent(6,3)'},
 	--actions.single_target+=/execute,if=buff.stone_heart.react
 	{'Execute', 'player.buff(Stone Heart)'},
 	--actions.single_target+=/whirlwind,if=buff.wrecking_ball.react&buff.enrage.up
 	{'Whirlwind', 'talent(3,1)&player.buff(Wrecking Ball)&player.buff(Enrage)'},
+	--actions.single_target+=/bladestorm,if=buff.enrage.remains>2&(raid_event.adds.in>90|!raid_event.adds.exists|spell_targets.bladestorm_mh>1)
+	{'Bladestorm', 'talent(7,1)&player.buff(Enrage).duration>2'},
 	--actions.single_target+=/bloodthirst
 	{'Bloodthirst'},
+	--actions.single_target+=/raging_blow,if=!set_bonus.tier19_2pc&!talent.inner_rage.enabled
+	{'Raging Blow', 'set_bonus(T19)<2&!talent(6,3)'},
+	--actions.single_target+=/whirlwind,if=spell_targets.whirlwind>2
+	{'Whirlwind', 'player.area(8).enemies>2'},
 	--actions.single_target+=/furious_slash
 	{'Furious Slash'},
 }
@@ -218,7 +224,6 @@ local inCombat = {
 	{Interrupts, '{!moving||moving}&toggle(interrupts)&target.interruptAt(70)&target.infront'},
 	{Cooldowns, '{!moving||moving}&toggle(cooldowns)&target.range<=8'},
 	{BattleCry, '{!moving||moving}&target.range<=8&target.infront&player.buff(Battle Cry)'},
-	{TwoTargets, '{!moving||moving}&toggle(aoe)&{player.area(8).enemies=2||player.area(8).enemies=3}'},
 	{AoE, '{!moving||moving}&toggle(aoe)&{player.area(8).enemies>3'},
 	{Execute, '{!moving||moving}&target.range<=8&target.infront&target.health<=20&!player.buff(Battle Cry)'},
 	{ST, '{!moving||moving}&target.range<=8&target.infront&target.health>20&!player.buff(Battle Cry)'},
