@@ -1,3 +1,16 @@
+All Credits go to https://github.com/damuY/NerdPack-Yumad !
+
+Only Retribution CR updated, the other ones won't even show up in Nerdpack.
+You might consider to download the Retribution CR file only and copy it into the original Yumad Rotation.
+
+Changes: 
+
+-Added AskMrRobot Rotation (performs better with high haste)
+-Added forced Singletarget for SimC and AMR Rotations
+-Added Spelllist (required by newer NeP-Versions)
+
+
+
 # NerdPack-Yumad
 
 I'm not good at this ```lua``` stuff, but this is me learning.
