@@ -10,7 +10,7 @@ Changes:
 -Added Spelllist (required by newer NeP-Versions)
 -Updated Talent suggestions
 
-=======================================================================================
+===================================================================
 Original ReadMe:
 
 # NerdPack-Yumad
