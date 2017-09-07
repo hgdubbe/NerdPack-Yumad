@@ -8,8 +8,10 @@ Changes:
 -Added AskMrRobot Rotation (performs better with high haste)
 -Added forced Singletarget for SimC and AMR Rotations
 -Added Spelllist (required by newer NeP-Versions)
+-Updated Talent suggestions
 
-
+=======================================================================================
+Original ReadMe:
 
 # NerdPack-Yumad
 
