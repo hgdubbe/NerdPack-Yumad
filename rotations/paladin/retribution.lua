@@ -153,6 +153,7 @@ local GUI = {
 	{type = 'dropdown',text = 'Select...', key = 'ROTA', list = {
 		{text = 'SimC', key = '1'},
 		{text = 'AMR', key = '2'},
+		{text = 'OFF/Manual', key = '3'},
 	}, default = '1' },
 	{type = 'ruler'},{type = 'spacer'},
 	-- GUI Survival
@@ -282,20 +283,27 @@ local Cooldowns = {
 	{'&Crusade', 'talent(7,2)&UI(ROTA) == 2&holypower>=5'},
 }
 
+
+local Opener = { --taken from Yumad Rotation, not in AskMrRobots original Rotation, but does its Job very well so always use it
+
+	{'/startattack', '!isattacking'},
+	--actions+=/judgment,if=time<2
+	{'Judgment'},
+	--actions+=/blade_of_justice,if=time<2&(equipped.137048|race.blood_elf)
+	{'Blade of Justice', 'equipped(Liadrin\'s Fury Unleashed)'},
+	--actions+=/divine_hammer,if=time<2&(equipped.137048|race.blood_elf)
+	{'Divine Hammer', 'talent(4,3)&equipped(Liadrin\'s Fury Unleashed)'},
+	--actions+=/wake_of_ashes,if=holy_power<=1&time<2
+	{'Wake of Ashes', 'holypower<=1'},
+}
+
 --
 --Original Yumad Rotaion (SimulationCraft) 
 --
 
 local CombatSIMC = {
 	{'/startattack', '!isattacking'},
-	--actions+=/judgment,if=time<2
-	{'Judgment', 'combat(player).time<2'},
-	--actions+=/blade_of_justice,if=time<2&(equipped.137048|race.blood_elf)
-	{'Blade of Justice', 'combat(player).time<2&equipped(Liadrin\'s Fury Unleashed)'},
-	--actions+=/divine_hammer,if=time<2&(equipped.137048|race.blood_elf)
-	{'Divine Hammer', 'talent(4,3)&combat(player).time<2&equipped(Liadrin\'s Fury Unleashed)'},
-	--actions+=/wake_of_ashes,if=holy_power<=1&time<2
-	{'Wake of Ashes', 'holypower<=1&combat(player).time<2'},
+
 	--actions+=/execution_sentence,if=spell_targets.divine_storm<=3&(cooldown.judgment.remains<gcd*4.5|debuff.judgment.remains>gcd*4.5)&(!talent.crusade.enabled|cooldown.crusade.remains>gcd*2)
 	{'Execution Sentence','talent(1,2)&player.area(8).enemies<=3&{spell(Judgment).cooldown<gcd*4.5||target.debuff(judgment).duration>gcd*4.5}&{!talent(7,2)||talent(7,2)&!toggle(cooldowns)||spell(Crusade).cooldown>gcd*2}'},
 	--actions+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&buff.divine_purpose.up&buff.divine_purpose.remains<gcd*2
@@ -364,14 +372,7 @@ local CombatSIMC = {
 
 local CombatSTSIMC = {
 	{'/startattack', '!isattacking'},
-	--actions+=/judgment,if=time<2
-	{'Judgment', 'combat(player).time<2'},
-	--actions+=/blade_of_justice,if=time<2&(equipped.137048|race.blood_elf)
-	{'Blade of Justice', 'combat(player).time<2&equipped(Liadrin\'s Fury Unleashed)'},
-	--actions+=/divine_hammer,if=time<2&(equipped.137048|race.blood_elf)
-	{'Divine Hammer', 'talent(4,3)&combat(player).time<2&equipped(Liadrin\'s Fury Unleashed)'},
-	--actions+=/wake_of_ashes,if=holy_power<=1&time<2
-	{'Wake of Ashes', 'holypower<=1&combat(player).time<2'},
+
 	--actions+=/execution_sentence,if=spell_targets.divine_storm<=3&(cooldown.judgment.remains<gcd*4.5|debuff.judgment.remains>gcd*4.5)&(!talent.crusade.enabled|cooldown.crusade.remains>gcd*2)
 	{'Execution Sentence','talent(1,2)&{spell(Judgment).cooldown<gcd*4.5||target.debuff(judgment).duration>gcd*4.5}&{!talent(7,2)||talent(7,2)&!toggle(cooldowns)||spell(Crusade).cooldown>gcd*2}'},
 	--actions+=/templars_verdict,if=debuff.judgment.up&buff.divine_purpose.up&buff.divine_purpose.remains<gcd*2
@@ -422,6 +423,7 @@ local CombatSTSIMC = {
 
 local CombatAMR = {
 	{'/startattack', '!isattacking'},
+
 	{'Judgment', 'holypower>=3||{holypower>=2&player.buff(The Fires of Justice)}||{talen(7,1)&player.buff(Divine Purpose)'},
 	
 	--T20 Bonus Rotation Changes
@@ -449,19 +451,33 @@ local CombatAMR = {
 	{'Judgment'},
 }
 
+local MythPlus = {
+	{'Flash of Light', 'player.debuff(240443).stacks>3', 'player'}, --help healer with bursting
+	{'Flash of Light', 'player.debuff(240443).stacks>2&nocombat', 'player'},
+	{'&Shield of Vengeance', 'player.debuff(240447)'}, --cast shield when quaking
+	{'Divine Shield', 'target.casting(202019)'}, --BRH Endboss Shadowbolt Volley
+	{'Divine Shield', 'target.casting(200067)'}, --DHT Endboss 50% Nuke || needs testing
+}
+
 local inCombat = {
 	{Dispel, 'toggle(yuCT)&spell(Cleanse Toxins).cooldown=0'},
 	{Survival},
 	{Blessings},
 	{Emergency, 'ingroup&toggle(yuEGA)'},
 	{Interrupts, 'toggle(interrupts)&target.interruptAt(70)&target.infront'},
+	{MythPlus},
 	{Cooldowns, 'toggle(cooldowns)'},
-	{CombatSIMC, 'UI(ROTA) == 1&target.infront&target.range<=8&toggle(AoE)'},
-	{CombatSTSIMC, 'UI(ROTA) == 1&target.infront&target.range<=8&!toggle(AoE)'},
-	{CombatAMR, 'UI(ROTA) == 2&target.infront&target.range<=8'},
+	--actual CRs
+	{{
+	{Opener, 'target.infront&target.range<=8&combat(player).time<2'},
+	{CombatSIMC, 'UI(ROTA) == 1&target.infront&target.range<=8&toggle(AoE)&player.debuff(240443).stacks<=4'},
+	{CombatSTSIMC, 'UI(ROTA) == 1&target.infront&target.range<=8&!toggle(AoE)&'},
+	{CombatAMR, 'UI(ROTA) == 2&target.infront&target.range<=8&player.debuff(240443).stacks<=4'}
+	},'player.debuff(240443).stacks<=4'}, --stop dps when bursting stacks to high
 }
 
 local outCombat = {
+	{MythPlus},
 	{Dispel, 'toggle(yuCT)&spell(Cleanse Toxins).cooldown=0'},
 	{Interrupts, 'toggle(interrupts)&target.interruptAt(70)&target.infront'},
 	{Blessings},
