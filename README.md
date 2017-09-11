@@ -5,7 +5,7 @@ You might consider to download the Retribution CR file only and copy it into the
 
 Changes:
 
- * Added AskMrRobot Rotation (performs better with high haste)
+ * Added AskMrRobot Rotation, Manual Combat (Selector in Options)
 
  * Added forced Singletarget for SimC and AMR Rotations
 
@@ -13,6 +13,7 @@ Changes:
 
  * Updated Talent suggestions
 
+ * Added some basic M+ Stuff (Bursting Dmg Stop...)
 
 ===================================================================
 
