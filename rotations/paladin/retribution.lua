@@ -453,7 +453,7 @@ local CombatAMR = {
 
 local MythPlus = {
 	{'Flash of Light', 'player.debuff(240443).stacks>3', 'player'}, --help healer with bursting
-	{'Flash of Light', 'player.debuff(240443).stacks>2&nocombat', 'player'},
+	{'Flash of Light', 'player.debuff(240443).stacks>2&!combat', 'player'},
 	{'&Shield of Vengeance', 'player.debuff(240447)'}, --cast shield when quaking
 	{'Divine Shield', 'target.casting(202019)'}, --BRH Endboss Shadowbolt Volley
 	{'Divine Shield', 'target.casting(200067)'}, --DHT Endboss 50% Nuke || needs testing
