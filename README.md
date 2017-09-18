@@ -1,7 +1,6 @@
 # All Credits go to https://github.com/damuY/NerdPack-Yumad !
 
-Only Retribution CR updated, the other ones won't even show up in Nerdpack.
-You might consider to download the Retribution CR file only and copy it into the original Yumad Rotation.
+Only Retribution CR updated and shown ingame. If you want to use this with the other Yumad Rotations, you copy /rotations/paladin/retribution.lua and core.lua into yumads directory
 
 Changes:
 
@@ -13,7 +12,12 @@ Changes:
 
  * Updated Talent suggestions
 
- * Added some basic M+ Stuff (Bursting Dmg Stop...)
+ * Added basic M+ Stuff (Bursting Dmg Stop...), took Zyllas m+ stuff (Fel explosives, quaking cast stop)
+ 
+ * Added Trinket1 Usage:
+  -auto: will detect Vial of ceaseless Toxins and Umbral Moonglaives
+  -on Cooldown: will try to sync the trinket with Crusade
+  -off/manual: no automatic trinket usage
 
 ===================================================================
 
