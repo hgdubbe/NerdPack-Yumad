@@ -310,3 +310,23 @@ end)
 NeP.DSL:Register('warlock.empower', function()
     return Yumad.Empower()
 end)
+
+--return if Vial or Moonglaives equipped
+
+NeP.DSL:Register('trinket_voct', function()
+	local trinketid = GetInventoryItemID('player', 13)
+	if trinketid == 147011 then
+		return 1
+	else
+		return 0
+	end
+end)
+
+NeP.DSL:Register('trinket_mg', function()
+	local trinketid = GetInventoryItemID('player', 13)
+	if trinketid == 147012 then
+		return 1
+	else
+		return 0
+	end
+end)

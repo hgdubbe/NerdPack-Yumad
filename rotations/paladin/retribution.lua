@@ -146,6 +146,8 @@ local spell_ids = {
   ["Consecrated Hammer"]               = 203785,
   ["First Avenger"]                    = 203776,
 }
+local Mythic_GUI = _G.Mythic_GUI
+local Mythic_Plus = _G.Mythic_Plus
 
 local GUI = {
 	--Rotation
@@ -153,6 +155,14 @@ local GUI = {
 	{type = 'dropdown',text = 'Select...', key = 'ROTA', list = {
 		{text = 'SimC', key = '1'},
 		{text = 'AMR', key = '2'},
+		{text = 'OFF/Manual', key = '3'},
+	}, default = '1' },
+	{type = 'ruler'},{type = 'spacer'},
+	-- Trinkets
+	{type = 'header', text = 'Upper Trinket', align = 'center'},
+	{type = 'dropdown',text = 'Select usage', key = 'TRNKT', list = {
+		{text = 'Auto', key = '1'},
+		{text = 'On Cooldown', key = '2'},
 		{text = 'OFF/Manual', key = '3'},
 	}, default = '1' },
 	{type = 'ruler'},{type = 'spacer'},
@@ -172,6 +182,8 @@ local GUI = {
 	{type = 'spinner', text = 'Player Health %', key = 'S_HS', default = 20},
 	{type = 'checkbox', text = 'Enable Ancient Healing Potion', key = 'S_AHPE', default = true},
 	{type = 'spinner', text = 'Player Health %', key = 'S_AHP', default = 20},
+	{type = 'checkbox', text = 'Enable Astral Healing Potion', key = 'S_ASHPE', default = true},
+	{type = 'spinner', text = 'Player Health %', key = 'S_ASHP', default = 10},
 	{type = 'ruler'},{type = 'spacer'},
 
 	-- GUI Emergency Group Assistance
@@ -188,6 +200,8 @@ local GUI = {
 	{type = 'checkbox', text = 'Blessing of Kings', key = 'B_BOKP', default = false},
 	{type = 'checkbox', text = 'Blessing of Wisdom', key = 'B_BOWP', default = false},
 	{type = 'ruler'},{type = 'spacer'},
+	---shamelessly stolem from zylla
+	unpack(Mythic_GUI),
 }
 
 local exeOnLoad = function()
@@ -213,6 +227,12 @@ local exeOnLoad = function()
 		text = 'Enable/Disable: Automatic LoH/BoP/FoL on group members',
 		icon = 'Interface\\ICONS\\ability_fiegndead',
 	})
+	NeP.Interface:AddToggle({
+	 key = 'interruptALL',
+	 name = 'Interrupt Anyone',
+	 text = 'Interrupt all nearby enemies, without targeting them.',
+	 icon = 'Interface\\Icons\\inv_ammo_arrow_04',
+	})
 end
 
 local Survival = {
@@ -228,6 +248,8 @@ local Survival = {
 	{'#5512', 'UI(S_HSE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_HS)'},
 	-- Ancient Healing Potion usage if enabled in UI.
 	{'#127834', 'UI(S_AHPE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_AHP)'},
+	-- Astral Healing Potion usage
+	{'#152615', 'UI(S_ASHPE)&{!player.debuff(Ignite Soul)}&player.health<=UI(S_ASHP)'},
 }
 
 local Player = {
@@ -252,8 +274,17 @@ local Interrupts = {
 	{'&Arcane Torrent', 'target.range<=8&spell(Rebuke).cooldown>gcd&!lastgcd(Rebuke)'},
 }
 
+local Interrupts_Random = { --another piece of zyllas code, could become handy ;)
+	{'!Rebuke', 'inFront&inMelee', 'enemies'},
+	{'!Hammer of Justice', '!equipped(137065)&range<20&player.spell(Rebuke).cooldown>gcd&!player.lastgcd(Rebuke)', 'enemies'},
+	{'!Hammer of Justice', 'equipped(137065)&health>74&range<20&player.spell(Rebuke).cooldown>gcd&!player.lastgcd(Rebuke)', 'enemies'},
+	{'!Blinding Light', 'player.spell(Rebuke).cooldown>gcd&!prev_gcd(Rebuke)&!immune(Stun)&inFront&range<20', 'enemies'},
+	{'!Arcane Torrent', 'player.spell(Rebuke).cooldown>gcd&!prev_gcd(Rebuke)&!immune(Stun)&inFront&inMelee', 'enemies'}
+}
+
 local Dispel = {
 	{'%dispelself'},
+	{'!Blessing of Freedom', 'UI(BoF)&{state(root)||state(snare)}' ,'player'},
 }
 
 local Blessings = {
@@ -261,6 +292,17 @@ local Blessings = {
 	{'Greater Blessing of Wisdom', 'UI(B_BOWP)&!player.buff(Greater Blessing of Wisdom)', 'player'},
 }
 
+local Trinkets = {
+	--voct --removed: ttd<20||{spell(Crusade).cooldown>=40&ttd<=10}||
+	{'#trinket1', '{player.buff(Crusade).count>=15||{!player.buff(Crusade)&spell(Crusade).cooldown>=40}}&!combat(player).time<5&trinket_voct == 1&UI(TRNKT) == 1&target.range<8&target.infront'},
+	--moonglaives
+	{'#trinket1', '{player.buff(Crusade).count>=15||player.area(5).enemies>=3}&UI(TRNKT) == 1&trinket_mg == 1'},
+	--on auto and no moonglaives or voct || try to sync with crusade
+	{'#trinket1', 'player.spell(Crusade).cooldown>=60&UI(TRNKT) == 1&!trinket_mg == 1&!trinket_voct == 1'},
+	-- on cooldown
+	{'#trinket1','UI(TRNKT) == 2'},
+	
+}
 -- ####################################################################################
 -- Primairly sourced from legion-dev SimC.
 -- Updates to rotations from sources are considered for implementation.
@@ -303,7 +345,6 @@ local Opener = { --taken from Yumad Rotation, not in AskMrRobots original Rotati
 
 local CombatSIMC = {
 	{'/startattack', '!isattacking'},
-
 	--actions+=/execution_sentence,if=spell_targets.divine_storm<=3&(cooldown.judgment.remains<gcd*4.5|debuff.judgment.remains>gcd*4.5)&(!talent.crusade.enabled|cooldown.crusade.remains>gcd*2)
 	{'Execution Sentence','talent(1,2)&player.area(8).enemies<=3&{spell(Judgment).cooldown<gcd*4.5||target.debuff(judgment).duration>gcd*4.5}&{!talent(7,2)||talent(7,2)&!toggle(cooldowns)||spell(Crusade).cooldown>gcd*2}'},
 	--actions+=/divine_storm,if=debuff.judgment.up&spell_targets.divine_storm>=2&buff.divine_purpose.up&buff.divine_purpose.remains<gcd*2
@@ -451,24 +492,18 @@ local CombatAMR = {
 	{'Judgment'},
 }
 
-local MythPlus = {
-	{'Flash of Light', 'player.debuff(240443).stacks>3', 'player'}, --help healer with bursting
-	{'Flash of Light', 'player.debuff(240443).stacks>2&!combat', 'player'},
-	{'&Shield of Vengeance', 'player.debuff(240447)'}, --cast shield when quaking
-	{'Divine Shield', 'target.casting(202019)'}, --BRH Endboss Shadowbolt Volley
-	{'Divine Shield', 'target.casting(200067)'}, --DHT Endboss 50% Nuke || needs testing
-}
-
 local inCombat = {
 	{Dispel, 'toggle(yuCT)&spell(Cleanse Toxins).cooldown=0'},
 	{Survival},
 	{Blessings},
 	{Emergency, 'ingroup&toggle(yuEGA)'},
 	{Interrupts, 'toggle(interrupts)&target.interruptAt(70)&target.infront'},
-	{MythPlus},
-	{Cooldowns, 'toggle(cooldowns)'},
-	--actual CRs
+	{Interrupts_Random, 'toggle(interrupts)&toggle(interruptALL)'},
+	{Mythic_Plus, 'inMelee'},
 	{{
+	{Cooldowns, 'toggle(cooldowns)'},
+	{Trinkets},
+	--actual CRs
 	{Opener, 'target.infront&target.range<=8&combat(player).time<2'},
 	{CombatSIMC, 'UI(ROTA) == 1&target.infront&target.range<=8&toggle(AoE)&player.debuff(240443).stacks<=4'},
 	{CombatSTSIMC, 'UI(ROTA) == 1&target.infront&target.range<=8&!toggle(AoE)&'},
@@ -477,8 +512,9 @@ local inCombat = {
 }
 
 local outCombat = {
-	{MythPlus},
+	{Mythic_Plus, 'inMelee'},
 	{Dispel, 'toggle(yuCT)&spell(Cleanse Toxins).cooldown=0'},
+	{Interrupts_Random, 'toggle(interrupts)&toggle(interruptALL)'},
 	{Interrupts, 'toggle(interrupts)&target.interruptAt(70)&target.infront'},
 	{Blessings},
 	{Emergency, 'ingroup&toggle(yuEGA)'},

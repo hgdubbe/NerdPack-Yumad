@@ -97,6 +97,24 @@ function Yumad.IsMinion(name)
   return false
 end
 
+_G.Mythic_GUI = {
+	-- Mythic + / Raiding
+	{type = 'header', 	size = 14, text = 'Mythic+ Raid Settings', 		align = 'center'},
+	{type = 'text',  		size = 10, text = 'Fel Explosives',	 					align = 'left'},
+	{type = 'checkbox', text = 'Fel Explosives [Affix]', 							key = 'mythic_fel', width = 55, default = true, desc = '|cffC41F3BThis will automatically target the \'Fel Explosives\' in Mythic+ dungeons!'},
+	{type = 'text',  		size = 10, text = 'Quaking',	 								align = 'left'},
+	{type = 'checkbox', text = 'Quaking [Affix]', 										key = 'quaking', width = 55, default = true, desc = '|cffC41F3BThis will automatically interrupt your casts at the end of your Quaking Debuff from Mythic+ dungeons!'},
+	{type = 'ruler'},	--XXX: Global GUI-part to be used on all combat routines.
+}
+
+_G.Mythic_Plus = {
+	{{
+			{"/target 'Teufelssprengstoff'", 'id(120651)&inFront', 'enemies'}
+	},	'UI(mythic_fel)'}, 																																																																							--XXX: Fel Explosives Mythic+ Affix
+	{'!/stopcasting','player.debuff(Quake).duration<=gcd&player.debuff(Quake)&UI(quaking)'},		--XXX: Quaking Mythic+ Affix
+	{'%pause' , 'player.debuff(Sapped Soul)'},																																																		--XXX: Vault of the Wardens - Sapped Soul Encounter
+}
+
 NeP.Listener:Add('Yumad_Warlock_Pets', 'COMBAT_LOG_EVENT_UNFILTERED', function(timestamp, combatevent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, ...)
   if select(3,UnitClass("player")) == 9 then
     if (combatevent == "SPELL_SUMMON" and sourceName == UnitName("player")) then
