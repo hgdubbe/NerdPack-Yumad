@@ -15,9 +15,13 @@ Changes:
  * Added basic M+ Stuff (Bursting Dmg Stop...), took Zyllas m+ stuff (Fel explosives, quaking cast stop)
  
  * Added Trinket1 Usage:
-  -auto: will detect Vial of ceaseless Toxins and Umbral Moonglaives
-  -on Cooldown: will try to sync the trinket with Crusade
-  -off/manual: no automatic trinket usage
+  
+    
+    * auto: will detect Vial of ceaseless Toxins and Umbral Moonglaives
+  
+    * on Cooldown: will try to sync the trinket with Crusade
+ 
+    * off/manual: no automatic trinket usage
 
 ===================================================================
 
