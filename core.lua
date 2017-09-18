@@ -109,9 +109,9 @@ _G.Mythic_GUI = {
 
 _G.Mythic_Plus = {
 	{{
-			{"/target 'Teufelssprengstoff'", 'id(120651)&inFront', 'enemies'}
+			{"/target 'Fel Explosive'", 'id(120651)&inFront', 'enemies'}
 	},	'UI(mythic_fel)'}, 																																																																							--XXX: Fel Explosives Mythic+ Affix
-	{'!/stopcasting','player.debuff(Quake).duration<=gcd&player.debuff(Quake)&UI(quaking)'},		--XXX: Quaking Mythic+ Affix
+	{'!/stopcasting','player.debuff(240448).duration<=gcd&player.debuff(240448)&UI(quaking)'},		--XXX: Quaking Mythic+ Affix
 	{'%pause' , 'player.debuff(Sapped Soul)'},																																																		--XXX: Vault of the Wardens - Sapped Soul Encounter
 }
 
