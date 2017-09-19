@@ -10,6 +10,8 @@ Changes:
     * Simc - High long term dps
    
     * AskMrRobot - High burst
+    
+    * *(Depends highly on used Leggys, relics etc)
    
     * Off/manual - only use CDs, survival etc
 
