@@ -4,7 +4,14 @@ Only Retribution CR updated and shown ingame. If you want to use this with the o
 
 Changes:
 
- * Added AskMrRobot Rotation, Manual Combat (Selector in Options)
+ *  Dropdown for Rotations:
+ 
+ 
+    * Simc - High long term dps
+   
+    * AskMrRobot - High burst
+   
+    * Off/manual - only use CDs, survival etc
 
  * Added forced Singletarget for SimC and AMR Rotations
 
