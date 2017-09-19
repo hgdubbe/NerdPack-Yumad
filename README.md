@@ -1,6 +1,6 @@
 # All Credits go to https://github.com/damuY/NerdPack-Yumad !
 
-Only Retribution CR updated and shown ingame. If you want to use this with the other Yumad Rotations, you copy /rotations/paladin/retribution.lua and core.lua into yumads directory
+Only Retribution CR updated and shown ingame. If you want to use this with the other Yumad Rotations, only copy /rotations/paladin/retribution.lua, conditions.lua and core.lua into yumads directory
 
 Changes:
 
